@@ -114,10 +114,6 @@ class ResettingController extends BaseController
             $event = new FormEvent($form, $request);
             $dispatcher->dispatch(FOSUserEvents::RESETTING_RESET_SUCCESS, $event);
 
-            //log
-            $logger = $this->get('logger');
-            $logger->info('DANS RESET PWD : '.$user->getPlainPassword());
-
             //changement du mdp dans LDAP
             $ds = ldap_connect($this->container->getParameter('ldapServerAdress'), 389);  // on suppose que le serveur LDAP est sur le serveur local
             ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, 3);
