@@ -1,0 +1,11 @@
+services:
+    sonata.admin.adresse:
+        class: Glukose\ContactBundle\Admin\AdresseAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Pôle Contact", label: "Adresse", icon: %iconUser% }
+        arguments:
+            - ~
+            - Glukose\ContactBundle\Entity\Adresse
+            - ~
+        calls:
+            - [ setTranslationDomain, [GlukoseContactBundle]]

@@ -1,0 +1,3 @@
+chouette_coop_admin_homepage:
+    path:     /
+    defaults: { _controller: ChouetteCoopAdminBundle:Main:index }

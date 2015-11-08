@@ -1,0 +1,3 @@
+glukose_contact_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: GlukoseContactBundle:Default:index }

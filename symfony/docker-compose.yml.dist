@@ -1,0 +1,39 @@
+data:
+  image: tianon/true
+  volumes:
+    - ./data/mysql:/var/lib/mysql
+
+web:
+  build: ./docker/web
+  links:
+    - db
+  ports:
+    - 80
+  volumes:
+    - .:/var/www
+    - ./web:/var/www/html
+    - ./docker/php_additional.ini:/usr/local/etc/php/conf.d/php_additional.ini:ro
+  environment:
+    VIRTUAL_HOST: chouettosadmin.lachouettecoop.test
+  volumes_from:
+    - data
+
+db:
+  image: mysql:5.5
+  environment:
+    MYSQL_ROOT_PASSWORD: root
+    MYSQL_DATABASE: chouettosAdmingl
+    MYSQL_USER: chouettosAdmin
+    MYSQL_PASSWORD: password
+  volumes_from:
+    - data
+
+composer:
+  build: ./docker/composer
+  links:
+    - db
+  volumes:
+    - $HOME/.composer:/root/composer
+    - ./docker/php_additional.ini:/usr/local/etc/php/conf.d/php_additional.ini
+    - .:/app
+  working_dir: /app

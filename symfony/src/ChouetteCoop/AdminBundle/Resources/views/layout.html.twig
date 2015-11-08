@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html {% block html_attributes %}class="no-js"{% endblock %}>
+   <head>
+      {% block meta_tags %}
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      {% endblock %}
+
+      <title> {% block title %} Chouettos Admin {% endblock %} </title>
+
+      <meta name="description" content="">
+      <meta name="keywords" content="">
+
+      {% block stylesheets %}
+      <!--<link rel="stylesheet" href="{{ asset('bundles/glukoseapspi/css/bootstrap.min.css') }}" type="text/css"/>-->
+      <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
+      <link rel="stylesheet" href="{{ asset('bundles/chouettecoopadmin/css/style.css') }}" type="text/css"/>
+
+      {% endblock %}
+
+
+      <!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<![endif]-->
+   </head>
+
+   <body >
+
+      <div class="wrapper">
+
+         {% block menu %}
+
+            {# if app.user %}
+            <li><a href="{{path('fos_user_security_logout')}}"><i class="glyphicon glyphicon-user"></i> {{app.user}} - deconnexion</a></li>
+            {% else %}
+            <li><a href="{{path('fos_user_security_login')}}"><i class="glyphicon glyphicon-user"></i></a></li>
+            {% endif #}
+         
+         {% endblock %}
+
+         {% block content %}
+
+         {% endblock %}
+
+      </div>
+      <div class="push bandFootDark">
+         <div class="container visible-md-block visible-lg-block">
+            <div class="row">
+               <div class="col-md-12 top-buffer">            
+                  <div class="row top-buffer">
+
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <!--<div class="footer">
+<p>Copyright (c) 2008</p>
+</div>-->
+
+
+
+
+      {% block javascripts %}
+      <script src="{{ asset('bundles/chouettecoopadmin/js/jquery.min.js') }}"></script>
+      <script src="{{ asset('bundles/chouettecoopadmin/js/bootstrap.min.js') }}"></script>
+      <script src="{{ asset('bundles/chouettecoopadmin/js/npm.js') }}"></script>
+      <script src="{{ asset('bundles/chouettecoopadmin/js/jquery.cookiebar.js') }}"></script>
+      {% endblock %}
+
+      {% block jquery %}
+
+      {% endblock %}
+
+   </body>
+</html>

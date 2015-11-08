@@ -1,0 +1,41 @@
+{% extends "ChouetteCoopAdminBundle::layout.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+
+{% block content %}
+<div>
+    <div class="container bottom-buffer">
+        {% for type, messages in app.session.flashbag.all() %}
+        {% for message in messages %}
+
+        <div class="row top-buffer">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="flash-{{ type }}">
+                        {{ message }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% endfor %}
+        {% endfor %}
+
+
+        <div class="row top-buffer bottom-buffer">
+
+            <div class="col-md-12">
+                <div class="card">
+                    {% block fos_user_content %}
+                    {% endblock fos_user_content %}
+                    <br />
+                    <a href="{{path('chouette_coop_admin_homepage')}}" class="btn btn-primary">Retour à l'accueil</a>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+{% endblock content %}

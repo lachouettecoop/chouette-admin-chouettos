@@ -1,0 +1,40 @@
+{% extends "GlukoseApspiBundle::layout.html.twig" %}
+
+{% block content %}
+
+{% for type, messages in app.session.flashbag.all() %}
+{% for message in messages %}
+<div class="container bottom-buffer">
+    <div class="row top-buffer bottom-buffer">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="flash-{{ type }}">
+                    {{ message }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endfor %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+<div class="container bottom-buffer">
+    <div class="row top-buffer bottom-buffer">
+
+        <div class="col-md-5 col-md-offset-4">
+            <div class="card">
+                <h3>Inscription</h3>
+                <form action="{{ path('user_utilisateur_registration') }}" {{ form_enctype(form) }} method="POST">
+                    {{ form_widget(form) }}
+                    <div>
+                        <br />
+                        <input type="submit" class="btn btn-success" value="{{ 'registration.submit'|trans }}" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

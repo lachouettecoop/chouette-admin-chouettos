@@ -1,0 +1,36 @@
+parameters:
+    glukose_user.component.authentication.handler.login_success_handler.class: Glukose\UserBundle\Component\Authentication\Handler\LoginSuccessHandler
+
+services:
+    glukose_user.component.authentication.handler.login_success_handler:
+        class:  %glukose_user.component.authentication.handler.login_success_handler.class%
+        arguments:  [@router, @security.context, @session]
+        tags:
+            - { name: 'monolog.logger', channel: 'security' }
+
+    app.form.registration:
+        class: Glukose\UserBundle\Form\RegistrationFormType
+        tags:
+            - { name: form.type, alias: app_user_registration }
+            
+    sonata.admin.utilisateur:
+        class: Glukose\UserBundle\Admin\UserAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Pôle Contact", label: "Utilisateurs", icon: %iconUser% }
+        arguments:
+            - ~
+            - Glukose\UserBundle\Entity\User
+            - ~
+        calls:
+            - [ setTranslationDomain, [GlukoseAdminContactBundle]]
+            
+    sonata.admin.groupes:
+        class: Glukose\UserBundle\Admin\GroupeAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Pôle Contact", label: "Groupes", icon: %iconUser% }
+        arguments:
+            - ~
+            - Glukose\UserBundle\Entity\Groupe
+            - ~
+        calls:
+            - [ setTranslationDomain, [GlukoseAdminContactBundle]]
