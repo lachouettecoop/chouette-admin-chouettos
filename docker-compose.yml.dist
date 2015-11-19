@@ -1,9 +1,9 @@
 application:
-    build: code
+    image: tianon/true
     volumes:
         - ./symfony:/var/www/symfony
         - ./logs/symfony:/var/www/symfony/app/logs
-    tty: true
+
 db:
     image: mysql
     ports:
@@ -11,8 +11,8 @@ db:
     environment:
         MYSQL_ROOT_PASSWORD: root
         MYSQL_DATABASE: symfony
-        MYSQL_USER: root
-        MYSQL_PASSWORD: root
+        MYSQL_USER: symfony
+        MYSQL_PASSWORD: symfonypassword
 php:
     build: php-fpm
     expose:
@@ -21,10 +21,11 @@ php:
         - application
     links:
         - db
+    working_dir: /var/www/symfony
 nginx:
     build: nginx
     ports:
-        - 8080:80
+        - 80
     links:
         - php
     volumes_from:
