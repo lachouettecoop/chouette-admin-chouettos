@@ -2,6 +2,7 @@
 
 namespace Glukose\UserBundle\Admin;
 
+use Glukose\UserBundle\Entity\User;
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -9,7 +10,10 @@ use Sonata\AdminBundle\Form\FormMapper;
 
 class UserAdmin extends Admin
 {
-    // Fields to be shown on create/edit forms
+    private $originalUserData;
+
+    const DN_MEMBRES = "ou=membres,o=lachouettecoop,dc=lachouettecoop,dc=fr";
+
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
@@ -23,7 +27,7 @@ class UserAdmin extends Admin
                 'second_options' => array('label' => 'form.password_confirmation'),
                 'invalid_message' => 'fos_user.password.mismatch',
             ))*/
-            ->add('civilite', 'choice', 
+            ->add('civilite', 'choice',
                   array('choices' => array(
                       'mr' => 'Monsieur',
                       'mme' => 'Madame',
@@ -40,7 +44,7 @@ class UserAdmin extends Admin
                   array(
                       'edit' => 'inline',
                       'inline' => 'table',
-                  )                   
+                  )
                  )*/
             ;
     }
@@ -70,21 +74,31 @@ class UserAdmin extends Admin
 
     public function preUpdate($user)
     {
-        //delete
         $em = $this->getModelManager()->getEntityManager($this->getClass());
-        $original = $em->getUnitOfWork()->getOriginalEntityData($user);
+        $this->originalUserData = $em->getUnitOfWork()->getOriginalEntityData($user);
+    }
 
-        $ds = ldap_connect($this->getConfigurationPool()->getContainer()->getParameter('ldapServerAdress'), 389);  // on suppose que le serveur LDAP est sur le serveur local
-        ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, 3);
-
-        if ($ds) {
-            // Connexion avec une identité qui permet les modifications
-            $r = ldap_bind($ds, $this->getConfigurationPool()->getContainer()->getParameter('ldapUser'), $this->getConfigurationPool()->getContainer()->getParameter('ldapMdp'));
-            $r = ldap_delete($ds, "cn=".$original['email'].",ou=membres,o=lachouettecoop,dc=lachouettecoop,dc=fr");            
+    public function postUpdate($user)
+    {
+        try {
+            $ds = $this->connectToLdapAsAdmin();
+        } catch(\RuntimeException $e) {
+            echo $e->getMessage();
+            return;
         }
-        ldap_close($ds);
-        $this->postPersist($user);
 
+        $info = $this->ldapAdministrableInfosOfUser($user);
+        $currentCn = $this->originalUserData['email'];
+        if ($info['cn'] != $currentCn) {
+            if (false === ldap_rename($ds, $this->userDn($currentCn), "cn=" . $info['cn'], self::DN_MEMBRES, true)) {
+                throw new \RuntimeException('Impossible de modifier l\'email');
+            }
+            $currentCn = $info['cn'];
+            unset($info['cn']);
+        }
+        $r = ldap_modify($ds, $this->userDn($currentCn), $info);
+
+        ldap_close($ds);
     }
 
     public function prePersist($user)
@@ -106,43 +120,59 @@ class UserAdmin extends Admin
     }
     public function postPersist($user)
     {
-
-        $ds = ldap_connect($this->getConfigurationPool()->getContainer()->getParameter('ldapServerAdress'), 389);  // on suppose que le serveur LDAP est sur le serveur local
-        ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, 3);
-
-        if ($ds) {
-            // Connexion avec une identité qui permet les modifications
-            $r = ldap_bind($ds, $this->getConfigurationPool()->getContainer()->getParameter('ldapUser'), $this->getConfigurationPool()->getContainer()->getParameter('ldapMdp'));
-
-            if ($r) {
-                echo "Connexion LDAP réussie...";
-            } else {
-                echo "Connexion LDAP échouée...";
-            }
-            // Prépare les données            
-            $info["objectclass"][0] = "posixAccount";
-            $info["objectclass"][1] = "person";
-            $info["objectclass"][2] = "mailAccount";
-            $info["cn"] = $user->getEmail();
-            $info["sn"] = $user->getNom();
-            $info["description"] = $user->getPrenom();
-            $info["mail"] = $user->getEmail();
-            $info["gidNumber"] = 1;
-            $info["homeDirectory"] = "/test";
-            $info["uid"] = $user->getId();
-            $info["uidNumber"] = $user->getId();
-            $info["userPassword"] = '{MD5}' . base64_encode(pack('H*',md5($user->getMotDePasse())));
-            //$info["gidNumber"] = "toto@gmail.com";
-
-
-            // Ajoute les données au dossier
-            $r = ldap_add($ds, "cn=".$user->getEmail().",ou=membres,o=lachouettecoop,dc=lachouettecoop,dc=fr", $info);
-
-            ldap_close($ds);
-        } else {
-            echo "Impossible de se connecter au serveur LDAP";
+        try {
+            $ds = $this->connectToLdapAsAdmin();
+        } catch(\RuntimeException $e) {
+            echo $e->getMessage();
+            return;
         }
 
+        // Prépare les données
+        $info = $this->ldapAdministrableInfosOfUser($user);
+        $info["objectclass"][0] = "posixAccount";
+        $info["objectclass"][1] = "person";
+        $info["objectclass"][2] = "mailAccount";
+        $info["gidNumber"] = 1;
+        $info["homeDirectory"] = "/test";
+        $info["uid"] = $user->getId();
+        $info["uidNumber"] = $user->getId();
+        $info["userPassword"] = '{MD5}' . base64_encode(pack('H*',md5($user->getMotDePasse())));
+        //$info["gidNumber"] = "toto@gmail.com";
+
+        // Ajoute les données au dossier
+        $r = ldap_add($ds, $this->userDn($user->getEmail()), $info);
+
+        ldap_close($ds);
+    }
+
+    private function connectToLdapAsAdmin()
+    {
+        $ds = ldap_connect($this->getConfigurationPool()->getContainer()->getParameter('ldapServerAdress'), 389);  // on suppose que le serveur LDAP est sur le serveur local
+        ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, 3);
+        if (!$ds) {
+            throw new \RuntimeException("Impossible de se connecter au serveur LDAP");
+        }
+
+        // Connexion avec une identité qui permet les modifications
+        $r = ldap_bind($ds, $this->getConfigurationPool()->getContainer()->getParameter('ldapUser'), $this->getConfigurationPool()->getContainer()->getParameter('ldapMdp'));
+        if (!$r) {
+            throw new \RuntimeException("Connexion LDAP échouée...");
+        }
+        return $ds;
+    }
+
+    private function ldapAdministrableInfosOfUser(User $user)
+    {
+        $info["cn"] = $user->getEmail();
+        $info["sn"] = $user->getNom();
+        $info["description"] = $user->getPrenom();
+        $info["mail"] = $user->getEmail();
+        return $info;
+    }
+
+    private function userDn($email)
+    {
+        return "cn=" . $email . "," . self::DN_MEMBRES;
     }
 
 
