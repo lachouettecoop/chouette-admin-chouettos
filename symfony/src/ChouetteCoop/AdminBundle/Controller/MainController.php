@@ -64,6 +64,14 @@ class MainController extends Controller
         } else {
             echo "Impossible de se connecter au serveur LDAP";
         }*/
+        $message = \Swift_Message::newInstance()
+        ->setSubject('Hello Email')
+        ->setFrom('contactlachouettecoop.fr@gmail.com')
+        ->setTo('larrieu.clement@gmail.com')
+        ->setBody('SAlut Pierre')
+        ;
+        
+    $this->get('mailer')->send($message);
 
         return $this->render('ChouetteCoopAdminBundle:Main:index.html.twig');
     }
