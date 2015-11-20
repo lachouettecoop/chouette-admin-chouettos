@@ -1,3 +1,7 @@
 chouette_coop_admin_homepage:
     path:     /
     defaults: { _controller: ChouetteCoopAdminBundle:Main:index }
+
+chouette_coop_admin_import_membres:
+    path:     /import-membres
+    defaults: { _controller: ChouetteCoopAdminBundle:Import:importMembres }

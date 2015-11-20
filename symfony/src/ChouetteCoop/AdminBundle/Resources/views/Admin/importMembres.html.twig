@@ -1,0 +1,45 @@
+{% extends "ChouetteCoopAdminBundle::layout.html.twig" %}
+
+{% block menu %}
+
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid bandGrey">
+    <div class="container">
+        <br />
+        <br />
+        <div class="row top-buffer">
+            <h1>Chouettos Admin</h1>
+        </div>
+        <br />
+
+
+        <div class="card">
+            <div class="row top-buffer valign">
+                <div class="col-md-6">
+                   
+                {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+                {{ form_widget(form) }}
+                <br />
+
+                <input type="submit" />
+
+                {{ form_rest(form) }}
+
+                {{ form_end(form) }}
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
+
+
+{% block jquery %}
+
+{% endblock %}
