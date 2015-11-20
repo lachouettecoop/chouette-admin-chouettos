@@ -115,35 +115,21 @@ class ResettingController extends BaseController
             $dispatcher->dispatch(FOSUserEvents::RESETTING_RESET_SUCCESS, $event);
 
             //changement du mdp dans LDAP
+            // TODO Réutiliser le code de \Glukose\UserBundle\Admin\UserAdmin::connectToLdapAsAdmin()
             $ds = ldap_connect($this->container->getParameter('ldapServerAdress'), 389);  // on suppose que le serveur LDAP est sur le serveur local
             ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, 3);
 
             if ($ds) {
                 // Connexion avec une identité qui permet les modifications
                 $r = ldap_bind($ds, $this->container->getParameter('ldapUser'), $this->container->getParameter('ldapMdp'));
-                $r = ldap_delete($ds, "cn=".$user->getEmail().",ou=membres,o=lachouettecoop,dc=lachouettecoop,dc=fr");
-
-                $info["objectclass"][0] = "posixAccount";
-                $info["objectclass"][1] = "person";
-                $info["objectclass"][2] = "mailAccount";
-                $info["cn"] = $user->getEmail();
-                $info["sn"] = $user->getNom();
-                $info["description"] = $user->getPrenom();
-                $info["mail"] = $user->getEmail();
-                $info["gidNumber"] = 1;
-                $info["homeDirectory"] = "/test";
-                $info["uid"] = $user->getId();
-                $info["uidNumber"] = $user->getId();
-                $info["userPassword"] = '{MD5}' . base64_encode(pack('H*',md5($user->getPlainPassword())));
-                //$info["gidNumber"] = "toto@gmail.com";
-
+                $info = [
+                    "userPassword" => '{MD5}' . base64_encode(pack('H*',md5($user->getPlainPassword())))
+                ];
 
                 // Ajoute les données au dossier
-                $r = ldap_add($ds, "cn=".$user->getEmail().",ou=membres,o=lachouettecoop,dc=lachouettecoop,dc=fr", $info);
-
+                $r = ldap_modify($ds, "cn=".$user->getEmail().",ou=membres,o=lachouettecoop,dc=lachouettecoop,dc=fr", $info);
                 ldap_close($ds);
             }
-
 
             $userManager->updateUser($user);
             if (null === $response = $event->getResponse()) {
