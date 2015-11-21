@@ -65,7 +65,21 @@ class ImportController extends Controller
                                 $user->setPrenom($row[3]);
                                 $user->setTelephone($row[5]);
                                 $user->setPlainPassword('123456666');
-                                $user->setEnabled(true);
+                                
+                                $user->setStatusAssociatif($row[6]);
+                                $user->setEnabled(false);
+                                if($row[6] == 'membre'){
+                                    $user->setEnabled(true);
+                                }
+                                
+                                $user->setDateAdhesion($row[7]);
+                                $user->setTypeCotisation($row[8]);
+                                $user->setMontant($row[9]);
+                                $user->setModePaiement($row[10]);
+                                $user->setPresentAzendoo($row[11]);
+                                $user->setDateAzendoo($row[12]);
+                                $user->setSiEchec($row[13]);
+                                
 
                                 if($row[4] == 'larrieu.clement@gmail.com'){
                                     $user->setSuperAdmin(true);

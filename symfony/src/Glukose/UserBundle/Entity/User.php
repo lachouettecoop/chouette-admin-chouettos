@@ -79,6 +79,62 @@ class User extends BaseUser
     /**
      * @var string
      *
+     * @ORM\Column(name="statusAssociatif", type="string", length=255, nullable=true)
+     */
+    private $statusAssociatif;
+ 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="dateAdhesion", type="string", length=255, nullable=true)
+     */
+    private $dateAdhesion;
+ 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="typeCotisation", type="string", length=255, nullable=true)
+     */
+    private $typeCotisation;
+ 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="montant", type="string", length=255, nullable=true)
+     */
+    private $montant;
+ 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="modePaiement", type="string", length=255, nullable=true)
+     */
+    private $modePaiement;
+ 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="presentAzendoo", type="string", length=255, nullable=true)
+     */
+    private $presentAzendoo;
+ 
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="dateAzendoo", type="string", length=255, nullable=true)
+     */
+    private $dateAzendoo;
+  
+    /**
+     * @var text
+     *
+     * @ORM\Column(name="siEchec", type="text", nullable=true)
+     */
+    private $siEchec;
+ 
+    /**
+     * @var string
+     *
      * @ORM\Column(name="motDePasse", type="string", length=255, nullable=true)
      */
     private $motDePasse;
@@ -375,5 +431,197 @@ class User extends BaseUser
     public function getMotDePasse()
     {
         return $this->motDePasse;
+    }
+
+    /**
+     * Set statusAssociatif
+     *
+     * @param string $statusAssociatif
+     *
+     * @return User
+     */
+    public function setStatusAssociatif($statusAssociatif)
+    {
+        $this->statusAssociatif = $statusAssociatif;
+
+        return $this;
+    }
+
+    /**
+     * Get statusAssociatif
+     *
+     * @return string
+     */
+    public function getStatusAssociatif()
+    {
+        return $this->statusAssociatif;
+    }
+
+    /**
+     * Set dateAdhesion
+     *
+     * @param string $dateAdhesion
+     *
+     * @return User
+     */
+    public function setDateAdhesion($dateAdhesion)
+    {
+        $this->dateAdhesion = $dateAdhesion;
+
+        return $this;
+    }
+
+    /**
+     * Get dateAdhesion
+     *
+     * @return string
+     */
+    public function getDateAdhesion()
+    {
+        return $this->dateAdhesion;
+    }
+
+    /**
+     * Set typeCotisation
+     *
+     * @param string $typeCotisation
+     *
+     * @return User
+     */
+    public function setTypeCotisation($typeCotisation)
+    {
+        $this->typeCotisation = $typeCotisation;
+
+        return $this;
+    }
+
+    /**
+     * Get typeCotisation
+     *
+     * @return string
+     */
+    public function getTypeCotisation()
+    {
+        return $this->typeCotisation;
+    }
+
+    /**
+     * Set montant
+     *
+     * @param string $montant
+     *
+     * @return User
+     */
+    public function setMontant($montant)
+    {
+        $this->montant = $montant;
+
+        return $this;
+    }
+
+    /**
+     * Get montant
+     *
+     * @return string
+     */
+    public function getMontant()
+    {
+        return $this->montant;
+    }
+
+    /**
+     * Set modePaiement
+     *
+     * @param string $modePaiement
+     *
+     * @return User
+     */
+    public function setModePaiement($modePaiement)
+    {
+        $this->modePaiement = $modePaiement;
+
+        return $this;
+    }
+
+    /**
+     * Get modePaiement
+     *
+     * @return string
+     */
+    public function getModePaiement()
+    {
+        return $this->modePaiement;
+    }
+
+    /**
+     * Set presentAzendoo
+     *
+     * @param string $presentAzendoo
+     *
+     * @return User
+     */
+    public function setPresentAzendoo($presentAzendoo)
+    {
+        $this->presentAzendoo = $presentAzendoo;
+
+        return $this;
+    }
+
+    /**
+     * Get presentAzendoo
+     *
+     * @return string
+     */
+    public function getPresentAzendoo()
+    {
+        return $this->presentAzendoo;
+    }
+
+    /**
+     * Set siEchec
+     *
+     * @param string $siEchec
+     *
+     * @return User
+     */
+    public function setSiEchec($siEchec)
+    {
+        $this->siEchec = $siEchec;
+
+        return $this;
+    }
+
+    /**
+     * Get siEchec
+     *
+     * @return string
+     */
+    public function getSiEchec()
+    {
+        return $this->siEchec;
+    }
+
+    /**
+     * Set dateAzendoo
+     *
+     * @param string $dateAzendoo
+     *
+     * @return User
+     */
+    public function setDateAzendoo($dateAzendoo)
+    {
+        $this->dateAzendoo = $dateAzendoo;
+
+        return $this;
+    }
+
+    /**
+     * Get dateAzendoo
+     *
+     * @return string
+     */
+    public function getDateAzendoo()
+    {
+        return $this->dateAzendoo;
     }
 }

@@ -23,7 +23,7 @@ class UserAdmin extends Admin
     {
         $formMapper
             //->add('username')
-            ->add('email')
+            
             //->add('motDePasse')
             /*->add('plainPassword', 'repeated', array(
                 'type' => 'password',
@@ -32,6 +32,10 @@ class UserAdmin extends Admin
                 'second_options' => array('label' => 'form.password_confirmation'),
                 'invalid_message' => 'fos_user.password.mismatch',
             ))*/
+            ->with('Civilité', array(
+                'class'       => 'col-md-6'
+            ))
+            ->add('email')
             ->add('civilite', 'choice',
                   array('choices' => array(
                       'mr' => 'Monsieur',
@@ -42,8 +46,20 @@ class UserAdmin extends Admin
             ->add('prenom')
             ->add('telephone')
             ->add('portable')    
-            ->add('enabled', null, array('required' => false, 'label' => 'Membre ?'))    
-            //->add('fax')
+            ->add('enabled', null, array('required' => false, 'label' => 'Membre ?'))
+            ->end()
+            ->with('Asoociation', array(
+                'class'       => 'col-md-6'
+            ))
+                ->add('statusAssociatif')
+                ->add('dateAdhesion')
+                ->add('montant')
+                ->add('modePaiement')
+                ->add('presentAzendoo')
+                ->add('siEchec')
+            
+            
+            ->end()
             /*->add('adresses', 'sonata_type_collection', array(
                 'required' => false,
             ),
