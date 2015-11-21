@@ -36,3 +36,4 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [GlukoseAdminContactBundle]]
+            - [ setLdapService, [@chouette.admin.ldap]]

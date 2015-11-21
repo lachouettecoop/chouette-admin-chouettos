@@ -23,6 +23,8 @@ class ImportController extends Controller
         $em = $this
             ->getDoctrine()
             ->getManager();
+        
+        $ldapService = $this->get('chouette.admin.ldap');
 
         $repositoryU = $em->getRepository('GlukoseUserBundle:User');
 
@@ -53,9 +55,7 @@ class ImportController extends Controller
 
                 if (($handle = fopen($pathFile->getRealPath(), "r")) !== FALSE) {
                     while(($row = fgetcsv($handle)) !== FALSE) {                        
-
-                        if($row[6] == 'membre'){
-
+                        
                             if(filter_var($row[4], FILTER_VALIDATE_EMAIL) != false){
                                 $user = $userManager->createUser();
 
@@ -65,6 +65,7 @@ class ImportController extends Controller
                                 $user->setPrenom($row[3]);
                                 $user->setTelephone($row[5]);
                                 $user->setPlainPassword('123456666');
+                                $user->setMotDePasse('123456666');
                                 
                                 $user->setStatusAssociatif($row[6]);
                                 $user->setEnabled(false);
@@ -83,11 +84,13 @@ class ImportController extends Controller
 
                                 if($row[4] == 'larrieu.clement@gmail.com'){
                                     $user->setSuperAdmin(true);
+                                    
+                                    //$ldapService->addUserOnLDAP($user);
                                 }
                                 
                                 $userManager->updateUser($user);
                             }
-                        }
+                        
 
                     }
 

@@ -4,10 +4,12 @@
 namespace ChouetteCoop\AdminBundle\LDAP;
 
 use Glukose\UserBundle\Entity\User as User;
+use Glukose\UserBundle\Entity\Groupe as Groupe;
 
 class LDAPService
 {
     const DN_MEMBRES = "ou=membres,o=lachouettecoop,dc=lachouettecoop,dc=fr";
+    const DN_GROUPES = "ou=groupes,o=lachouettecoop,dc=lachouettecoop,dc=fr";
 
     private $ldapServerAdress;
     private $ldapUser;
@@ -49,12 +51,32 @@ class LDAPService
         $info["mail"] = $user->getEmail();
         return $info;
     }
+    
+    private function ldapAdministrableInfosOfGroupe(Groupe $groupe)
+    {
+        // Prépare les données            
+        $info["cn"] = $groupe->getNom();
+        $info["gidNumber"] = $groupe->getId();
+        return $info;
+    }
 
     private function userDn($email)
     {
         return "cn=" . $email . "," . self::DN_MEMBRES;
     }
     
+    private function groupeDn($nom, $id)
+    {
+        return "cn=" . $nom . "+gidNumber=" . $id . "," . self::DN_GROUPES;
+    }
+    
+    
+    /**
+     * Add user from database to LDAP
+     * 
+     * @param  User   $user 
+     * @return boolean
+     */
     public function addUserOnLDAP(User $user)
     {
         try {
@@ -86,6 +108,41 @@ class LDAPService
         return true;
     }
     
+    /**
+     * remove user entry from LDAP
+     * 
+     * @param  User   $user 
+     * @return boolean
+     */
+    public function removeUserOnLDAP(User $user)
+    {
+        try {
+            $this->connectToLdapAsAdmin();
+        } catch(\RuntimeException $e) {
+            echo $e->getMessage();
+            return;
+        }        
+        
+         // Ajoute le nouvel user dans LDAP
+        $r = ldap_delete($this->ds, $this->userDn($user->getEmail()));
+        
+        if (!$r) {
+            throw new \RuntimeException("Echec de la suppression dans LDAP ...");
+        }
+
+        ldap_close($this->ds);
+        
+        return true;
+    }
+    
+    
+    /**
+     * Update an user on the LDAP server
+     * 
+     * @param   User  $user             
+     * @param   User  $originalUserData       
+     * @return boolean 
+     */
     public function updateUserOnLDAP(User $user, $originalUserData)
     {
         try {
@@ -108,6 +165,38 @@ class LDAPService
             unset($info['cn']);
         }
         $r = ldap_modify($this->ds, $this->userDn($currentCn), $info);
+
+        ldap_close($this->ds);
+        
+        return true;
+    }
+    
+    
+    /**
+     * Add group from database to LDAP
+     * 
+     * @param  User    $user 
+     * @return boolean
+     */
+    public function addGroupeOnLDAP(Groupe $groupe)
+    {
+        try {
+            $this->connectToLdapAsAdmin();
+        } catch(\RuntimeException $e) {
+            echo $e->getMessage();
+            return;
+        }
+        
+        $info = $this->ldapAdministrableInfosOfGroupe($groupe);
+        $info["objectclass"][0] = "posixGroup";
+        $info["objectclass"][1] = "top";
+        
+         // Ajoute le nouvel user dans LDAP
+        $r = ldap_add($this->ds, $this->groupeDn($groupe->getNom(), $groupe->getId()), $info);
+        
+        if (!$r) {
+            throw new \RuntimeException("Echec de l'ajout dans LDAP ...");
+        }
 
         ldap_close($this->ds);
         

@@ -9,6 +9,15 @@ use Sonata\AdminBundle\Form\FormMapper;
 
 class GroupeAdmin extends Admin
 {
+    const DN_MEMBRES = "ou=membres,o=lachouettecoop,dc=lachouettecoop,dc=fr";
+    
+    private $originalUserData;
+    private $ldapService;
+    
+    public function setLdapService($ldapService){
+        $this->ldapService = $ldapService;
+    }
+    
     // Fields to be shown on create/edit forms
     protected function configureFormFields(FormMapper $formMapper)
     {
@@ -41,6 +50,13 @@ class GroupeAdmin extends Admin
             ;
     }
 
+    
+    public function postPersist($groupe)
+    {
+        $this->ldapService->addGroupeOnLDAP($groupe);
+    }
+    
+    
     public function preUpdate($groupe)
     {
 
@@ -54,14 +70,14 @@ class GroupeAdmin extends Admin
         if ($ds) {
             // Connexion avec une identité qui permet les modifications
             $r = ldap_bind($ds, $this->getConfigurationPool()->getContainer()->getParameter('ldapUser'), $this->getConfigurationPool()->getContainer()->getParameter('ldapMdp'));
-            $r = ldap_delete($ds, "cn=".$original['nom']."+gidNumber=".$original['id'].",ou=groupes,o=lachouettecoop,dc=lachouettecoop,dc=fr");            
-            $info["objectclass"][0] = "posixGroup";
+            //$r = ldap_delete($ds, "cn=".$original['nom']."+gidNumber=".$original['id'].",ou=groupes,o=lachouettecoop,dc=lachouettecoop,dc=fr");            
+            /*$info["objectclass"][0] = "posixGroup";
             $info["objectclass"][1] = "top";
             $info["cn"] = $groupe->getNom();
             $info["gidNumber"] = $groupe->getId();
 
             // Ajoute les données au dossier
-            $r = ldap_add($ds, "cn=".$groupe->getNom()."+gidNumber=".$groupe->getId().",ou=groupes,o=lachouettecoop,dc=lachouettecoop,dc=fr", $info);
+            $r = ldap_add($ds, "cn=".$groupe->getNom()."+gidNumber=".$groupe->getId().",ou=groupes,o=lachouettecoop,dc=lachouettecoop,dc=fr", $info);*/
             
             foreach($groupe->getMembres() as $membre){
                 $info = array();
@@ -76,41 +92,7 @@ class GroupeAdmin extends Admin
 
     }
 
-    public function prePersist($groupe)
-    {
-
-    }
-
-    public function postPersist($groupe)
-    {
-
-       $ds = ldap_connect($this->getConfigurationPool()->getContainer()->getParameter('ldapServerAdress'), 389);  // on suppose que le serveur LDAP est sur le serveur local
-        ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, 3);
-
-        if ($ds) {
-            // Connexion avec une identité qui permet les modifications
-            $r = ldap_bind($ds, $this->getConfigurationPool()->getContainer()->getParameter('ldapUser'), $this->getConfigurationPool()->getContainer()->getParameter('ldapMdp'));
-
-            if ($r) {
-                echo "Connexion LDAP réussie...";
-            } else {
-                echo "Connexion LDAP échouée...";
-            }
-            // Prépare les données            
-            $info["objectclass"][0] = "posixGroup";
-            $info["objectclass"][1] = "top";
-            $info["cn"] = $groupe->getNom();
-            $info["gidNumber"] = $groupe->getId();
-
-            // Ajoute les données au dossier
-            $r = ldap_add($ds, "cn=".$groupe->getNom()."+gidNumber=".$groupe->getId().",ou=groupes,o=lachouettecoop,dc=lachouettecoop,dc=fr", $info);
-
-            ldap_close($ds);
-        } else {
-            echo "Impossible de se connecter au serveur LDAP";
-        }
-
-    }
+    
 
 
 }

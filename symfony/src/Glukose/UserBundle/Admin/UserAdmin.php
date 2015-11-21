@@ -104,8 +104,14 @@ class UserAdmin extends Admin
 
     //update the user on ldap
     public function postUpdate($user)
-    {
-        $this->ldapService->updateUserOnLDAP($user, $this->originalUserData);        
+    {        
+        if($this->originalUserData['enabled'] == $user->isEnabled() && $user->isEnabled()){
+            $this->ldapService->updateUserOnLDAP($user, $this->originalUserData);
+        } elseif(!$user->isEnabled() && $this->originalUserData['enabled'] == true) {
+            $this->ldapService->removeUserOnLDAP($user);
+        } else {
+            $this->ldapService->addUserOnLDAP($user);
+        }
     }
 
     
@@ -128,7 +134,9 @@ class UserAdmin extends Admin
     
     public function postPersist($user)
     {
-        $this->ldapService->addUserOnLDAP($user);
+        if($user->isEnabled()) {
+            $this->ldapService->addUserOnLDAP($user);
+        }
     }
 
 
