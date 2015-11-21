@@ -21,8 +21,10 @@ services:
             - ~
             - Glukose\UserBundle\Entity\User
             - ~
+            - 
         calls:
             - [ setTranslationDomain, [GlukoseAdminContactBundle]]
+            - [ setLdapService, [@chouette.admin.ldap]]
             
     sonata.admin.groupes:
         class: Glukose\UserBundle\Admin\GroupeAdmin

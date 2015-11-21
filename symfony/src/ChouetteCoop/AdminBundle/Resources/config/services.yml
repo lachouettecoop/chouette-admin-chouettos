@@ -1,4 +1,4 @@
 services:
-#    chouette_coop_admin.example:
-#        class: ChouetteCoop\AdminBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
+    chouette.admin.ldap:
+        class:     ChouetteCoop\AdminBundle\LDAP\LDAPService
+        arguments: [%ldapServerAdress%, %ldapUser%, %ldapMdp%]

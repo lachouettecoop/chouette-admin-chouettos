@@ -10,9 +10,14 @@ use Sonata\AdminBundle\Form\FormMapper;
 
 class UserAdmin extends Admin
 {
-    private $originalUserData;
-
     const DN_MEMBRES = "ou=membres,o=lachouettecoop,dc=lachouettecoop,dc=fr";
+    
+    private $originalUserData;
+    private $ldapService;     
+    
+    public function setLdapService($ldapService){
+        $this->ldapService = $ldapService;
+    }
 
     protected function configureFormFields(FormMapper $formMapper)
     {
@@ -36,7 +41,8 @@ class UserAdmin extends Admin
             ->add('nom')
             ->add('prenom')
             ->add('telephone')
-            ->add('portable')
+            ->add('portable')    
+            ->add('enabled', null, array('required' => false, 'label' => 'Membre ?'))    
             //->add('fax')
             /*->add('adresses', 'sonata_type_collection', array(
                 'required' => false,
@@ -49,6 +55,7 @@ class UserAdmin extends Admin
             ;
     }
 
+    
     // Fields to be shown on filter forms
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
@@ -72,38 +79,22 @@ class UserAdmin extends Admin
             ;
     }
 
+    //make a copy of the existing object
     public function preUpdate($user)
     {
         $em = $this->getModelManager()->getEntityManager($this->getClass());
         $this->originalUserData = $em->getUnitOfWork()->getOriginalEntityData($user);
     }
 
+    //update the user on ldap
     public function postUpdate($user)
     {
-        try {
-            $ds = $this->connectToLdapAsAdmin();
-        } catch(\RuntimeException $e) {
-            echo $e->getMessage();
-            return;
-        }
-
-        $info = $this->ldapAdministrableInfosOfUser($user);
-        $currentCn = $this->originalUserData['email'];
-        if ($info['cn'] != $currentCn) {
-            if (false === ldap_rename($ds, $this->userDn($currentCn), "cn=" . $info['cn'], self::DN_MEMBRES, true)) {
-                throw new \RuntimeException('Impossible de modifier l\'email');
-            }
-            $currentCn = $info['cn'];
-            unset($info['cn']);
-        }
-        $r = ldap_modify($ds, $this->userDn($currentCn), $info);
-
-        ldap_close($ds);
+        $this->ldapService->updateUserOnLDAP($user, $this->originalUserData);        
     }
 
+    
     public function prePersist($user)
     {
-        $user->setEnabled(true);
         $PasswordLDAP = $user->getMotDePasse();
         $PasswordFOS = $user->getPassword();
         if(empty($PasswordLDAP)){
@@ -118,62 +109,12 @@ class UserAdmin extends Admin
             $user->setUsername($user->getEmail());
         }
     }
+    
     public function postPersist($user)
     {
-        try {
-            $ds = $this->connectToLdapAsAdmin();
-        } catch(\RuntimeException $e) {
-            echo $e->getMessage();
-            return;
-        }
-
-        // Prépare les données
-        $info = $this->ldapAdministrableInfosOfUser($user);
-        $info["objectclass"][0] = "posixAccount";
-        $info["objectclass"][1] = "person";
-        $info["objectclass"][2] = "mailAccount";
-        $info["gidNumber"] = 1;
-        $info["homeDirectory"] = "/test";
-        $info["uid"] = $user->getId();
-        $info["uidNumber"] = $user->getId();
-        $info["userPassword"] = '{MD5}' . base64_encode(pack('H*',md5($user->getMotDePasse())));
-        //$info["gidNumber"] = "toto@gmail.com";
-
-        // Ajoute les données au dossier
-        $r = ldap_add($ds, $this->userDn($user->getEmail()), $info);
-
-        ldap_close($ds);
+        $this->ldapService->addUserOnLDAP($user);
     }
 
-    private function connectToLdapAsAdmin()
-    {
-        $ds = ldap_connect($this->getConfigurationPool()->getContainer()->getParameter('ldapServerAdress'), 389);  // on suppose que le serveur LDAP est sur le serveur local
-        ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, 3);
-        if (!$ds) {
-            throw new \RuntimeException("Impossible de se connecter au serveur LDAP");
-        }
-
-        // Connexion avec une identité qui permet les modifications
-        $r = ldap_bind($ds, $this->getConfigurationPool()->getContainer()->getParameter('ldapUser'), $this->getConfigurationPool()->getContainer()->getParameter('ldapMdp'));
-        if (!$r) {
-            throw new \RuntimeException("Connexion LDAP échouée...");
-        }
-        return $ds;
-    }
-
-    private function ldapAdministrableInfosOfUser(User $user)
-    {
-        $info["cn"] = $user->getEmail();
-        $info["sn"] = $user->getNom();
-        $info["description"] = $user->getPrenom();
-        $info["mail"] = $user->getEmail();
-        return $info;
-    }
-
-    private function userDn($email)
-    {
-        return "cn=" . $email . "," . self::DN_MEMBRES;
-    }
 
 
 }

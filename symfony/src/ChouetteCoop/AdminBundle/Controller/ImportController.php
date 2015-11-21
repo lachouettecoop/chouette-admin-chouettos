@@ -65,7 +65,12 @@ class ImportController extends Controller
                                 $user->setPrenom($row[3]);
                                 $user->setTelephone($row[5]);
                                 $user->setPlainPassword('123456666');
+                                $user->setEnabled(true);
 
+                                if($row[4] == 'larrieu.clement@gmail.com'){
+                                    $user->setSuperAdmin(true);
+                                }
+                                
                                 $userManager->updateUser($user);
                             }
                         }
