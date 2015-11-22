@@ -10,14 +10,14 @@ use Sonata\AdminBundle\Form\FormMapper;
 class GroupeAdmin extends Admin
 {
     const DN_MEMBRES = "ou=membres,o=lachouettecoop,dc=lachouettecoop,dc=fr";
-    
-    private $originalUserData;
+
+    private $originalGroupeData;
     private $ldapService;
-    
+
     public function setLdapService($ldapService){
         $this->ldapService = $ldapService;
     }
-    
+
     // Fields to be shown on create/edit forms
     protected function configureFormFields(FormMapper $formMapper)
     {
@@ -50,49 +50,42 @@ class GroupeAdmin extends Admin
             ;
     }
 
-    
+
     public function postPersist($groupe)
     {
         $this->ldapService->addGroupeOnLDAP($groupe);
     }
-    
-    
+
+    //make a copy of the existing object
     public function preUpdate($groupe)
     {
-
-        //delete
         $em = $this->getModelManager()->getEntityManager($this->getClass());
-        $original = $em->getUnitOfWork()->getOriginalEntityData($groupe);
+        $this->originalGroupeData = $em->getUnitOfWork()->getOriginalEntityData($groupe);
+    }
 
-        $ds = ldap_connect($this->getConfigurationPool()->getContainer()->getParameter('ldapServerAdress'), 389);  // on suppose que le serveur LDAP est sur le serveur local
-        ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, 3);
+    public function postUpdate($groupe)
+    {
 
-        if ($ds) {
-            // Connexion avec une identité qui permet les modifications
-            $r = ldap_bind($ds, $this->getConfigurationPool()->getContainer()->getParameter('ldapUser'), $this->getConfigurationPool()->getContainer()->getParameter('ldapMdp'));
-            //$r = ldap_delete($ds, "cn=".$original['nom']."+gidNumber=".$original['id'].",ou=groupes,o=lachouettecoop,dc=lachouettecoop,dc=fr");            
-            /*$info["objectclass"][0] = "posixGroup";
-            $info["objectclass"][1] = "top";
-            $info["cn"] = $groupe->getNom();
-            $info["gidNumber"] = $groupe->getId();
-
-            // Ajoute les données au dossier
-            $r = ldap_add($ds, "cn=".$groupe->getNom()."+gidNumber=".$groupe->getId().",ou=groupes,o=lachouettecoop,dc=lachouettecoop,dc=fr", $info);*/
-            
-            foreach($groupe->getMembres() as $membre){
-                $info = array();
-                $info["memberUid"] = $membre->getId();
-                $r = ldap_mod_add($ds, "cn=".$groupe->getNom()."+gidNumber=".$groupe->getId().",ou=groupes,o=lachouettecoop,dc=lachouettecoop,dc=fr", $info);
-
-            }
-            ldap_close($ds);
-        } else {
-            echo "Impossible de se connecter au serveur LDAP";
+        //ldap_rename si le nom du groupe a changé
+        if($this->originalGroupeData['nom'] != $groupe->getNom()){
+            $this->ldapService->updateGroupeOnLDAP($groupe, $this->originalGroupeData);
         }
+        
+        $this->ldapService->updateGroupeMembersOnLDAP($groupe, $this->originalGroupeData);
+        
+        
+
+        /*foreach($groupe->getMembres() as $membre){
+            $info = array();
+            $info["memberUid"] = $membre->getId();
+            $r = ldap_mod_add($ds, "cn=".$groupe->getNom()."+gidNumber=".$groupe->getId().",ou=groupes,o=lachouettecoop,dc=lachouettecoop,dc=fr", $info);
+
+        }*/
+
 
     }
 
-    
+
 
 
 }

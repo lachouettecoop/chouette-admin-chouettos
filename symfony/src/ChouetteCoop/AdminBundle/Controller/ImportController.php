@@ -111,6 +111,35 @@ class ImportController extends Controller
                             );
 
     }
+    
+    /**
+     * Import CRM abonnes
+     * @param  Request $request 
+     * @return View    
+     */
+    public function ldapMembresAction(Request $request)
+    {
+
+        $em = $this
+            ->getDoctrine()
+            ->getManager();
+        
+        $ldapService = $this->get('chouette.admin.ldap');
+
+        $repositoryU = $em->getRepository('GlukoseUserBundle:User');
+
+        $users = $repositoryU->findAll();
+        
+        foreach($users as $user){
+            if($user->isEnabled()){
+                $ldapService->addUserOnLDAP($user);
+            }
+        }                                    
+                             
+        return $this->render('ChouetteCoopAdminBundle:Main:index.html.twig',
+                             array());
+
+    }
 
 
 }

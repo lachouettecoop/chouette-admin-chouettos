@@ -39,10 +39,10 @@ class LDAPService
         if (!$r) {
             throw new \RuntimeException("Connexion LDAP échouée...");
         }
-        
+
         return true;
     }
-    
+
     private function ldapAdministrableInfosOfUser(User $user)
     {
         $info["cn"] = $user->getEmail();
@@ -51,7 +51,7 @@ class LDAPService
         $info["mail"] = $user->getEmail();
         return $info;
     }
-    
+
     private function ldapAdministrableInfosOfGroupe(Groupe $groupe)
     {
         // Prépare les données            
@@ -64,15 +64,16 @@ class LDAPService
     {
         return "cn=" . $email . "," . self::DN_MEMBRES;
     }
-    
+
     private function groupeDn($nom, $id)
     {
-        return "cn=" . $nom . "+gidNumber=" . $id . "," . self::DN_GROUPES;
+        $nomEchape = str_replace(" ", "\ ", $nom);
+        return "cn=" . $nomEchape . "+gidNumber=" . $id . "," . self::DN_GROUPES;
     }
-    
-    
+
+
     /**
-     * Add user from database to LDAP
+     * Add user to LDAP
      * 
      * @param  User   $user 
      * @return boolean
@@ -85,7 +86,7 @@ class LDAPService
             echo $e->getMessage();
             return;
         }
-        
+
         $info = $this->ldapAdministrableInfosOfUser($user);
         $info["objectclass"][0] = "posixAccount";
         $info["objectclass"][1] = "person";
@@ -95,19 +96,19 @@ class LDAPService
         $info["uid"] = $user->getId();
         $info["uidNumber"] = $user->getId();
         $info["userPassword"] = '{MD5}' . base64_encode(pack('H*',md5($user->getMotDePasse())));
-        
-         // Ajoute le nouvel user dans LDAP
+
+        // Ajoute le nouvel user dans LDAP
         $r = ldap_add($this->ds, $this->userDn($user->getEmail()), $info);
-        
+
         if (!$r) {
             throw new \RuntimeException("Echec de l'ajout dans LDAP ...");
         }
 
         ldap_close($this->ds);
-        
+
         return true;
     }
-    
+
     /**
      * remove user entry from LDAP
      * 
@@ -122,25 +123,25 @@ class LDAPService
             echo $e->getMessage();
             return;
         }        
-        
-         // Ajoute le nouvel user dans LDAP
+
+        // Ajoute le nouvel user dans LDAP
         $r = ldap_delete($this->ds, $this->userDn($user->getEmail()));
-        
+
         if (!$r) {
             throw new \RuntimeException("Echec de la suppression dans LDAP ...");
         }
 
         ldap_close($this->ds);
-        
+
         return true;
     }
-    
-    
+
+
     /**
      * Update an user on the LDAP server
      * 
      * @param   User  $user             
-     * @param   User  $originalUserData       
+     * @param   array  $originalUserData       
      * @return boolean 
      */
     public function updateUserOnLDAP(User $user, $originalUserData)
@@ -151,10 +152,10 @@ class LDAPService
             echo $e->getMessage();
             return;
         }
-        
+
         $info = $this->ldapAdministrableInfosOfUser($user);        
         $currentCn = $originalUserData['email'];
-        
+
         //on vérifie d'abord si l'email change, car c'est l'id sur LDAP et la
         // méthode php est ldsp_rename
         if ($info['cn'] != $currentCn) {
@@ -167,15 +168,15 @@ class LDAPService
         $r = ldap_modify($this->ds, $this->userDn($currentCn), $info);
 
         ldap_close($this->ds);
-        
+
         return true;
     }
-    
-    
+
+
     /**
-     * Add group from database to LDAP
+     * Add groupe to LDAP
      * 
-     * @param  User    $user 
+     * @param  Groupe  $groupe 
      * @return boolean
      */
     public function addGroupeOnLDAP(Groupe $groupe)
@@ -186,20 +187,101 @@ class LDAPService
             echo $e->getMessage();
             return;
         }
-        
+
         $info = $this->ldapAdministrableInfosOfGroupe($groupe);
         $info["objectclass"][0] = "posixGroup";
         $info["objectclass"][1] = "top";
-        
-         // Ajoute le nouvel user dans LDAP
+
+
+        // Ajoute le nouveau groupe dans LDAP
         $r = ldap_add($this->ds, $this->groupeDn($groupe->getNom(), $groupe->getId()), $info);
-        
+
         if (!$r) {
             throw new \RuntimeException("Echec de l'ajout dans LDAP ...");
         }
 
+        $info = array();
+        $info["memberUid"] = 9999;
+        $r = ldap_mod_add($this->ds, $this->groupeDn($groupe->getNom(), $groupe->getId()), $info);
+
         ldap_close($this->ds);
+
+        return true;
+    }
+
+
+    /**
+     * Update a groupe on the LDAP server
+     * 
+     * @param   Groupe  $groupe             
+     * @param   array  $originalGroupeData       
+     * @return boolean 
+     */
+    public function updateGroupeOnLDAP(Groupe $groupe, $originalGroupeData)
+    {
+        try {
+            $this->connectToLdapAsAdmin();
+        } catch(\RuntimeException $e) {
+            echo $e->getMessage();
+            return;
+        }
+
+        $info = $this->ldapAdministrableInfosOfGroupe($groupe);        
+        $currentCn = $originalGroupeData['nom'];
+
+        if (false === ldap_rename($this->ds, 
+                                  $this->groupeDn($currentCn, $groupe->getId()),
+                                  "cn=" . $info['cn'] ."+gidNumber=".$info["gidNumber"],
+                                  self::DN_GROUPES,
+                                  true)) {
+            throw new \RuntimeException('Impossible de modifier le nom du groupe');
+        }
+
+
+        ldap_close($this->ds);
+
+        return true;
+    }
+
+
+    /**
+     * Update the group members on the LDAP server
+     * 
+     * @param   Groupe  $groupe
+     * @param   array  $originalGroupeData   
+     * @return boolean 
+     */
+    public function updateGroupeMembersOnLDAP(Groupe $groupe, $originalGroupeData)
+    {
+        try {
+            $this->connectToLdapAsAdmin();
+        } catch(\RuntimeException $e) {
+            echo $e->getMessage();
+            return;
+        }
+
+        //remove all
+        if($groupe->getMembres()->count() > 0 && count($originalGroupeData['membres']) > 0 ) {
+            ldap_mod_del($this->ds, $this->groupeDn($groupe->getNom(), $groupe->getId()), array("memberUid" => array())); 
+        }
+
+        $info["memberUid"] = 9999;
+        $r = ldap_mod_add($this->ds, $this->groupeDn($groupe->getNom(), $groupe->getId()), $info);
         
+        foreach($groupe->getMembres() as $membre){
+            $info = array();
+            $info["memberUid"] = $membre->getId();
+
+            $r = ldap_mod_add($this->ds, $this->groupeDn($groupe->getNom(), $groupe->getId()), $info);
+
+            if (!$r) {
+                throw new \RuntimeException("Echec de l'ajout dans LDAP ...");
+            }
+        }
+
+
+        ldap_close($this->ds);
+
         return true;
     }
 

@@ -16,7 +16,7 @@ services:
     sonata.admin.utilisateur:
         class: Glukose\UserBundle\Admin\UserAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Pôle Contact", label: "Utilisateurs", icon: %iconUser% }
+            - { name: sonata.admin, manager_type: orm, group: "Gestion des membres", label: "Utilisateurs", icon: %iconUser% }
         arguments:
             - ~
             - Glukose\UserBundle\Entity\User
@@ -29,7 +29,7 @@ services:
     sonata.admin.groupes:
         class: Glukose\UserBundle\Admin\GroupeAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Pôle Contact", label: "Groupes", icon: %iconUser% }
+            - { name: sonata.admin, manager_type: orm, group: "Gestion des membres", label: "Groupes", icon: %iconUser% }
         arguments:
             - ~
             - Glukose\UserBundle\Entity\Groupe
