@@ -165,7 +165,7 @@ class User extends BaseUser
     }
  
     public function __toString(){
-        return $this->nom.' '.$this->prenom;
+        return $this->prenom.' '.$this->nom;
     }
 
     /**

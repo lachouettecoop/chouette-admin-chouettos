@@ -264,9 +264,6 @@ class LDAPService
         if($groupe->getMembres()->count() > 0 && count($originalGroupeData['membres']) > 0 ) {
             ldap_mod_del($this->ds, $this->groupeDn($groupe->getNom(), $groupe->getId()), array("memberUid" => array())); 
         }
-
-        $info["memberUid"] = 9999;
-        $r = ldap_mod_add($this->ds, $this->groupeDn($groupe->getNom(), $groupe->getId()), $info);
         
         foreach($groupe->getMembres() as $membre){
             $info = array();

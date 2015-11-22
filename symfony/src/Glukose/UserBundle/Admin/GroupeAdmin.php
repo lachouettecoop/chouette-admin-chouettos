@@ -65,23 +65,12 @@ class GroupeAdmin extends Admin
 
     public function postUpdate($groupe)
     {
-
         //ldap_rename si le nom du groupe a changé
         if($this->originalGroupeData['nom'] != $groupe->getNom()){
             $this->ldapService->updateGroupeOnLDAP($groupe, $this->originalGroupeData);
         }
         
-        $this->ldapService->updateGroupeMembersOnLDAP($groupe, $this->originalGroupeData);
-        
-        
-
-        /*foreach($groupe->getMembres() as $membre){
-            $info = array();
-            $info["memberUid"] = $membre->getId();
-            $r = ldap_mod_add($ds, "cn=".$groupe->getNom()."+gidNumber=".$groupe->getId().",ou=groupes,o=lachouettecoop,dc=lachouettecoop,dc=fr", $info);
-
-        }*/
-
+        $this->ldapService->updateGroupeMembersOnLDAP($groupe, $this->originalGroupeData);        
 
     }
 
