@@ -11,10 +11,10 @@ use Sonata\AdminBundle\Form\FormMapper;
 class UserAdmin extends Admin
 {
     const DN_MEMBRES = "ou=membres,o=lachouettecoop,dc=lachouettecoop,dc=fr";
-    
+
     private $originalUserData;
     private $ldapService;     
-    
+
     public function setLdapService($ldapService){
         $this->ldapService = $ldapService;
     }
@@ -23,7 +23,7 @@ class UserAdmin extends Admin
     {
         $formMapper
             //->add('username')
-            
+
             //->add('motDePasse')
             /*->add('plainPassword', 'repeated', array(
                 'type' => 'password',
@@ -36,42 +36,46 @@ class UserAdmin extends Admin
                 'class'       => 'col-md-6'
             ))
             ->add('email')
-            ->add('civilite', 'choice',
+            /*->add('civilite', 'choice',
                   array('choices' => array(
                       'mr' => 'Monsieur',
                       'mme' => 'Madame',
                       'mlle' => 'Mademoiselle' )
-                       ))
+                       ))*/
             ->add('nom')
             ->add('prenom')
             ->add('telephone')
-            ->add('portable')    
+            //->add('portable')    
             ->add('enabled', null, array('required' => false, 'label' => 'Membre ?'))
             ->end()
-            ->with('Asoociation', array(
+            ->with('Association', array(
                 'class'       => 'col-md-6'
             ))
-                ->add('statusAssociatif')
-                ->add('dateAdhesion')
-                ->add('montant')
-                ->add('modePaiement')
-                ->add('presentAzendoo')
-                ->add('siEchec')
-            
-            
+            //->add('statusAssociatif')
+            ->add('dateAdhesion', null, array('label' => 'Date première adhésion'))
+            ->add('montant')
+            ->add('modePaiement')
+            //->add('presentAzendoo')
+            ->add('notes')
+
+
             ->end()
-            /*->add('adresses', 'sonata_type_collection', array(
+            ->with('Historique des adhésions', array(
+                'class'       => 'col-md-12'
+            ))
+            ->add('adhesions', 'sonata_type_collection', array(
                 'required' => false,
             ),
                   array(
                       'edit' => 'inline',
                       'inline' => 'table',
                   )
-                 )*/
+                 )
+            ->end()
             ;
     }
 
-    
+
     // Fields to be shown on filter forms
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
@@ -91,6 +95,7 @@ class UserAdmin extends Admin
             ->addIdentifier('nom')
             ->add('prenom')
             ->add('telephone')
+            ->add('groupes')
             ->add('enabled', null, array('label' => 'Activé', 'editable'=>true))
             ;
     }
@@ -109,12 +114,14 @@ class UserAdmin extends Admin
             $this->ldapService->updateUserOnLDAP($user, $this->originalUserData);
         } elseif(!$user->isEnabled() && $this->originalUserData['enabled'] == true) {
             $this->ldapService->removeUserOnLDAP($user);
+        } elseif(!$user->isEnabled()){
+            
         } else {
             $this->ldapService->addUserOnLDAP($user);
         }
     }
 
-    
+
     public function prePersist($user)
     {
         $PasswordLDAP = $user->getMotDePasse();
@@ -131,7 +138,7 @@ class UserAdmin extends Admin
             $user->setUsername($user->getEmail());
         }
     }
-    
+
     public function postPersist($user)
     {
         if($user->isEnabled()) {

@@ -29,7 +29,7 @@ class Groupe
     private $nom;
 
     /**
-    * @ORM\ManyToMany(targetEntity="Glukose\UserBundle\Entity\User", cascade={"persist"})
+    * @ORM\ManyToMany(targetEntity="Glukose\UserBundle\Entity\User", cascade={"persist"}, inversedBy="groupes")
     */
     private $membres;
 

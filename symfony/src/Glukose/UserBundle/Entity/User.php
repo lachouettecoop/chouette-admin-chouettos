@@ -128,9 +128,9 @@ class User extends BaseUser
     /**
      * @var text
      *
-     * @ORM\Column(name="siEchec", type="text", nullable=true)
+     * @ORM\Column(name="notes", type="text", nullable=true)
      */
-    private $siEchec;
+    private $notes;
  
     /**
      * @var string
@@ -151,6 +151,16 @@ class User extends BaseUser
     * @ORM\ManyToMany(targetEntity="Glukose\ContactBundle\Entity\Adresse", cascade={"persist"}, orphanRemoval=true)
     */
     private $adresses;
+ 
+    /**
+    * @ORM\ManyToMany(targetEntity="Glukose\UserBundle\Entity\Adhesion", cascade={"persist"}, orphanRemoval=true)
+    */
+    private $adhesions;
+ 
+    /**
+    * @ORM\ManyToMany(targetEntity="Glukose\UserBundle\Entity\Groupe", mappedBy="membres")
+    */
+    private $groupes;
  
 
     /**
@@ -577,29 +587,6 @@ class User extends BaseUser
         return $this->presentAzendoo;
     }
 
-    /**
-     * Set siEchec
-     *
-     * @param string $siEchec
-     *
-     * @return User
-     */
-    public function setSiEchec($siEchec)
-    {
-        $this->siEchec = $siEchec;
-
-        return $this;
-    }
-
-    /**
-     * Get siEchec
-     *
-     * @return string
-     */
-    public function getSiEchec()
-    {
-        return $this->siEchec;
-    }
 
     /**
      * Set dateAzendoo
@@ -623,5 +610,97 @@ class User extends BaseUser
     public function getDateAzendoo()
     {
         return $this->dateAzendoo;
+    }
+
+    /**
+     * Set notes
+     *
+     * @param string $notes
+     *
+     * @return User
+     */
+    public function setNotes($notes)
+    {
+        $this->notes = $notes;
+
+        return $this;
+    }
+
+    /**
+     * Get notes
+     *
+     * @return string
+     */
+    public function getNotes()
+    {
+        return $this->notes;
+    }
+
+    /**
+     * Add adhesion
+     *
+     * @param \Glukose\UserBundle\Entity\Adhesion $adhesion
+     *
+     * @return User
+     */
+    public function addAdhesion(\Glukose\UserBundle\Entity\Adhesion $adhesion)
+    {
+        $this->adhesions[] = $adhesion;
+
+        return $this;
+    }
+
+    /**
+     * Remove adhesion
+     *
+     * @param \Glukose\UserBundle\Entity\Adhesion $adhesion
+     */
+    public function removeAdhesion(\Glukose\UserBundle\Entity\Adhesion $adhesion)
+    {
+        $this->adhesions->removeElement($adhesion);
+    }
+
+    /**
+     * Get adhesions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAdhesions()
+    {
+        return $this->adhesions;
+    }
+
+    /**
+     * Add groupe
+     *
+     * @param \Glukose\UserBundle\Entity\Groupe $groupe
+     *
+     * @return User
+     */
+    public function addGroupe(\Glukose\UserBundle\Entity\Groupe $groupe)
+    {
+        $this->groupes[] = $groupe;
+
+        return $this;
+    }
+
+    /**
+     * Remove groupe
+     *
+     * @param \Glukose\UserBundle\Entity\Groupe $groupe
+     */
+    public function removeGroupe(\Glukose\UserBundle\Entity\Groupe $groupe)
+    {
+        $this->groupes->removeElement($groupe);
+    }
+
+    /**
+     * Get groupes
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getGroupes()
+    {
+        return $this->groupes;
     }
 }

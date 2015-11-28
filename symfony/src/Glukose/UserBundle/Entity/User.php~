@@ -128,9 +128,9 @@ class User extends BaseUser
     /**
      * @var text
      *
-     * @ORM\Column(name="siEchec", type="text", nullable=true)
+     * @ORM\Column(name="notes", type="text", nullable=true)
      */
-    private $siEchec;
+    private $notes;
  
     /**
      * @var string
@@ -152,6 +152,16 @@ class User extends BaseUser
     */
     private $adresses;
  
+    /**
+    * @ORM\ManyToMany(targetEntity="Glukose\UserBundle\Entity\Adhesion", cascade={"persist"}, orphanRemoval=true)
+    */
+    private $adhesions;
+ 
+    /**
+    * @ORM\ManyToMany(targetEntity="Glukose\UserBundle\Entity\Groupe", mappedBy="membres")
+    */
+    private $groupes;
+ 
 
     /**
      * @DnPregMatch("/ou=([a-zA-Z0-9\.]+)/")
@@ -165,7 +175,7 @@ class User extends BaseUser
     }
  
     public function __toString(){
-        return $this->nom.' '.$this->prenom;
+        return $this->prenom.' '.$this->nom;
     }
 
     /**
@@ -577,27 +587,86 @@ class User extends BaseUser
         return $this->presentAzendoo;
     }
 
+
     /**
-     * Set siEchec
+     * Set dateAzendoo
      *
-     * @param string $siEchec
+     * @param string $dateAzendoo
      *
      * @return User
      */
-    public function setSiEchec($siEchec)
+    public function setDateAzendoo($dateAzendoo)
     {
-        $this->siEchec = $siEchec;
+        $this->dateAzendoo = $dateAzendoo;
 
         return $this;
     }
 
     /**
-     * Get siEchec
+     * Get dateAzendoo
      *
      * @return string
      */
-    public function getSiEchec()
+    public function getDateAzendoo()
     {
-        return $this->siEchec;
+        return $this->dateAzendoo;
+    }
+
+    /**
+     * Set notes
+     *
+     * @param string $notes
+     *
+     * @return User
+     */
+    public function setNotes($notes)
+    {
+        $this->notes = $notes;
+
+        return $this;
+    }
+
+    /**
+     * Get notes
+     *
+     * @return string
+     */
+    public function getNotes()
+    {
+        return $this->notes;
+    }
+
+    /**
+     * Add adhesion
+     *
+     * @param \Glukose\UserBundle\Entity\Adhesion $adhesion
+     *
+     * @return User
+     */
+    public function addAdhesion(\Glukose\UserBundle\Entity\Adhesion $adhesion)
+    {
+        $this->adhesions[] = $adhesion;
+
+        return $this;
+    }
+
+    /**
+     * Remove adhesion
+     *
+     * @param \Glukose\UserBundle\Entity\Adhesion $adhesion
+     */
+    public function removeAdhesion(\Glukose\UserBundle\Entity\Adhesion $adhesion)
+    {
+        $this->adhesions->removeElement($adhesion);
+    }
+
+    /**
+     * Get adhesions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAdhesions()
+    {
+        return $this->adhesions;
     }
 }
