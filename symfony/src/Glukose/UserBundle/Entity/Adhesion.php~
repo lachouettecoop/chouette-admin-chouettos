@@ -28,6 +28,13 @@ class Adhesion
      * @ORM\Column(name="dateAdhesion", type="date", nullable=true)
      */
     private $dateAdhesion;
+ 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="annee", type="integer", nullable=true)
+     */
+    private $annee;
 
     /**
      * @var string
@@ -54,5 +61,78 @@ class Adhesion
 
     }
 
+
+
+    /**
+     * Set dateAdhesion
+     *
+     * @param \DateTime $dateAdhesion
+     *
+     * @return Adhesion
+     */
+    public function setDateAdhesion($dateAdhesion)
+    {
+        $this->dateAdhesion = $dateAdhesion;
+
+        return $this;
+    }
+
+    /**
+     * Get dateAdhesion
+     *
+     * @return \DateTime
+     */
+    public function getDateAdhesion()
+    {
+        return $this->dateAdhesion;
+    }
+
+    /**
+     * Set montant
+     *
+     * @param string $montant
+     *
+     * @return Adhesion
+     */
+    public function setMontant($montant)
+    {
+        $this->montant = $montant;
+
+        return $this;
+    }
+
+    /**
+     * Get montant
+     *
+     * @return string
+     */
+    public function getMontant()
+    {
+        return $this->montant;
+    }
+
+    /**
+     * Set modePaiement
+     *
+     * @param string $modePaiement
+     *
+     * @return Adhesion
+     */
+    public function setModePaiement($modePaiement)
+    {
+        $this->modePaiement = $modePaiement;
+
+        return $this;
+    }
+
+    /**
+     * Get modePaiement
+     *
+     * @return string
+     */
+    public function getModePaiement()
+    {
+        return $this->modePaiement;
+    }
 
 }

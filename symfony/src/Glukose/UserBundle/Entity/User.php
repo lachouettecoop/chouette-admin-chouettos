@@ -75,63 +75,70 @@ class User extends BaseUser
      * @ORM\Column(name="fax", type="string", length=255, nullable=true)
      */
     private $fax;
- 
+
     /**
      * @var string
      *
      * @ORM\Column(name="statusAssociatif", type="string", length=255, nullable=true)
      */
     private $statusAssociatif;
- 
+
     /**
      * @var string
      *
      * @ORM\Column(name="dateAdhesion", type="string", length=255, nullable=true)
      */
     private $dateAdhesion;
- 
+
     /**
      * @var string
      *
      * @ORM\Column(name="typeCotisation", type="string", length=255, nullable=true)
      */
     private $typeCotisation;
- 
+
     /**
      * @var string
      *
      * @ORM\Column(name="montant", type="string", length=255, nullable=true)
      */
     private $montant;
- 
+
     /**
      * @var string
      *
      * @ORM\Column(name="modePaiement", type="string", length=255, nullable=true)
      */
     private $modePaiement;
- 
+
     /**
      * @var string
      *
      * @ORM\Column(name="presentAzendoo", type="string", length=255, nullable=true)
      */
     private $presentAzendoo;
- 
-     /**
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="csp", type="string", length=255, nullable=true)
+     */
+    private $csp;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="dateAzendoo", type="string", length=255, nullable=true)
      */
     private $dateAzendoo;
-  
+
     /**
      * @var text
      *
      * @ORM\Column(name="notes", type="text", nullable=true)
      */
     private $notes;
- 
+
     /**
      * @var string
      *
@@ -151,17 +158,17 @@ class User extends BaseUser
     * @ORM\ManyToMany(targetEntity="Glukose\ContactBundle\Entity\Adresse", cascade={"persist"}, orphanRemoval=true)
     */
     private $adresses;
- 
+
     /**
     * @ORM\ManyToMany(targetEntity="Glukose\UserBundle\Entity\Adhesion", cascade={"persist"}, orphanRemoval=true)
     */
     private $adhesions;
- 
+
     /**
     * @ORM\ManyToMany(targetEntity="Glukose\UserBundle\Entity\Groupe", mappedBy="membres")
     */
     private $groupes;
- 
+
 
     /**
      * @DnPregMatch("/ou=([a-zA-Z0-9\.]+)/")
@@ -173,7 +180,7 @@ class User extends BaseUser
         parent::__construct();
         // your own logic
     }
- 
+
     public function __toString(){
         return $this->prenom.' '.$this->nom;
     }
@@ -702,5 +709,29 @@ class User extends BaseUser
     public function getGroupes()
     {
         return $this->groupes;
+    }
+
+    /**
+     * Set csp
+     *
+     * @param string $csp
+     *
+     * @return User
+     */
+    public function setCsp($csp)
+    {
+        $this->csp = $csp;
+
+        return $this;
+    }
+
+    /**
+     * Get csp
+     *
+     * @return string
+     */
+    public function getCsp()
+    {
+        return $this->csp;
     }
 }

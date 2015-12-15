@@ -36,12 +36,13 @@ class UserAdmin extends Admin
                 'class'       => 'col-md-6'
             ))
             ->add('email')
-            /*->add('civilite', 'choice',
+            ->add('civilite', 'choice',
                   array('choices' => array(
                       'mr' => 'Monsieur',
-                      'mme' => 'Madame',
-                      'mlle' => 'Mademoiselle' )
-                       ))*/
+                      'mme' => 'Madame'
+                      //,'mlle' => 'Mademoiselle' 
+                  )
+                       ))
             ->add('nom')
             ->add('prenom')
             ->add('telephone')
@@ -56,6 +57,7 @@ class UserAdmin extends Admin
             ->add('montant')
             ->add('modePaiement')
             //->add('presentAzendoo')
+            ->add('csp', null, array('label' => 'Catégorie socio-profesionnelle'))
             ->add('notes')
 
 
@@ -64,6 +66,18 @@ class UserAdmin extends Admin
                 'class'       => 'col-md-12'
             ))
             ->add('adhesions', 'sonata_type_collection', array(
+                'required' => false,
+            ),
+                  array(
+                      'edit' => 'inline',
+                      'inline' => 'table',
+                  )
+                 )
+            ->end()
+            ->with('Adresse', array(
+                'class'       => 'col-md-12'
+            ))
+            ->add('adresses', 'sonata_type_collection', array(
                 'required' => false,
             ),
                   array(
@@ -96,6 +110,7 @@ class UserAdmin extends Admin
             ->add('prenom')
             ->add('telephone')
             ->add('groupes')
+            ->add('adhesions')
             ->add('enabled', null, array('label' => 'Activé', 'editable'=>true))
             ;
     }

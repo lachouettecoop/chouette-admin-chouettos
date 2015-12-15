@@ -13,14 +13,14 @@ class AdresseAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('nom', 'textarea', array('label' => 'Nom adresse'))
+            //->add('nom', 'textarea', array('label' => 'Nom adresse'))
             ->add('destinataire', 'textarea')
             ->add('ligne1', 'textarea')
             ->add('ligne2', 'textarea')
             ->add('ligne3', 'textarea')
             ->add('codePostal', 'textarea')
             ->add('ville', 'textarea')
-            ->add('pays', 'textarea')
+            //->add('pays', 'country')
             ->add('nPAI')
             ;
     }

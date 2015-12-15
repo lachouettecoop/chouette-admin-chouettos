@@ -30,12 +30,19 @@ class Adhesion
     private $dateAdhesion;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="annee", type="integer", nullable=true)
+     */
+    private $annee;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="montant", type="string", length=255, nullable=true)
      */
     private $montant;
- 
+
     /**
      * @var string
      *
@@ -54,6 +61,11 @@ class Adhesion
 
     }
 
+    public function __toString()
+    {
+        return $this->annee;
+
+    }
 
 
     /**
@@ -126,5 +138,30 @@ class Adhesion
     public function getModePaiement()
     {
         return $this->modePaiement;
+    }
+
+
+    /**
+     * Set annee
+     *
+     * @param integer $annee
+     *
+     * @return Adhesion
+     */
+    public function setAnnee($annee)
+    {
+        $this->annee = $annee;
+
+        return $this;
+    }
+
+    /**
+     * Get annee
+     *
+     * @return integer
+     */
+    public function getAnnee()
+    {
+        return $this->annee;
     }
 }

@@ -15,6 +15,7 @@ class AdhesionAdmin extends Admin
     {
         $formMapper            
             ->add('dateAdhesion')
+            ->add('annee')
             ->add('montant')
             ->add('modePaiement', 'choice',
                   array('choices' => array(
