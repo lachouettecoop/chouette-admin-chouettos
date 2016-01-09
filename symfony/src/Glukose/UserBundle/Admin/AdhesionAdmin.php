@@ -19,10 +19,14 @@ class AdhesionAdmin extends Admin
             ->add('montant')
             ->add('modePaiement', 'choice',
                   array('choices' => array(
+                      'helloAsso' => 'helloAsso',
                       'cheque' => 'cheque',
                       'especes' => 'especes',
                       'cb' => 'cb',
-                      'virement' => 'virement' )
+                      'virement' => 'virement',
+                      'solViolette' => 'sol violette',
+                      'autre' => 'autre'
+                  )
                        ))
             ;
     }

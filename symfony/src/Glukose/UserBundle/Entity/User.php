@@ -124,6 +124,13 @@ class User extends BaseUser
      * @ORM\Column(name="csp", type="string", length=255, nullable=true)
      */
     private $csp;
+ 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="domaineCompetence", type="string", length=255, nullable=true)
+     */
+    private $domaineCompetence;
 
     /**
      * @var string
@@ -131,6 +138,13 @@ class User extends BaseUser
      * @ORM\Column(name="dateAzendoo", type="string", length=255, nullable=true)
      */
     private $dateAzendoo;
+ 
+     /**
+     * @var date
+     *
+     * @ORM\Column(name="dateNaissance", type="date", nullable=true)
+     */
+     private $dateNaissance;
 
     /**
      * @var text
@@ -733,5 +747,53 @@ class User extends BaseUser
     public function getCsp()
     {
         return $this->csp;
+    }
+
+    /**
+     * Set dateNaissance
+     *
+     * @param \DateTime $dateNaissance
+     *
+     * @return User
+     */
+    public function setDateNaissance($dateNaissance)
+    {
+        $this->dateNaissance = $dateNaissance;
+
+        return $this;
+    }
+
+    /**
+     * Get dateNaissance
+     *
+     * @return \DateTime
+     */
+    public function getDateNaissance()
+    {
+        return $this->dateNaissance;
+    }
+
+    /**
+     * Set domaineCompetence
+     *
+     * @param string $domaineCompetence
+     *
+     * @return User
+     */
+    public function setDomaineCompetence($domaineCompetence)
+    {
+        $this->domaineCompetence = $domaineCompetence;
+
+        return $this;
+    }
+
+    /**
+     * Get domaineCompetence
+     *
+     * @return string
+     */
+    public function getDomaineCompetence()
+    {
+        return $this->domaineCompetence;
     }
 }

@@ -46,7 +46,7 @@ class UserAdmin extends Admin
             ->add('nom')
             ->add('prenom')
             ->add('telephone')
-            //->add('portable')    
+            ->add('dateNaissance')    
             ->add('enabled', null, array('required' => false, 'label' => 'Membre ?'))
             ->end()
             ->with('Association', array(
@@ -58,6 +58,7 @@ class UserAdmin extends Admin
             ->add('modePaiement')
             //->add('presentAzendoo')
             ->add('csp', null, array('label' => 'Catégorie socio-profesionnelle'))
+            ->add('domaineCompetence', null, array('label' => 'Domaines de compétences'))
             ->add('notes')
 
 
