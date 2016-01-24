@@ -41,7 +41,7 @@ services:
     sonata.admin.adhesion:
         class: Glukose\UserBundle\Admin\AdhesionAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Gestion des membres", label: "Adhesions", icon: %iconUser%, show_in_dashboard: false }
+            - { name: sonata.admin, manager_type: orm, group: "Gestion des membres", label: "Adhesions", icon: %iconUser%, show_in_dashboard: true }
         arguments:
             - ~
             - Glukose\UserBundle\Entity\Adhesion
