@@ -14,7 +14,15 @@ class AdhesionAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper            
-            ->add('dateAdhesion')
+            ->add('dateAdhesion', 'sonata_type_date_picker', array(
+                'required' => false,
+                'format'=>'dd/MM/yyyy',
+                /*'dp_min_date' => $start->format('m/d/Y'),
+                'dp_max_date' => $end->format('m/d/Y'),*/
+                'attr' => array(
+                    'data-date-format' => 'DD/MM/YYYY',
+                )
+            ))
             ->add('annee')
             ->add('montant')
             ->add('modePaiement', 'choice',

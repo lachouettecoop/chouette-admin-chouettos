@@ -174,7 +174,7 @@ class User extends BaseUser
     private $adresses;
 
     /**
-    * @ORM\ManyToMany(targetEntity="Glukose\UserBundle\Entity\Adhesion", cascade={"persist"}, orphanRemoval=true)
+    * @ORM\OneToMany(targetEntity="Glukose\UserBundle\Entity\Adhesion", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
     */
     private $adhesions;
 
@@ -189,16 +189,18 @@ class User extends BaseUser
      */
     private $entities = array("accounts");
 
-    public function __construct()
-    {
-        parent::__construct();
-        // your own logic
-    }
+
 
     public function __toString(){
         return $this->prenom.' '.$this->nom;
     }
-
+ 
+    public function __construct()
+    {
+        parent::__construct();
+        $this->adhesions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->adresses = new \Doctrine\Common\Collections\ArrayCollection();
+    }
     /**
      * Set civilite
      *

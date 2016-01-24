@@ -47,6 +47,10 @@ twig:
     strict_variables: "%kernel.debug%"
     globals:
         web_path: %web_path%
+    form:
+        resources:
+            - 'SonataCoreBundle:Form:datepicker.html.twig'
+
 
 
 # Assetic Configuration

@@ -49,6 +49,12 @@ class Adhesion
      * @ORM\Column(name="modePaiement", type="string", length=255, nullable=true)
      */
     private $modePaiement;
+ 
+    
+    /**
+    * @ORM\ManyToOne(targetEntity="Glukose\UserBundle\Entity\User", inversedBy="adhesions")
+    */
+    private $user;
 
     /**
      * Get id
@@ -163,5 +169,29 @@ class Adhesion
     public function getAnnee()
     {
         return $this->annee;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \Glukose\UserBundle\Entity\User $user
+     *
+     * @return Adhesion
+     */
+    public function setUser(\Glukose\UserBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \Glukose\UserBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }

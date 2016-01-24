@@ -46,7 +46,15 @@ class UserAdmin extends Admin
             ->add('nom')
             ->add('prenom')
             ->add('telephone')
-            ->add('dateNaissance')    
+            ->add('dateNaissance', 'sonata_type_date_picker', array(
+                'required' => false,
+                'format'=>'dd/MM/yyyy',
+                /*'dp_min_date' => $start->format('m/d/Y'),
+                'dp_max_date' => $end->format('m/d/Y'),*/
+                'attr' => array(
+                    'data-date-format' => 'DD/MM/YYYY',
+                )
+            ))
             ->add('enabled', null, array('required' => false, 'label' => 'Membre ?'))
             ->end()
             ->with('Association', array(
@@ -119,6 +127,7 @@ class UserAdmin extends Admin
     //make a copy of the existing object
     public function preUpdate($user)
     {
+        $this->syncRelations($user);
         $em = $this->getModelManager()->getEntityManager($this->getClass());
         $this->originalUserData = $em->getUnitOfWork()->getOriginalEntityData($user);
     }
@@ -153,6 +162,8 @@ class UserAdmin extends Admin
         if(empty($username)){
             $user->setUsername($user->getEmail());
         }
+        
+        $this->syncRelations($user);
     }
 
     public function postPersist($user)
@@ -162,6 +173,16 @@ class UserAdmin extends Admin
         }
     }
 
+    
+    public function syncRelations($user){
+        if($user->getAdhesions() != null){
+            foreach($user->getAdhesions() as $adhesion){
+                //on établi la relation entre ouvrage et la table intérmédiaire autre participant
+                $adhesion->setUser($user);
+            }
+        }
+        
+    }
 
 
 }
