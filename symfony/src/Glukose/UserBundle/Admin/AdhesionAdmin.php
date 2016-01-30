@@ -36,6 +36,7 @@ class AdhesionAdmin extends Admin
                       'autre' => 'autre'
                   )
                        ))
+            ->add('user')
             ;
     }
 

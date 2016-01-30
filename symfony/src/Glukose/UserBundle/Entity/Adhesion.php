@@ -69,7 +69,7 @@ class Adhesion
 
     public function __toString()
     {
-        return $this->annee;
+        return 'User :'.$this->user;
 
     }
 

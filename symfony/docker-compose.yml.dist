@@ -37,3 +37,5 @@ composer:
     - ./docker/php_additional.ini:/usr/local/etc/php/conf.d/php_additional.ini
     - .:/app
   working_dir: /app
+  
+  docker run -it --link db:mysql --rm mariadb:latest sh -c 'exec mysqldump -h"$MYSQL_PORT_3306_TCP_ADDR" -P"$MYSQL_PORT_3306_TCP_PORT" -uroot -p"$MYSQL_ENV_MYSQL_ROOT_PASSWORD" chouettosAdmingl' > chouettosAdmingl_dump.sql

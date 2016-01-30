@@ -140,7 +140,7 @@ class UserAdmin extends Admin
         } elseif(!$user->isEnabled() && $this->originalUserData['enabled'] == true) {
             $this->ldapService->removeUserOnLDAP($user);
         } elseif(!$user->isEnabled()){
-            
+
         } else {
             $this->ldapService->addUserOnLDAP($user);
         }
@@ -162,7 +162,7 @@ class UserAdmin extends Admin
         if(empty($username)){
             $user->setUsername($user->getEmail());
         }
-        
+
         $this->syncRelations($user);
     }
 
@@ -173,7 +173,7 @@ class UserAdmin extends Admin
         }
     }
 
-    
+
     public function syncRelations($user){
         if($user->getAdhesions() != null){
             foreach($user->getAdhesions() as $adhesion){
@@ -181,8 +181,15 @@ class UserAdmin extends Admin
                 $adhesion->setUser($user);
             }
         }
-        
+
     }
+
+
+    public function getExportFields()
+    {
+        return array('nom','prenom','email','telephone','enabled');
+    }
+
 
 
 }
