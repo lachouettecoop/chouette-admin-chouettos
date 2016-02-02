@@ -124,7 +124,7 @@ class User extends BaseUser
      * @ORM\Column(name="csp", type="string", length=255, nullable=true)
      */
     private $csp;
- 
+
     /**
      * @var string
      *
@@ -138,13 +138,13 @@ class User extends BaseUser
      * @ORM\Column(name="dateAzendoo", type="string", length=255, nullable=true)
      */
     private $dateAzendoo;
- 
-     /**
+
+    /**
      * @var date
      *
      * @ORM\Column(name="dateNaissance", type="date", nullable=true)
      */
-     private $dateNaissance;
+    private $dateNaissance;
 
     /**
      * @var text
@@ -194,12 +194,82 @@ class User extends BaseUser
     public function __toString(){
         return $this->prenom.' '.$this->nom;
     }
- 
+
     public function __construct()
     {
         parent::__construct();
         $this->adhesions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->adresses = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function exportAdresse()
+    {
+        $output = '';
+        foreach($this->adresses as $adresse){
+            $output.= $adresse->getDestinataire();
+        }
+     
+        return $output;
+    }
+ 
+    public function exportAdresse1()
+    {
+        $output = '';
+        foreach($this->adresses as $adresse){
+            $output.= $adresse->getLigne1();
+        }
+     
+        return $output;
+    }
+ 
+    public function exportAdresse2()
+    {
+        $output = '';
+        foreach($this->adresses as $adresse){
+            $output.= $adresse->getLigne2();
+        }
+     
+        return $output;
+    }
+ 
+    public function exportAdresse3()
+    {
+        $output = '';
+        foreach($this->adresses as $adresse){
+            $output.= $adresse->getLigne3();
+        }
+     
+        return $output;
+    }
+ 
+    public function exportAdresse4()
+    {
+        $output = '';
+        foreach($this->adresses as $adresse){
+            $output.= $adresse->getCodePostal();
+        }
+     
+        return $output;
+    }
+    
+ public function exportAdresse5()
+    {
+        $output = '';
+        foreach($this->adresses as $adresse){
+            $output.= $adresse->getVille();
+        }
+     
+        return $output;
+    }
+ 
+ public function exportAdresse6()
+    {
+        $output = '';
+        foreach($this->adresses as $adresse){
+            $output.= $adresse->getPays();
+        }
+     
+        return $output;
     }
     /**
      * Set civilite

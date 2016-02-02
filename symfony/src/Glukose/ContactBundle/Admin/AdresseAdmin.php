@@ -40,7 +40,8 @@ class AdresseAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('nom')
+            ->addIdentifier('id')
+            ->add('destinataire')
             ;
     }
 }
