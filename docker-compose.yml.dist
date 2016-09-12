@@ -16,7 +16,7 @@ db:
 php:
     build: php-fpm
     expose:
-        - 9000:9000
+        - 9000/tcp
     volumes_from:
         - application
     links:
