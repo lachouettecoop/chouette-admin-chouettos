@@ -13,7 +13,7 @@ class UserAdmin extends Admin
     const DN_MEMBRES = "ou=membres,o=lachouettecoop,dc=lachouettecoop,dc=fr";
 
     private $originalUserData;
-    private $ldapService;     
+    private $ldapService;
 
     public function setLdapService($ldapService){
         $this->ldapService = $ldapService;
@@ -40,7 +40,7 @@ class UserAdmin extends Admin
                   array('choices' => array(
                       'mr' => 'Monsieur',
                       'mme' => 'Madame'
-                      //,'mlle' => 'Mademoiselle' 
+                      //,'mlle' => 'Mademoiselle'
                   )
                        ))
             ->add('nom')
@@ -134,7 +134,7 @@ class UserAdmin extends Admin
 
     //update the user on ldap
     public function postUpdate($user)
-    {        
+    {
         if($this->originalUserData['enabled'] == $user->isEnabled() && $user->isEnabled()){
             $this->ldapService->updateUserOnLDAP($user, $this->originalUserData);
         } elseif(!$user->isEnabled() && $this->originalUserData['enabled'] == true) {
@@ -177,7 +177,7 @@ class UserAdmin extends Admin
     public function syncRelations($user){
         if($user->getAdhesions() != null){
             foreach($user->getAdhesions() as $adhesion){
-                //on établi la relation entre ouvrage et la table intérmédiaire autre participant
+                //on établi la relation entre ouvrage et la table intérmédiaire
                 $adhesion->setUser($user);
             }
         }
