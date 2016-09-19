@@ -35,7 +35,7 @@ class User extends BaseUser
     /**
      * @var string
      * @Attribute("nom")
-     * 
+     *
      * @ORM\Column(name="nom", type="string", length=255, nullable=true)
      */
     private $nom;
@@ -43,7 +43,7 @@ class User extends BaseUser
     /**
      * @var string
      * @Attribute("firstname")
-     * 
+     *
      * @ORM\Column(name="prenom", type="string", length=255, nullable=true)
      */
     private $prenom;
@@ -183,6 +183,13 @@ class User extends BaseUser
     */
     private $groupes;
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="accepteMail", type="boolean", nullable=true)
+     */
+    private $accepteMail = true;
+
 
     /**
      * @DnPregMatch("/ou=([a-zA-Z0-9\.]+)/")
@@ -208,67 +215,67 @@ class User extends BaseUser
         foreach($this->adresses as $adresse){
             $output.= $adresse->getDestinataire();
         }
-     
+
         return $output;
     }
- 
+
     public function exportAdresse1()
     {
         $output = '';
         foreach($this->adresses as $adresse){
             $output.= $adresse->getLigne1();
         }
-     
+
         return $output;
     }
- 
+
     public function exportAdresse2()
     {
         $output = '';
         foreach($this->adresses as $adresse){
             $output.= $adresse->getLigne2();
         }
-     
+
         return $output;
     }
- 
+
     public function exportAdresse3()
     {
         $output = '';
         foreach($this->adresses as $adresse){
             $output.= $adresse->getLigne3();
         }
-     
+
         return $output;
     }
- 
+
     public function exportAdresse4()
     {
         $output = '';
         foreach($this->adresses as $adresse){
             $output.= $adresse->getCodePostal();
         }
-     
+
         return $output;
     }
-    
+
  public function exportAdresse5()
     {
         $output = '';
         foreach($this->adresses as $adresse){
             $output.= $adresse->getVille();
         }
-     
+
         return $output;
     }
- 
+
  public function exportAdresse6()
     {
         $output = '';
         foreach($this->adresses as $adresse){
             $output.= $adresse->getPays();
         }
-     
+
         return $output;
     }
     /**
@@ -287,7 +294,7 @@ class User extends BaseUser
     /**
      * Get civilite
      *
-     * @return string 
+     * @return string
      */
     public function getCivilite()
     {
@@ -310,7 +317,7 @@ class User extends BaseUser
     /**
      * Get nom
      *
-     * @return string 
+     * @return string
      */
     public function getNom()
     {
@@ -333,7 +340,7 @@ class User extends BaseUser
     /**
      * Get prenom
      *
-     * @return string 
+     * @return string
      */
     public function getPrenom()
     {
@@ -356,7 +363,7 @@ class User extends BaseUser
     /**
      * Get destination
      *
-     * @return integer 
+     * @return integer
      */
     public function getDestination()
     {
@@ -379,7 +386,7 @@ class User extends BaseUser
     /**
      * Get telephone
      *
-     * @return string 
+     * @return string
      */
     public function getTelephone()
     {
@@ -402,7 +409,7 @@ class User extends BaseUser
     /**
      * Get portable
      *
-     * @return string 
+     * @return string
      */
     public function getPortable()
     {
@@ -425,7 +432,7 @@ class User extends BaseUser
     /**
      * Get fax
      *
-     * @return string 
+     * @return string
      */
     public function getFax()
     {
@@ -448,7 +455,7 @@ class User extends BaseUser
     /**
      * Get updated
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdated()
     {
@@ -481,7 +488,7 @@ class User extends BaseUser
     /**
      * Get adresses
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getAdresses()
     {
@@ -867,5 +874,29 @@ class User extends BaseUser
     public function getDomaineCompetence()
     {
         return $this->domaineCompetence;
+    }
+
+    /**
+     * Set accepteMail
+     *
+     * @param boolean $accepteMail
+     *
+     * @return User
+     */
+    public function setAccepteMail($accepteMail)
+    {
+        $this->accepteMail = $accepteMail;
+
+        return $this;
+    }
+
+    /**
+     * Get accepteMail
+     *
+     * @return boolean
+     */
+    public function getAccepteMail()
+    {
+        return $this->accepteMail;
     }
 }

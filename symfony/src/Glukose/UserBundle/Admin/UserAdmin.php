@@ -56,6 +56,7 @@ class UserAdmin extends Admin
                 )
             ))
             ->add('enabled', null, array('required' => false, 'label' => 'Membre ?'))
+            ->add('accepteMail', null, array('required' => false, 'label' => 'Accepte les emails ?'))
             ->end()
             ->with('Association', array(
                 'class'       => 'col-md-6'
@@ -152,10 +153,10 @@ class UserAdmin extends Admin
         $PasswordLDAP = $user->getMotDePasse();
         $PasswordFOS = $user->getPassword();
         if(empty($PasswordLDAP)){
-            $user->setMotDePasse('123456');
+            $user->setMotDePasse('123456'.(string)time());
         }
-        if(empty($Password)){
-            $user->setPlainPassword('123456');
+        if(empty($PasswordFOS)){
+            $user->setMotDePasse('123456'.(string)time());
         }
 
         $username = $user->getUsername();
@@ -177,7 +178,6 @@ class UserAdmin extends Admin
     public function syncRelations($user){
         if($user->getAdhesions() != null){
             foreach($user->getAdhesions() as $adhesion){
-                //on établi la relation entre ouvrage et la table intérmédiaire
                 $adhesion->setUser($user);
             }
         }
