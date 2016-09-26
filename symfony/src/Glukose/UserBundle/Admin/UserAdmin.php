@@ -156,7 +156,7 @@ class UserAdmin extends Admin
             $user->setMotDePasse('123456'.(string)time());
         }
         if(empty($PasswordFOS)){
-            $user->setMotDePasse('123456'.(string)time());
+            $user->setPlainPassword('123456'.(string)time());
         }
 
         $username = $user->getUsername();
