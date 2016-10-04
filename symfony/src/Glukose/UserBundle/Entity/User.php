@@ -190,6 +190,13 @@ class User extends BaseUser
      */
     private $accepteMail = true;
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="membreActif", type="boolean", nullable=true)
+     */
+    private $membreActif = false;
+
 
     /**
      * @DnPregMatch("/ou=([a-zA-Z0-9\.]+)/")

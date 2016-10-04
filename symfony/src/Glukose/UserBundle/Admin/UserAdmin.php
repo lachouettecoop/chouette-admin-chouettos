@@ -57,6 +57,7 @@ class UserAdmin extends Admin
             ))
             ->add('enabled', null, array('required' => false, 'label' => 'Membre ?'))
             ->add('accepteMail', null, array('required' => false, 'label' => 'Accepte les emails ?'))
+            ->add('membreActif', null, array('required' => false, 'label' => 'Membre actif ?'))
             ->end()
             ->with('Association', array(
                 'class'       => 'col-md-6'
@@ -187,7 +188,7 @@ class UserAdmin extends Admin
 
     public function getExportFields()
     {
-        return array('civilite', 'nom','prenom','email','telephone','enabled', 'exportAdresse', 'exportAdresse1', 'exportAdresse2', 'exportAdresse3', 'exportAdresse4', 'exportAdresse5', 'exportAdresse6');
+        return array('civilite', 'nom','prenom','email','telephone','enabled', 'accepteMail', 'membreActif','exportAdresse', 'exportAdresse1', 'exportAdresse2', 'exportAdresse3', 'exportAdresse4', 'exportAdresse5', 'exportAdresse6');
     }
 
 
