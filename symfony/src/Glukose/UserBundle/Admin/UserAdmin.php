@@ -188,7 +188,7 @@ class UserAdmin extends Admin
 
     public function getExportFields()
     {
-        return array('civilite', 'nom','prenom','email','telephone','enabled', 'accepteMail', 'membreActif', 'domaineCompetence', 'exportAdresse', 'exportAdresse1', 'exportAdresse2', 'exportAdresse3', 'exportAdresse4', 'exportAdresse5', 'exportAdresse6');
+        return array('civilite', 'nom','prenom','email','telephone','enabled', 'accepteMail', 'domaineCompetence', 'exportAdresse', 'exportAdresse1', 'exportAdresse2', 'exportAdresse3', 'exportAdresse4', 'exportAdresse5', 'exportAdresse6');
     }
 
 
