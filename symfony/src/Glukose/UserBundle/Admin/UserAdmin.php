@@ -57,7 +57,7 @@ class UserAdmin extends Admin
             ))
             ->add('enabled', null, array('required' => false, 'label' => 'Membre ?'))
             ->add('accepteMail', null, array('required' => false, 'label' => 'Accepte les emails ?'))
-            ->add('membreActif', null, array('required' => false, 'label' => 'Membre actif ?'))
+            //->add('membreActif', null, array('required' => false, 'label' => 'Membre actif ?'))
             ->end()
             ->with('Association', array(
                 'class'       => 'col-md-6'
