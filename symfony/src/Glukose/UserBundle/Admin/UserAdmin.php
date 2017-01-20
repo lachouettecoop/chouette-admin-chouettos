@@ -121,6 +121,7 @@ class UserAdmin extends Admin
             ->add('prenom')
             ->add('telephone')
             ->add('groupes')
+            ->add('notes', 'string', array('template' => 'GlukoseUserBundle:Admin:resetPassword.html.twig'))
             ->add('adhesions')
             ->add('enabled', null, array('label' => 'Activé', 'editable'=>true))
             ;

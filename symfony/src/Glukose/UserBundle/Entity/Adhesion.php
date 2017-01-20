@@ -49,8 +49,8 @@ class Adhesion
      * @ORM\Column(name="modePaiement", type="string", length=255, nullable=true)
      */
     private $modePaiement;
- 
-    
+
+
     /**
     * @ORM\ManyToOne(targetEntity="Glukose\UserBundle\Entity\User", inversedBy="adhesions")
     */
@@ -69,7 +69,7 @@ class Adhesion
 
     public function __toString()
     {
-        return 'User :'.$this->user;
+        return $this->annee;
 
     }
 
