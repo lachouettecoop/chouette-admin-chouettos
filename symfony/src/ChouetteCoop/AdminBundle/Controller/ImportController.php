@@ -12,6 +12,44 @@ use Glukose\UserBundle\Entity\User;
 class ImportController extends Controller
 {
 
+  /**
+   * Disable users who have not an adhesion for $annee
+   *
+   * @param  Request $request
+   * @return View
+   */
+  public function desactivationMembresAction($annee, Request $request)
+  {
+        $em = $this
+          ->getDoctrine()
+          ->getManager();
+
+        $userRep = $em->getRepository('GlukoseUserBundle:User');
+
+        $users = $userRep->findAll();
+
+        foreach ($users as $user) {
+
+          $flag = false;
+          foreach ($user->getAdhesions() as $adhesion) {
+            if($adhesion->getAnnee() == $annee) {
+              $flag = true;
+            }
+          }
+
+          if(!$flag){
+            $user->setEnabled(false);
+            $em->persist($user);
+          }
+        }
+
+        $em->flush();
+        $admin_pool = $this->get('sonata.admin.pool');
+        return $this->render('ChouetteCoopAdminBundle:Main:index.html.twig',
+                             array('admin_pool' => $admin_pool)
+                            );
+  }
+
     /**
      * Import CRM abonnes
      * @param  Request $request
