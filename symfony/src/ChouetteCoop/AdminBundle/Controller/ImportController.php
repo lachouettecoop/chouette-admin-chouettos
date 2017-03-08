@@ -50,6 +50,56 @@ class ImportController extends Controller
                             );
   }
 
+  /**
+   * Create Barcodes for users
+   *
+   * @param  Request $request
+   * @return View
+   */
+  public function creationDeCodeBarreAction(Request $request)
+  {
+        $em = $this
+          ->getDoctrine()
+          ->getManager();
+
+        $userRep = $em->getRepository('GlukoseUserBundle:User');
+
+        $users = $userRep->findAll();
+
+        $timestamp = time();
+
+        $i = 0;
+        foreach ($users as $user) {
+            $i++;
+            $codeBarre = $this->generateEAN(($timestamp + $i));
+            $user->setCodeBarre($codeBarre);
+            $em->persist($user);
+        }
+
+        $em->flush();
+        $admin_pool = $this->get('sonata.admin.pool');
+        return $this->render('ChouetteCoopAdminBundle:Main:index.html.twig',
+                             array('admin_pool' => $admin_pool)
+                            );
+  }
+
+  function generateEAN($number)
+  {
+    $code = '24' . $number;
+    $weightflag = true;
+    $sum = 0;
+    // Weight for a digit in the checksum is 3, 1, 3.. starting from the last digit.
+    // loop backwards to make the loop length-agnostic. The same basic functionality
+    // will work for codes of different lengths.
+    for ($i = strlen($code) - 1; $i >= 0; $i--)
+    {
+      $sum += (int)$code[$i] * ($weightflag?3:1);
+      $weightflag = !$weightflag;
+    }
+    $code .= (10 - ($sum % 10)) % 10;
+    return $code;
+  }
+
     /**
      * Import CRM abonnes
      * @param  Request $request

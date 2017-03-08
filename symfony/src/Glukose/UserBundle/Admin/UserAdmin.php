@@ -46,6 +46,7 @@ class UserAdmin extends Admin
             ->add('nom')
             ->add('prenom')
             ->add('telephone')
+            ->add('codeBarre')
             ->add('dateNaissance', 'sonata_type_date_picker', array(
                 'required' => false,
                 'format'=>'dd/MM/yyyy',
@@ -102,7 +103,7 @@ class UserAdmin extends Admin
 
     public function getExportFields()
     {
-        return array('civilite', 'nom','prenom', 'dateNaissance', 'csp', 'dateAdhesion', 'telephone','email','enabled', 'accepteMail', 'domaineCompetence', 'exportAdresse', 'exportAdresse1', 'exportAdresse2', 'exportAdresse3', 'exportAdresse4', 'exportAdresse5', 'exportAdresse6', 'adhesions', 'exportdAhesionAnnee', 'exportAdhesionDate', 'exportAdhesionMontant');
+        return array('civilite', 'nom','prenom', 'dateNaissance', 'csp', 'codebarre', 'dateAdhesion', 'telephone','email','enabled', 'accepteMail', 'domaineCompetence', 'exportAdresse', 'exportAdresse1', 'exportAdresse2', 'exportAdresse3', 'exportAdresse4', 'exportAdresse5', 'exportAdresse6', 'adhesions', 'exportdAhesionAnnee', 'exportAdhesionDate', 'exportAdhesionMontant');
     }
 
 

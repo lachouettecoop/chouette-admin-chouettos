@@ -121,6 +121,13 @@ class User extends BaseUser
     /**
      * @var string
      *
+     * @ORM\Column(name="codeBarre", type="string", length=255, nullable=true)
+     */
+    private $codeBarre;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="csp", type="string", length=255, nullable=true)
      */
     private $csp;
@@ -936,5 +943,53 @@ class User extends BaseUser
     public function getAccepteMail()
     {
         return $this->accepteMail;
+    }
+
+    /**
+     * Set codeBarre
+     *
+     * @param string $codeBarre
+     *
+     * @return User
+     */
+    public function setCodeBarre($codeBarre)
+    {
+        $this->codeBarre = $codeBarre;
+
+        return $this;
+    }
+
+    /**
+     * Get codeBarre
+     *
+     * @return string
+     */
+    public function getCodeBarre()
+    {
+        return $this->codeBarre;
+    }
+
+    /**
+     * Set membreActif
+     *
+     * @param boolean $membreActif
+     *
+     * @return User
+     */
+    public function setMembreActif($membreActif)
+    {
+        $this->membreActif = $membreActif;
+
+        return $this;
+    }
+
+    /**
+     * Get membreActif
+     *
+     * @return boolean
+     */
+    public function getMembreActif()
+    {
+        return $this->membreActif;
     }
 }
