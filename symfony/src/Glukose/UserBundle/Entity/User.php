@@ -216,6 +216,35 @@ class User extends BaseUser
         $this->adresses = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+    public function exportdAhesionAnnee()
+    {
+        $output = '';
+        foreach($this->adhesions as $adhesion){
+            $output.= $adhesion->getAnnee().', ';
+        }
+
+        return $output;
+    }
+
+    public function exportAdhesionDate()
+    {
+        $output = '';
+        foreach($this->adhesions as $adhesion){
+            $output.= $adhesion->getDateAdhesion()->format('d/m/Y').', ';
+        }
+
+        return $output;
+    }
+    public function exportAdhesionMontant()
+    {
+        $output = '';
+        foreach($this->adhesions as $adhesion){
+            $output.= $adhesion->getMontant().', ';
+        }
+
+        return $output;
+    }
+
     public function exportAdresse()
     {
         $output = '';

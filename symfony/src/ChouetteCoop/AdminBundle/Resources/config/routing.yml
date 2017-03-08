@@ -7,7 +7,7 @@ chouette_coop_admin_import_membres:
     defaults: { _controller: ChouetteCoopAdminBundle:Import:importMembres }
 
 chouette_coop_desactivation:
-    path:     /desactivation/{annee}
+    path:     admin/desactivation/{annee}
     defaults: { _controller: ChouetteCoopAdminBundle:Import:desactivationMembres }
 
 chouette_coop_admin_ldap_membres:
