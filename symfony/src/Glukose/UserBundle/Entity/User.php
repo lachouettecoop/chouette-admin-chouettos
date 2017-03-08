@@ -230,7 +230,9 @@ class User extends BaseUser
     {
         $output = '';
         foreach($this->adhesions as $adhesion){
+          if($adhesion->getDateAdhesion() != null && $adhesion->getDateAdhesion()!= ''){
             $output.= $adhesion->getDateAdhesion()->format('d/m/Y').', ';
+            }
         }
 
         return $output;
