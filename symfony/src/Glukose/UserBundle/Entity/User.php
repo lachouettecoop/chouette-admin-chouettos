@@ -223,6 +223,15 @@ class User extends BaseUser
         $this->adresses = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+    public function exportDateNaissance()
+    {
+        $output = ' ';
+        if ($this->dateNaissance != ''){
+            $output = $this->dateNaissance->format('d/m/Y');
+        }
+        return $output;
+    }
+
     public function exportdAhesionAnnee()
     {
         $output = '';
