@@ -121,6 +121,13 @@ class User extends BaseUser
     /**
      * @var string
      *
+     * @ORM\Column(name="codeBarre", type="string", length=255, nullable=true)
+     */
+    private $codeBarre;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="csp", type="string", length=255, nullable=true)
      */
     private $csp;
@@ -190,6 +197,13 @@ class User extends BaseUser
      */
     private $accepteMail = true;
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="membreActif", type="boolean", nullable=true)
+     */
+    private $membreActif = false;
+
 
     /**
      * @DnPregMatch("/ou=([a-zA-Z0-9\.]+)/")
@@ -207,6 +221,37 @@ class User extends BaseUser
         parent::__construct();
         $this->adhesions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->adresses = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function exportdAhesionAnnee()
+    {
+        $output = '';
+        foreach($this->adhesions as $adhesion){
+            $output.= $adhesion->getAnnee().', ';
+        }
+
+        return $output;
+    }
+
+    public function exportAdhesionDate()
+    {
+        $output = '';
+        foreach($this->adhesions as $adhesion){
+          if($adhesion->getDateAdhesion() != null && $adhesion->getDateAdhesion()!= ''){
+            $output.= $adhesion->getDateAdhesion()->format('d/m/Y').', ';
+            }
+        }
+
+        return $output;
+    }
+    public function exportAdhesionMontant()
+    {
+        $output = '';
+        foreach($this->adhesions as $adhesion){
+            $output.= $adhesion->getMontant().', ';
+        }
+
+        return $output;
     }
 
     public function exportAdresse()
@@ -874,5 +919,29 @@ class User extends BaseUser
     public function getDomaineCompetence()
     {
         return $this->domaineCompetence;
+    }
+
+    /**
+     * Set accepteMail
+     *
+     * @param boolean $accepteMail
+     *
+     * @return User
+     */
+    public function setAccepteMail($accepteMail)
+    {
+        $this->accepteMail = $accepteMail;
+
+        return $this;
+    }
+
+    /**
+     * Get accepteMail
+     *
+     * @return boolean
+     */
+    public function getAccepteMail()
+    {
+        return $this->accepteMail;
     }
 }

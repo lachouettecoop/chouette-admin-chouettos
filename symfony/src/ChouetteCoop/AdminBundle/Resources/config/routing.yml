@@ -3,7 +3,7 @@ chouette_coop_admin_homepage:
     defaults: { _controller: ChouetteCoopAdminBundle:Main:index }
 
 chouette_coop_admin_import_membres:
-    path:     /import-membres
+    path:     admin/import-membres
     defaults: { _controller: ChouetteCoopAdminBundle:Import:importMembres }
 
 chouette_coop_desactivation:
@@ -15,5 +15,5 @@ chouette_coop_codebare:
     defaults: { _controller: ChouetteCoopAdminBundle:Import:creationDeCodeBarre }
 
 chouette_coop_admin_ldap_membres:
-    path:     /ldap-membres
+    path:     admin/ldap-membres
     defaults: { _controller: ChouetteCoopAdminBundle:Import:ldapMembres }

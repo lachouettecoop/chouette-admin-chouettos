@@ -7,6 +7,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Glukose\UserBundle\Entity\User;
+use Glukose\ContactBundle\Entity\Adresse;
+use Glukose\UserBundle\Entity\Adhesion;
 
 
 class ImportController extends Controller
@@ -141,42 +143,75 @@ class ImportController extends Controller
                 $pathFile  = $file->getData();
 
 
+
+
                 if (($handle = fopen($pathFile->getRealPath(), "r")) !== FALSE) {
                     while(($row = fgetcsv($handle)) !== FALSE) {
 
-                            if(filter_var($row[4], FILTER_VALIDATE_EMAIL) != false){
-                                $user = $userManager->createUser();
+                            if(filter_var($row[8], FILTER_VALIDATE_EMAIL) != false){
+                                $userOld = $repositoryU->findOneBy(array('email' => $row[8]));
 
-                                $user->setUsername($row[4]);
-                                $user->setEmail($row[4]);
-                                $user->setNom($row[2]);
-                                $user->setPrenom($row[3]);
-                                $user->setTelephone($row[5]);
-                                $user->setPlainPassword('123456666');
-                                $user->setMotDePasse('123456666');
+                                if(!$userOld){
+                                  $user = $userManager->createUser();
 
-                                $user->setStatusAssociatif($row[6]);
-                                $user->setEnabled(false);
-                                if($row[6] == 'membre'){
-                                    $user->setEnabled(true);
-                                }
+                                  $user->setUsername($row[8]);
+                                  $user->setEmail($row[8]);
+                                  $user->setNom($row[1]);
+                                  $user->setPrenom($row[2]);
+                                  $user->setTelephone($row[7]);
+                                  $user->setPlainPassword('1234'.time());
+                                  $user->setMotDePasse('1234'.time());
 
-                                $user->setDateAdhesion($row[7]);
-                                $user->setTypeCotisation($row[8]);
-                                $user->setMontant($row[9]);
-                                $user->setModePaiement($row[10]);
-                                $user->setPresentAzendoo($row[11]);
-                                $user->setDateAzendoo($row[12]);
-                                $user->setSiEchec($row[13]);
+                                  $user->setCodeBarre($row[5]);
+                                  $user->setEnabled(false);
+                                  if($row[9] == '1'){
+                                      $user->setEnabled(true);
+                                  }
+                                  if($row[10] == '1'){
+                                      $user->setAccepteMail(true);
+                                  }
 
+                                  $user->setDateNaissance($this->dateToSQL($row[3], 'D, d M Y H:i:s O'));
+                                  $user->setDomaineCompetence($row[11]);
 
-                                if($row[4] == 'larrieu.clement@gmail.com'){
-                                    $user->setSuperAdmin(true);
+                                  if($row[4] == 'larrieu.clement@gmail.com'){
+                                      $user->setSuperAdmin(true);
 
-                                    //$ldapService->addUserOnLDAP($user);
-                                }
+                                      //$ldapService->addUserOnLDAP($user);
+                                  }
 
-                                $userManager->updateUser($user);
+                                  $adresse = new Adresse();
+                                  $adresse->setLigne1($row[13]);
+                                  $adresse->setLigne2($row[14]);
+                                  $adresse->setLigne3($row[15]);
+                                  $adresse->setCodePostal($row[16]);
+                                  $adresse->setVille($row[17]);
+
+                                  $user->addAdress($adresse);
+                                  $em->persist($adresse);
+
+                                  $tabAdhesionAnnee = explode(',', $row[20]);
+                                  $tabAdhesionDate = explode(',', $row[21]);
+                                  $tabAdhesionMontant = explode(',', $row[22]);
+                                  $i = 0;
+                                  if($tabAdhesionAnnee){
+                                    foreach ($tabAdhesionAnnee as $value) {
+                                      if(isset($tabAdhesionAnnee[$i]) && $tabAdhesionAnnee[$i] !=''  && isset($tabAdhesionDate[$i]) && $tabAdhesionDate[$i]!= '' && isset($tabAdhesionMontant[$i]) && $tabAdhesionMontant[$i] !='' ){
+                                        $adhesion = new Adhesion();
+                                        if(is_int($tabAdhesionAnnee[$i]) ){
+                                        $adhesion->setAnnee($tabAdhesionAnnee[$i]);
+                                        $adhesion->setDateAdhesion($this->dateToSQL($tabAdhesionDate[$i], 'd/m/Y'));
+                                        $adhesion->setMontant($tabAdhesionMontant[$i]);
+                                        $i++;
+                                        $user->addAdhesion($adhesion);
+                                        }
+                                      }
+                                    }
+                                  }
+
+                                  $userManager->updateUser($user);
+                              }
+
                             }
 
 
@@ -227,6 +262,11 @@ class ImportController extends Controller
         return $this->render('ChouetteCoopAdminBundle:Main:index.html.twig',
                              array());
 
+    }
+
+    function dateToSQL($frenchDate, $format) {
+      $date = \DateTime::createFromFormat($format, $frenchDate);
+      return $date ? $date : null;
     }
 
 
