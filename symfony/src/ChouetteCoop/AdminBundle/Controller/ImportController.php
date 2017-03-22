@@ -203,7 +203,8 @@ class ImportController extends Controller
                                         $adhesion->setDateAdhesion($this->dateToSQL($tabAdhesionDate[$i], 'd/m/Y'));
                                         $adhesion->setMontant($tabAdhesionMontant[$i]);
                                         $i++;
-                                        $user->addAdhesion($adhesion);
+                                        $adhesion->setUser($user);
+                                        $persist($adhesion);
                                         }
                                       }
                                     }
