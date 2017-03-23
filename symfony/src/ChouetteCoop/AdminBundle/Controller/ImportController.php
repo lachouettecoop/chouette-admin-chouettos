@@ -153,6 +153,8 @@ class ImportController extends Controller
 
                                 if(!$userOld){
                                   $user = $userManager->createUser();
+				
+				  //$user = $userOld;
 
                                   $user->setUsername($row[8]);
                                   $user->setEmail($row[8]);
@@ -176,7 +178,6 @@ class ImportController extends Controller
 
                                   if($row[4] == 'larrieu.clement@gmail.com'){
                                       $user->setSuperAdmin(true);
-
                                       //$ldapService->addUserOnLDAP($user);
                                   }
 
@@ -189,6 +190,7 @@ class ImportController extends Controller
 
                                   $user->addAdress($adresse);
                                   $em->persist($adresse);
+                                  
 
                                   $tabAdhesionAnnee = explode(',', $row[20]);
                                   $tabAdhesionDate = explode(',', $row[21]);
@@ -198,19 +200,24 @@ class ImportController extends Controller
                                     foreach ($tabAdhesionAnnee as $value) {
                                       if(isset($tabAdhesionAnnee[$i]) && $tabAdhesionAnnee[$i] !=''  && isset($tabAdhesionDate[$i]) && $tabAdhesionDate[$i]!= '' && isset($tabAdhesionMontant[$i]) && $tabAdhesionMontant[$i] !='' ){
                                         $adhesion = new Adhesion();
-                                        if(is_int($tabAdhesionAnnee[$i]) ){
-                                        $adhesion->setAnnee($tabAdhesionAnnee[$i]);
-                                        $adhesion->setDateAdhesion($this->dateToSQL($tabAdhesionDate[$i], 'd/m/Y'));
+					
+                                        if((int)$tabAdhesionAnnee[$i] != 0){
+                                        $adhesion->setAnnee((int)$tabAdhesionAnnee[$i]);
+                                        $adhesion->setDateAdhesion($this->dateToSQL(trim($tabAdhesionDate[$i]), 'd/m/Y'));
                                         $adhesion->setMontant($tabAdhesionMontant[$i]);
                                         $i++;
-                                        $adhesion->setUser($user);
-                                        $persist($adhesion);
-                                        }
+                                        $user->addAdhesion($adhesion);
+					$adhesion->setUser($user);
+                                        $em->persist($adhesion);
+					
+					}
+                                        
                                       }
                                     }
                                   }
 
-                                  $userManager->updateUser($user);
+				
+                                $userManager->updateUser($user);
                               }
 
                             }
