@@ -155,17 +155,22 @@ class LDAPService
         }
 
         $info = $this->ldapAdministrableInfosOfUser($user);
-        $currentCn = $originalUserData['email'];
 
-        //on vérifie d'abord si l'email change, car c'est l'id sur LDAP et la
-        // méthode php est ldsp_rename
-        if ($info['cn'] != $currentCn) {
-            if (false === ldap_rename($this->ds, $this->userDn($currentCn), "cn=" . $info['cn'], self::DN_MEMBRES, true)) {
-                throw new \RuntimeException('Impossible de modifier l\'email');
+        if($originalUserData != null){
+            $currentCn = $originalUserData['email'];
+            //on vérifie d'abord si l'email change, car c'est l'id sur LDAP et la
+            // méthode php est ldsp_rename
+            if ($info['cn'] != $currentCn) {
+                if (false === ldap_rename($this->ds, $this->userDn($currentCn), "cn=" . $info['cn'], self::DN_MEMBRES, true)) {
+                    throw new \RuntimeException('Impossible de modifier l\'email');
+                }
+                $currentCn = $info['cn'];
+                unset($info['cn']);
             }
-            $currentCn = $info['cn'];
-            unset($info['cn']);
+        } else {
+           $currentCn = $info["mail"];
         }
+
         $r = ldap_modify($this->ds, $this->userDn($currentCn), $info);
 
         ldap_close($this->ds);

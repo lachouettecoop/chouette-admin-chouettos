@@ -70,7 +70,7 @@ class ImportController extends Controller
 
     foreach ($users as $user) {
         if($user->isEnabled()){
-          $ldapService->updateUserOnLDAP($user, $user);
+          $ldapService->updateUserOnLDAP($user, null);
         } else {
           $ldapService->removeUserOnLDAP($user);
         }
