@@ -53,6 +53,36 @@ class ImportController extends Controller
   }
 
   /**
+   * Populates our LDAP with Barcode infos
+   *
+   * @param  Request $request
+   * @return View
+   */
+  public function updateAllUsersAction(Request $request)
+  {
+    $em = $this
+      ->getDoctrine()
+      ->getManager();
+
+    $userRep = $em->getRepository('GlukoseUserBundle:User');
+    $ldapService = $this->get('chouette.admin.ldap');
+    $users = $userRep->findAll();
+
+    foreach ($users as $user) {
+        if($user->isEnabled()){
+          $ldapService->updateUserOnLDAP($user, $user);
+        } else {
+          $ldapService->removeUserOnLDAP($user);
+        }
+    }
+
+    $admin_pool = $this->get('sonata.admin.pool');
+    return $this->render('ChouetteCoopAdminBundle:Main:index.html.twig',
+                         array('admin_pool' => $admin_pool)
+                        );
+
+  }
+  /**
    * Create Barcodes for users
    * Only for users who have the $annee subscribed
    *

@@ -14,6 +14,10 @@ chouette_coop_codebare:
     path:     admin/codebarre/{annee}
     defaults: { _controller: ChouetteCoopAdminBundle:Import:creationDeCodeBarre }
 
+chouette_coop_updateuser:
+    path:     admin/updata/users
+    defaults: { _controller: ChouetteCoopAdminBundle:Import:updateAllUsers }
+
 chouette_coop_admin_ldap_membres:
     path:     admin/ldap-membres
     defaults: { _controller: ChouetteCoopAdminBundle:Import:ldapMembres }

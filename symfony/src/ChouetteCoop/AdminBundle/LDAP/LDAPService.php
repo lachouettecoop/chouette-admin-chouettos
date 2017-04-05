@@ -125,7 +125,7 @@ class LDAPService
             return;
         }
 
-        // Ajoute le nouvel user dans LDAP
+        // Supprime l'user dans LDAP
         $r = ldap_delete($this->ds, $this->userDn($user->getEmail()));
 
         if (!$r) {
