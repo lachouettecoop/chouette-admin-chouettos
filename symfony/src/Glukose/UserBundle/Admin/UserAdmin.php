@@ -171,6 +171,11 @@ class UserAdmin extends Admin
         if(empty($username)){
             $user->setUsername($user->getEmail());
         }
+        $timestamp = time();
+        if( empty($user->getCodeBarre()) ){
+            $codeBarre = $this->generateEAN($timestamp);
+            $user->setCodeBarre($codeBarre);
+        }
 
         $this->syncRelations($user);
     }
@@ -190,6 +195,23 @@ class UserAdmin extends Admin
             }
         }
 
+    }
+
+    function generateEAN($number)
+    {
+      $code = '24' . $number;
+      $weightflag = true;
+      $sum = 0;
+      // Weight for a digit in the checksum is 3, 1, 3.. starting from the last digit.
+      // loop backwards to make the loop length-agnostic. The same basic functionality
+      // will work for codes of different lengths.
+      for ($i = strlen($code) - 1; $i >= 0; $i--)
+      {
+        $sum += (int)$code[$i] * ($weightflag?3:1);
+        $weightflag = !$weightflag;
+      }
+      $code .= (10 - ($sum % 10)) % 10;
+      return $code;
     }
 
 

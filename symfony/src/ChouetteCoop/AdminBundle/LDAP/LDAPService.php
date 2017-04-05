@@ -49,12 +49,13 @@ class LDAPService
         $info["sn"] = $user->getNom();
         $info["description"] = $user->getPrenom();
         $info["mail"] = $user->getEmail();
+        $info["homeDirectory"] = (string)$user->getCodeBarre();
         return $info;
     }
 
     private function ldapAdministrableInfosOfGroupe(Groupe $groupe)
     {
-        // Prépare les données            
+        // Prépare les données
         $info["cn"] = $groupe->getNom();
         $info["gidNumber"] = $groupe->getId();
         return $info;
@@ -74,8 +75,8 @@ class LDAPService
 
     /**
      * Add user to LDAP
-     * 
-     * @param  User   $user 
+     *
+     * @param  User   $user
      * @return boolean
      */
     public function addUserOnLDAP(User $user)
@@ -92,7 +93,7 @@ class LDAPService
         $info["objectclass"][1] = "person";
         $info["objectclass"][2] = "mailAccount";
         $info["gidNumber"] = 1;
-        $info["homeDirectory"] = "/test";
+        $info["homeDirectory"] = (string)$user->getCodeBarre();
         $info["uid"] = $user->getId();
         $info["uidNumber"] = $user->getId();
         $info["userPassword"] = '{MD5}' . base64_encode(pack('H*',md5($user->getMotDePasse())));
@@ -111,8 +112,8 @@ class LDAPService
 
     /**
      * remove user entry from LDAP
-     * 
-     * @param  User   $user 
+     *
+     * @param  User   $user
      * @return boolean
      */
     public function removeUserOnLDAP(User $user)
@@ -122,7 +123,7 @@ class LDAPService
         } catch(\RuntimeException $e) {
             echo $e->getMessage();
             return;
-        }        
+        }
 
         // Ajoute le nouvel user dans LDAP
         $r = ldap_delete($this->ds, $this->userDn($user->getEmail()));
@@ -139,10 +140,10 @@ class LDAPService
 
     /**
      * Update an user on the LDAP server
-     * 
-     * @param   User  $user             
-     * @param   array  $originalUserData       
-     * @return boolean 
+     *
+     * @param   User  $user
+     * @param   array  $originalUserData
+     * @return boolean
      */
     public function updateUserOnLDAP(User $user, $originalUserData)
     {
@@ -153,7 +154,7 @@ class LDAPService
             return;
         }
 
-        $info = $this->ldapAdministrableInfosOfUser($user);        
+        $info = $this->ldapAdministrableInfosOfUser($user);
         $currentCn = $originalUserData['email'];
 
         //on vérifie d'abord si l'email change, car c'est l'id sur LDAP et la
@@ -175,8 +176,8 @@ class LDAPService
 
     /**
      * Add groupe to LDAP
-     * 
-     * @param  Groupe  $groupe 
+     *
+     * @param  Groupe  $groupe
      * @return boolean
      */
     public function addGroupeOnLDAP(Groupe $groupe)
@@ -212,10 +213,10 @@ class LDAPService
 
     /**
      * Update a groupe on the LDAP server
-     * 
-     * @param   Groupe  $groupe             
-     * @param   array  $originalGroupeData       
-     * @return boolean 
+     *
+     * @param   Groupe  $groupe
+     * @param   array  $originalGroupeData
+     * @return boolean
      */
     public function updateGroupeOnLDAP(Groupe $groupe, $originalGroupeData)
     {
@@ -226,10 +227,10 @@ class LDAPService
             return;
         }
 
-        $info = $this->ldapAdministrableInfosOfGroupe($groupe);        
+        $info = $this->ldapAdministrableInfosOfGroupe($groupe);
         $currentCn = $originalGroupeData['nom'];
 
-        if (false === ldap_rename($this->ds, 
+        if (false === ldap_rename($this->ds,
                                   $this->groupeDn($currentCn, $groupe->getId()),
                                   "cn=" . $info['cn'] ."+gidNumber=".$info["gidNumber"],
                                   self::DN_GROUPES,
@@ -246,10 +247,10 @@ class LDAPService
 
     /**
      * Update the group members on the LDAP server
-     * 
+     *
      * @param   Groupe  $groupe
-     * @param   array  $originalGroupeData   
-     * @return boolean 
+     * @param   array  $originalGroupeData
+     * @return boolean
      */
     public function updateGroupeMembersOnLDAP(Groupe $groupe, $originalGroupeData)
     {
@@ -262,9 +263,9 @@ class LDAPService
 
         //remove all
         if($groupe->getMembres()->count() > 0 && count($originalGroupeData['membres']) > 0 ) {
-            ldap_mod_del($this->ds, $this->groupeDn($groupe->getNom(), $groupe->getId()), array("memberUid" => array())); 
+            ldap_mod_del($this->ds, $this->groupeDn($groupe->getNom(), $groupe->getId()), array("memberUid" => array()));
         }
-        
+
         foreach($groupe->getMembres() as $membre){
             $info = array();
             $info["memberUid"] = $membre->getId();

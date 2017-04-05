@@ -54,11 +54,12 @@ class ImportController extends Controller
 
   /**
    * Create Barcodes for users
+   * Only for users who have the $annee subscribed
    *
    * @param  Request $request
    * @return View
    */
-  public function creationDeCodeBarreAction(Request $request)
+  public function creationDeCodeBarreAction($annee, Request $request)
   {
         $em = $this
           ->getDoctrine()
@@ -67,15 +68,23 @@ class ImportController extends Controller
         $userRep = $em->getRepository('GlukoseUserBundle:User');
 
         $users = $userRep->findAll();
-
         $timestamp = time();
-
         $i = 0;
+
         foreach ($users as $user) {
-            $i++;
+          $flag = false;
+          foreach ($user->getAdhesions() as $adhesion) {
+            if($adhesion->getAnnee() == $annee) {
+              $flag = true;
+            }
+          }
+
+          if($flag){
+            i++;
             $codeBarre = $this->generateEAN(($timestamp + $i));
             $user->setCodeBarre($codeBarre);
             $em->persist($user);
+          }
         }
 
         $em->flush();
