@@ -110,10 +110,13 @@ class ImportController extends Controller
           }
 
           if($flag){
-            $i++;
-            $codeBarre = $this->generateEAN(($timestamp + $i));
-            $user->setCodeBarre($codeBarre);
-            $em->persist($user);
+
+            if($user->getCodeBarre() != ''){
+                $i++;
+                $codeBarre = $this->generateEAN(($timestamp + $i));
+                $user->setCodeBarre($codeBarre);
+                $em->persist($user);
+            }
           }
         }
 
@@ -187,10 +190,18 @@ class ImportController extends Controller
                 if (($handle = fopen($pathFile->getRealPath(), "r")) !== FALSE) {
                     while(($row = fgetcsv($handle)) !== FALSE) {
 
-                            if(filter_var($row[8], FILTER_VALIDATE_EMAIL) != false){
-                                $userOld = $repositoryU->findOneBy(array('email' => $row[8]));
+                            if(filter_var($row[4], FILTER_VALIDATE_EMAIL) != false){
+                                $userOld = $repositoryU->findOneBy(array('email' => $row[4]));
 
-                                if(!$userOld){
+                                if($userOld){
+
+                                    if($row[3] != ''){
+                                      $userOld->setCodeBarre($row[3]);
+                                      $userManager->updateUser($userOld);
+                                    }
+
+                                }
+                                /*if(!$userOld){
                                   $user = $userManager->createUser();
 
 				  //$user = $userOld;
@@ -257,7 +268,7 @@ class ImportController extends Controller
 
 
                                 $userManager->updateUser($user);
-                              }
+                              }*/
 
                             }
 

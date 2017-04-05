@@ -126,7 +126,7 @@ class LDAPService
         }
 
         // Supprime l'user dans LDAP
-        $r = ldap_delete($this->ds, $this->userDn($user->getEmail()));
+        $r = @ldap_delete($this->ds, $this->userDn($user->getEmail()));
 
         if (!$r) {
             throw new \RuntimeException("Echec de la suppression dans LDAP ...");
