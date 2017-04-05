@@ -11,7 +11,7 @@ chouette_coop_desactivation:
     defaults: { _controller: ChouetteCoopAdminBundle:Import:desactivationMembres }
 
 chouette_coop_codebare:
-    path:     admin/codebarre
+    path:     admin/codebarre/{annee}
     defaults: { _controller: ChouetteCoopAdminBundle:Import:creationDeCodeBarre }
 
 chouette_coop_admin_ldap_membres:
