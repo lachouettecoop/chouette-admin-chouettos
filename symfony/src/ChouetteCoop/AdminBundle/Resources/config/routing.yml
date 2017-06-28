@@ -21,3 +21,7 @@ chouette_coop_updateuser:
 chouette_coop_admin_ldap_membres:
     path:     admin/ldap-membres
     defaults: { _controller: ChouetteCoopAdminBundle:Import:ldapMembres }
+
+chouette_coop_admin_weekly:
+    path:     zduJNFHI4e54qzd5/weeklymail/{boolSend}
+    defaults: { _controller: ChouetteCoopAdminBundle:Import:weeklyNewMembers, boolSend:'1'  }

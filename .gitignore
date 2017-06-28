@@ -43,3 +43,8 @@
 # Docker
 /symfony/docker-compose.yml
 /docker-compose.yml
+
+.idea/*
+data/
+dataOld/
+*.php~
