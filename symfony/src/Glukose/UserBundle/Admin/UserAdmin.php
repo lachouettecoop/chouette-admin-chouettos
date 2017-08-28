@@ -38,8 +38,8 @@ class UserAdmin extends Admin
             ->add('email')
             ->add('civilite', 'choice',
                   array('choices' => array(
-                      'mr' => 'Monsieur',
-                      'mme' => 'Madame'
+                      'mme' => 'Madame',
+                      'mr' => 'Monsieur'
                       //,'mlle' => 'Mademoiselle'
                   )
                        ))

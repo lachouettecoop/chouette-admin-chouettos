@@ -32,8 +32,8 @@ class RegistrationFormType extends AbstractType
         $builder
             ->add('civilite', 'choice', 
                   array('choices' => array(
-                            'mr' => 'Monsieur',
                             'mme' => 'Madame',
+                            'mr' => 'Monsieur',
                             'mlle' => 'Mademoiselle' ),
                         'label' => 'Civilité',
                         'attr' => array( 'class' => 'form-control' ) 
