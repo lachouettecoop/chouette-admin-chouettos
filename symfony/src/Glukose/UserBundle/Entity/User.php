@@ -13,7 +13,7 @@ use Gorg\Bundle\LdapOrmBundle\Annotation\Ldap\ArrayField;
 use Gorg\Bundle\LdapOrmBundle\Annotation\Ldap\DnPregMatch;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Glukose\UserBundle\Entity\UserRepository")
  * @ORM\Table(name="fos_user")
  */
 class User extends BaseUser
@@ -166,6 +166,14 @@ class User extends BaseUser
      * @ORM\Column(name="motDePasse", type="string", length=255, nullable=true)
      */
     private $motDePasse;
+
+    /**
+     * @var \DateTime
+     *
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(name="created", type="datetime", nullable=true)
+     */
+    private $created;
 
     /**
      * @var \DateTime
@@ -1000,5 +1008,29 @@ class User extends BaseUser
     public function getMembreActif()
     {
         return $this->membreActif;
+    }
+
+    /**
+     * Set created
+     *
+     * @param \DateTime $created
+     *
+     * @return User
+     */
+    public function setCreated($created)
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * Get created
+     *
+     * @return \DateTime
+     */
+    public function getCreated()
+    {
+        return $this->created;
     }
 }

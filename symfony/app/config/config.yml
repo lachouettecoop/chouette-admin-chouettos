@@ -101,6 +101,8 @@ fos_user:
     db_driver:     orm                       
     firewall_name: main                      
     user_class:    Glukose\UserBundle\Entity\User
+    service:
+        mailer: fos_user.mailer.twig_swift
     registration:
         form:
             type: app_user_registration
