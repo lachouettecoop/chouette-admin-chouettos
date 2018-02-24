@@ -14,7 +14,7 @@ db:
         MYSQL_USER: symfony
         MYSQL_PASSWORD: symfonypassword
 php:
-    build: php-fpm
+    build: ./php-fpm
     expose:
         - 9000/tcp
     volumes_from:
@@ -22,6 +22,7 @@ php:
     links:
         - db
     working_dir: /var/www/symfony
+
 nginx:
     build: nginx
     ports:
@@ -34,14 +35,3 @@ nginx:
         - ./logs/nginx/:/var/log/nginx
     environment:
         VIRTUAL_HOST: adminchouettos.lachouettecoop.test
-elk:
-    image: willdurand/elk
-    ports:
-        - 81:80
-    volumes:
-        - ./elk/logstash:/etc/logstash
-        - ./elk/logstash/patterns:/opt/logstash/patterns
-    volumes_from:
-        - application
-        - php
-        - nginx
