@@ -17,3 +17,7 @@ parameters:
 
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt
+
+    ldapserveradress: xxx
+    ldapuser: cn=admin,dc=lachouettecoop,dc=test
+    ldapmdp: xxx
