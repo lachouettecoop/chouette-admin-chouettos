@@ -57,6 +57,7 @@ class UserAdmin extends Admin
                 )
             ))
             ->add('enabled', null, array('required' => false, 'label' => 'Membre ?'))
+            ->add('carteImprimee', null, array('required' => false, 'label' => 'Carte imprimée ?'))
             ->add('accepteMail', null, array('required' => false, 'label' => 'Accepte les emails ?'))
             //->add('membreActif', null, array('required' => false, 'label' => 'Membre actif ?'))
             ->end()
@@ -114,6 +115,8 @@ class UserAdmin extends Admin
             ->add('nom')
             ->add('prenom')
             ->add('email')
+            ->add('carteImprimee', null, ['label' => 'Carte imprimée ?'])
+            ->add('enabled', null, ['label' => 'Actif ?'])
             ;
     }
 
@@ -130,7 +133,21 @@ class UserAdmin extends Admin
             ->add('notes', 'string', array('template' => 'GlukoseUserBundle:Admin:resetPassword.html.twig'))
             ->add('adhesions')
             ->add('enabled', null, array('label' => 'Activé', 'editable'=>true))
+            ->add('carteImprimee', null, array('label' => 'Carte imprimée', 'editable'=>true))
             ;
+    }
+
+    public function getBatchActions()
+    {
+        $actions = [];
+        if ($this->hasRoute('edit') && $this->isGranted('EDIT')) {
+            $actions['imprimeCarte'] = array(
+                'label' => 'Carte imprimée',
+                'ask_confirmation' => true
+            );
+
+        }
+        return $actions;
     }
 
     //make a copy of the existing object

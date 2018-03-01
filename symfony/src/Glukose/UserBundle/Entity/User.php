@@ -212,6 +212,13 @@ class User extends BaseUser
      */
     private $membreActif = false;
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="carteImprimee", type="boolean", nullable=true, options={"default" : 0})
+     */
+    private $carteImprimee = false;
+
 
     /**
      * @DnPregMatch("/ou=([a-zA-Z0-9\.]+)/")
@@ -1032,5 +1039,29 @@ class User extends BaseUser
     public function getCreated()
     {
         return $this->created;
+    }
+
+    /**
+     * Set carteImprimee
+     *
+     * @param boolean $carteImprimee
+     *
+     * @return User
+     */
+    public function setCarteImprimee($carteImprimee)
+    {
+        $this->carteImprimee = $carteImprimee;
+
+        return $this;
+    }
+
+    /**
+     * Get carteImprimee
+     *
+     * @return boolean
+     */
+    public function getCarteImprimee()
+    {
+        return $this->carteImprimee;
     }
 }
