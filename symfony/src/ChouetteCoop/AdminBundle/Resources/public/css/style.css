@@ -1,18 +1,22 @@
 @font-face{
 	font-family: raleway;
-	src:url(../fonts/Raleway-Medium.ttf);   
+	src:url(../fonts/Raleway-Medium.ttf);
+	font-display: optional;
 }
 @font-face{
 	font-family: ralewaybold;
-	src:url(../fonts/Raleway-Bold.ttf);   
+	src:url(../fonts/Raleway-Bold.ttf);
+	font-display: optional;
 }
 @font-face{
 	font-family: latoRegular;
-	src:url(../fonts/Lato-Regular.ttf);   
+	src:url(../fonts/Lato-Regular.ttf);
+	font-display: optional;
 }
 @font-face{
 	font-family: latoBold;
-	src:url(../fonts/Lato-Bold.ttf);   
+	src:url(../fonts/Lato-Bold.ttf);
+	font-display: optional;
 }
 html,
 body {
