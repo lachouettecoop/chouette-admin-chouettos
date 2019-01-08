@@ -16,6 +16,10 @@ parameters:
     mailer_password:   ~
     mailer_port:       ~
 
+    # Expéditeur des emails (exemple : reset de mot de passe)
+    transactional_mailer_user: "contact@localcoop.local"
+    transactional_mailer_user_name: "Nom de la coop"
+
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt
 

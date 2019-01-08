@@ -102,6 +102,9 @@ fos_user:
   registration:
     form:
       type: app_user_registration
+  from_email:
+    address: "%transactional_mailer_user%"
+    sender_name: "%transactional_mailer_user_name%"
 
 # SONATA ADMIN Configuration
 sonata_core: ~
