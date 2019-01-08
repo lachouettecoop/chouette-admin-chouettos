@@ -1,210 +1,204 @@
 imports:
-    - { resource: parameters.yml }
-    - { resource: security.yml }
-    - { resource: services.yml }
+  - { resource: parameters.yml }
+  - { resource: security.yml }
+  - { resource: services.yml }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    locale: fr
-    web_path:      %kernel.root_dir%/../web/
-    iconUser:      <i class="glyphicon glyphicon-user"></i>
-    iconAutre:     <i class="fa fa-pencil"></i>
-    twig:
-        options: ~
-    templating:
-        globals: ~
-            
-
+  locale: fr
+  web_path: %kernel.root_dir%/../web/
+  iconUser: <i class="glyphicon glyphicon-user"></i>
+  iconAutre: <i class="fa fa-pencil"></i>
+  twig:
+    options: ~
+  templating:
+    globals: ~
 
 framework:
-    #esi:             ~
-    translator:      { fallbacks: ["%locale%"] }
-    secret:          "%secret%"
-    router:
-        resource: "%kernel.root_dir%/config/routing.yml"
-        strict_requirements: ~
-    form:            ~
-    csrf_protection: ~
-    validation:      { enable_annotations: true }
-    #serializer:      { enable_annotations: true }
-    templating:
-        engines: ['twig']
-        #assets_version: SomeVersionScheme
-    default_locale:  "%locale%"
-    trusted_hosts:   ~
-    trusted_proxies: ~
-    session:
-        # handler_id set to null will use default session handler from php.ini
-        handler_id:  ~
-    fragments:       ~
-    http_method_override: true
-
+  #esi:             ~
+  translator: { fallbacks: ["%locale%"] }
+  secret: "%secret%"
+  router:
+    resource: "%kernel.root_dir%/config/routing.yml"
+    strict_requirements: ~
+  form: ~
+  csrf_protection: ~
+  validation: { enable_annotations: true }
+  #serializer:      { enable_annotations: true }
+  templating:
+    engines: ["twig"]
+    #assets_version: SomeVersionScheme
+  default_locale: "%locale%"
+  trusted_hosts: ~
+  trusted_proxies: ~
+  session:
+    # handler_id set to null will use default session handler from php.ini
+    handler_id: ~
+  fragments: ~
+  http_method_override: true
 
 # Twig Configuration
 twig:
-    debug:            "%kernel.debug%"
-    strict_variables: "%kernel.debug%"
-    globals:
-        web_path: %web_path%
-    form:
-        resources:
-            - 'SonataCoreBundle:Form:datepicker.html.twig'
-
-
+  debug: "%kernel.debug%"
+  strict_variables: "%kernel.debug%"
+  globals:
+    web_path: %web_path%
+  form:
+    resources:
+      - "SonataCoreBundle:Form:datepicker.html.twig"
 
 # Assetic Configuration
 assetic:
-    debug:          "%kernel.debug%"
-    use_controller: false
-    bundles:        [ ]
-    #java: /usr/bin/java
-    filters:
-        cssrewrite: ~
-        #closure:
-        #    jar: "%kernel.root_dir%/Resources/java/compiler.jar"
-        #yui_css:
-        #    jar: "%kernel.root_dir%/Resources/java/yuicompressor-2.4.7.jar"
+  debug: "%kernel.debug%"
+  use_controller: false
+  bundles: []
+  #java: /usr/bin/java
+  filters:
+    cssrewrite: ~
+    #closure:
+    #    jar: "%kernel.root_dir%/Resources/java/compiler.jar"
+    #yui_css:
+    #    jar: "%kernel.root_dir%/Resources/java/yuicompressor-2.4.7.jar"
 
 # Doctrine Configuration
 doctrine:
-    dbal:
-        driver:   pdo_mysql
-        host:     "%database_host%"
-        port:     "%database_port%"
-        dbname:   "%database_name%"
-        user:     "%database_user%"
-        password: "%database_password%"
-        charset:  UTF8
-        # if using pdo_sqlite as your database driver:
-        #   1. add the path in parameters.yml
-        #     e.g. database_path: "%kernel.root_dir%/data/data.db3"
-        #   2. Uncomment database_path in parameters.yml.dist
-        #   3. Uncomment next line:
-        #     path:     "%database_path%"
+  dbal:
+    driver: pdo_mysql
+    host: "%database_host%"
+    port: "%database_port%"
+    dbname: "%database_name%"
+    user: "%database_user%"
+    password: "%database_password%"
+    charset: UTF8
+    # if using pdo_sqlite as your database driver:
+    #   1. add the path in parameters.yml
+    #     e.g. database_path: "%kernel.root_dir%/data/data.db3"
+    #   2. Uncomment database_path in parameters.yml.dist
+    #   3. Uncomment next line:
+    #     path:     "%database_path%"
 
-    orm:
-        auto_generate_proxy_classes: "%kernel.debug%"
-        naming_strategy: doctrine.orm.naming_strategy.underscore
-        auto_mapping: true
+  orm:
+    auto_generate_proxy_classes: "%kernel.debug%"
+    naming_strategy: doctrine.orm.naming_strategy.underscore
+    auto_mapping: true
 
 # Swiftmailer Configuration
 swiftmailer:
-    transport: "%mailer_transport%"
-    host:      "%mailer_host%"
-    username:  "%mailer_user%"
-    password:  "%mailer_password%"
-    spool:     { type: memory }
+  transport: "%mailer_transport%"
+  host: "%mailer_host%"
+  username: "%mailer_user%"
+  password: "%mailer_password%"
+  spool: { type: memory }
 
 # FOS USER Configuration
 fos_user:
-    db_driver:     orm                       
-    firewall_name: main                      
-    user_class:    Glukose\UserBundle\Entity\User
-    service:
-        mailer: fos_user.mailer.twig_swift
-    registration:
-        form:
-            type: app_user_registration
-            
+  db_driver: orm
+  firewall_name: main
+  user_class: Glukose\UserBundle\Entity\User
+  service:
+    mailer: fos_user.mailer.twig_swift
+  registration:
+    form:
+      type: app_user_registration
+
 # SONATA ADMIN Configuration
 sonata_core: ~
 
 sonata_block:
-    default_contexts: [cms]
-    blocks:        
-        # Enable the SonataAdminBundle block
-        sonata.admin.block.admin_list:
-            contexts:    [admin]
-        sonata.admin.block.search_result:
-            contexts:    [admin]
-        #My blocks
+  default_contexts: [cms]
+  blocks:
+    # Enable the SonataAdminBundle block
+    sonata.admin.block.admin_list:
+      contexts: [admin]
+    sonata.admin.block.search_result:
+      contexts: [admin]
+    #My blocks
 
 knp_menu:
-    twig:                   # use "twig: false" to disable the Twig extension and the TwigRenderer
-        template: knp_menu.html.twig
-    templating: false       # if true, enables the helper for PHP templates
-    default_renderer: twig  # The renderer to use, list is also available by default
-    
-    
-sonata_doctrine_orm_admin:
-    # default value is null, so doctrine uses the value defined in the configuration
-    entity_manager: ~
-        
-    templates:
-        form:
-            - SonataDoctrineORMAdminBundle:Form:form_admin_fields.html.twig
-        filter:
-            - SonataDoctrineORMAdminBundle:Form:filter_admin_fields.html.twig
-        types:
-            list: 
-                array:      SonataAdminBundle:CRUD:list_array.html.twig
-                boolean:    SonataAdminBundle:CRUD:list_boolean.html.twig
-                date:       SonataAdminBundle:CRUD:list_date.html.twig
-                time:       SonataAdminBundle:CRUD:list_time.html.twig
-                datetime:   SonataAdminBundle:CRUD:list_datetime.html.twig
-                text:       SonataAdminBundle:CRUD:base_list_field.html.twig
-                trans:      SonataAdminBundle:CRUD:list_trans.html.twig
-                string:     SonataAdminBundle:CRUD:base_list_field.html.twig
-                smallint:   SonataAdminBundle:CRUD:base_list_field.html.twig
-                bigint:     SonataAdminBundle:CRUD:base_list_field.html.twig
-                integer:    SonataAdminBundle:CRUD:base_list_field.html.twig
-                decimal:    SonataAdminBundle:CRUD:base_list_field.html.twig
-                identifier: SonataAdminBundle:CRUD:base_list_field.html.twig
-                currency:   SonataAdminBundle:CRUD:list_currency.html.twig
-                percent:    SonataAdminBundle:CRUD:list_percent.html.twig
-                choice:     SonataAdminBundle:CRUD:list_choice.html.twig
-                url:        SonataAdminBundle:CRUD:list_url.html.twig
+  twig: # use "twig: false" to disable the Twig extension and the TwigRenderer
+    template: knp_menu.html.twig
+  templating: false # if true, enables the helper for PHP templates
+  default_renderer: twig # The renderer to use, list is also available by default
 
-            show:
-                array:      SonataAdminBundle:CRUD:show_array.html.twig
-                boolean:    SonataAdminBundle:CRUD:show_boolean.html.twig
-                date:       SonataAdminBundle:CRUD:show_date.html.twig
-                time:       SonataAdminBundle:CRUD:show_time.html.twig
-                datetime:   SonataAdminBundle:CRUD:show_datetime.html.twig
-                text:       SonataAdminBundle:CRUD:base_show_field.html.twig
-                trans:      SonataAdminBundle:CRUD:show_trans.html.twig
-                string:     SonataAdminBundle:CRUD:base_show_field.html.twig
-                smallint:   SonataAdminBundle:CRUD:base_show_field.html.twig
-                bigint:     SonataAdminBundle:CRUD:base_show_field.html.twig
-                integer:    SonataAdminBundle:CRUD:base_show_field.html.twig
-                decimal:    SonataAdminBundle:CRUD:base_show_field.html.twig
-                currency:   SonataAdminBundle:CRUD:base_currency.html.twig
-                percent:    SonataAdminBundle:CRUD:base_percent.html.twig
-                choice:     SonataAdminBundle:CRUD:show_choice.html.twig
-                url:        SonataAdminBundle:CRUD:show_url.html.twig
-sonata_admin :
-    title:                Chouettos Admin
-    title_logo:           bundles/sonataadmin/logo_title.png
-    templates:
-        layout:           ChouetteCoopAdminBundle:Admin:standard_layout.html.twig
-        search:              SonataAdminBundle:Core:search.html.twig
-        search_result_block: SonataAdminBundle:Block:block_search_result.html.twig
-    options:
-        html5_validate:                         true      # use html5 validation
-        confirm_exit:                           true      # enabled confirmation when quitting with unsaved changes
-        use_select2:                            true      # enable select2
-        use_icheck:                             true      # enable iCheck
-        dropdown_number_groups_per_colums:      2         # max items per column in dropdown menu (add button in top nav)
-        title_mode:           'single_text'                      # 'both', 'single_text' or 'single_image'
-        
+sonata_doctrine_orm_admin:
+  # default value is null, so doctrine uses the value defined in the configuration
+  entity_manager: ~
+
+  templates:
+    form:
+      - SonataDoctrineORMAdminBundle:Form:form_admin_fields.html.twig
+    filter:
+      - SonataDoctrineORMAdminBundle:Form:filter_admin_fields.html.twig
+    types:
+      list:
+        array: SonataAdminBundle:CRUD:list_array.html.twig
+        boolean: SonataAdminBundle:CRUD:list_boolean.html.twig
+        date: SonataAdminBundle:CRUD:list_date.html.twig
+        time: SonataAdminBundle:CRUD:list_time.html.twig
+        datetime: SonataAdminBundle:CRUD:list_datetime.html.twig
+        text: SonataAdminBundle:CRUD:base_list_field.html.twig
+        trans: SonataAdminBundle:CRUD:list_trans.html.twig
+        string: SonataAdminBundle:CRUD:base_list_field.html.twig
+        smallint: SonataAdminBundle:CRUD:base_list_field.html.twig
+        bigint: SonataAdminBundle:CRUD:base_list_field.html.twig
+        integer: SonataAdminBundle:CRUD:base_list_field.html.twig
+        decimal: SonataAdminBundle:CRUD:base_list_field.html.twig
+        identifier: SonataAdminBundle:CRUD:base_list_field.html.twig
+        currency: SonataAdminBundle:CRUD:list_currency.html.twig
+        percent: SonataAdminBundle:CRUD:list_percent.html.twig
+        choice: SonataAdminBundle:CRUD:list_choice.html.twig
+        url: SonataAdminBundle:CRUD:list_url.html.twig
+
+      show:
+        array: SonataAdminBundle:CRUD:show_array.html.twig
+        boolean: SonataAdminBundle:CRUD:show_boolean.html.twig
+        date: SonataAdminBundle:CRUD:show_date.html.twig
+        time: SonataAdminBundle:CRUD:show_time.html.twig
+        datetime: SonataAdminBundle:CRUD:show_datetime.html.twig
+        text: SonataAdminBundle:CRUD:base_show_field.html.twig
+        trans: SonataAdminBundle:CRUD:show_trans.html.twig
+        string: SonataAdminBundle:CRUD:base_show_field.html.twig
+        smallint: SonataAdminBundle:CRUD:base_show_field.html.twig
+        bigint: SonataAdminBundle:CRUD:base_show_field.html.twig
+        integer: SonataAdminBundle:CRUD:base_show_field.html.twig
+        decimal: SonataAdminBundle:CRUD:base_show_field.html.twig
+        currency: SonataAdminBundle:CRUD:base_currency.html.twig
+        percent: SonataAdminBundle:CRUD:base_percent.html.twig
+        choice: SonataAdminBundle:CRUD:show_choice.html.twig
+        url: SonataAdminBundle:CRUD:show_url.html.twig
+sonata_admin:
+  title: Chouettos Admin
+  title_logo: bundles/sonataadmin/logo_title.png
+  templates:
+    layout: ChouetteCoopAdminBundle:Admin:standard_layout.html.twig
+    search: SonataAdminBundle:Core:search.html.twig
+    search_result_block: SonataAdminBundle:Block:block_search_result.html.twig
+  options:
+    html5_validate: true # use html5 validation
+    confirm_exit: true # enabled confirmation when quitting with unsaved changes
+    use_select2: true # enable select2
+    use_icheck: true # enable iCheck
+    dropdown_number_groups_per_colums: 2 # max items per column in dropdown menu (add button in top nav)
+    title_mode: "single_text" # 'both', 'single_text' or 'single_image'
+
 stof_doctrine_extensions:
-    default_locale: fr_FR
-    orm:
-        default:            
-            timestampable: true
-            sluggable: true
+  default_locale: fr_FR
+  orm:
+    default:
+      timestampable: true
+      sluggable: true
 
 knp_snappy:
-    pdf:
-        enabled:    true
-        binary:     /usr/bin/wkhtmltopdf
-        options:
-            margin-bottom: 0mm
-            margin-top: 0mm
-            margin-right: 0mm
-            margin-left: 0mm
-    image:
-        enabled:    true
-        binary:     C:/xampp/wkhtmltopdf/bin/wkhtmltoimage.exe
-        options:    []
+  pdf:
+    enabled: true
+    binary: /usr/bin/wkhtmltopdf
+    options:
+      margin-bottom: 0mm
+      margin-top: 0mm
+      margin-right: 0mm
+      margin-left: 0mm
+  image:
+    enabled: true
+    binary: C:/xampp/wkhtmltopdf/bin/wkhtmltoimage.exe
+    options: []
