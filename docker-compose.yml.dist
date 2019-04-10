@@ -1,37 +1,66 @@
-application:
-    image: tianon/true
-    volumes:
-        - ./symfony:/var/www/symfony
-        - ./logs/symfony:/var/www/symfony/app/logs
-
-db:
+version: "2.1"
+services:
+  db:
     image: mysql
-    ports:
-        - 3306:3306
+    restart: unless-stopped
     environment:
-        MYSQL_ROOT_PASSWORD: root
-        MYSQL_DATABASE: symfony
-        MYSQL_USER: symfony
-        MYSQL_PASSWORD: symfonypassword
-php:
-    build: ./php-fpm
-    expose:
-        - 9000/tcp
-    volumes_from:
-        - application
-    links:
-        - db
-    working_dir: /var/www/symfony
-
-nginx:
-    build: nginx
-    ports:
-        - 80
-    links:
-        - php
-    volumes_from:
-        - application
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "symfony"
+      MYSQL_USER: "symfony"
+      MYSQL_PASSWORD: "symfonypassword"
     volumes:
-        - ./logs/nginx/:/var/log/nginx
-    environment:
-        VIRTUAL_HOST: adminchouettos.lachouettecoop.test
+      - ./data/mysql:/var/lib/mysql
+
+  php:
+    build: php-fpm
+    restart: unless-stopped
+    volumes:
+      - ./symfony:/var/www/symfony
+      - ./logs/symfony:/var/www/symfony/app/logs
+    links:
+      - db
+    working_dir: /var/www/symfony
+    networks:
+      default:
+      traefik:
+
+  nginx:
+    build: nginx
+    restart: unless-stopped
+    links:
+      - php
+    volumes:
+      - ./logs/nginx/:/var/log/nginx
+      - ./symfony:/var/www/symfony
+    networks:
+      default:
+      traefik:
+    labels:
+      traefik.docker.network: "traefik"
+      traefik.enable: "true"
+      traefik.frontend.passHostHeader: "true"
+      traefik.port: "80"
+      traefik.www.frontend.rule: "Host:adminchouettos.lachouettecoop.test"
+
+  pma:
+    image: phpmyadmin/phpmyadmin
+    restart: unless-stopped
+    links:
+      - db
+    networks:
+      default:
+      traefik:
+    labels:
+      traefik.docker.network: "traefik"
+      traefik.enable: "true"
+      traefik.frontend.passHostHeader: "true"
+      traefik.port: "80"
+      traefik.www.frontend.rule: "Host:pmadmin.lachouettecoop.test"
+
+networks:
+  default:
+    internal: true
+    driver_opts:
+      encrypted: 1
+  traefik:
+    external: true
