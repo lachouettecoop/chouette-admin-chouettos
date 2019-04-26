@@ -50,10 +50,9 @@ class Adhesion
      */
     private $modePaiement;
 
-
     /**
-    * @ORM\ManyToOne(targetEntity="Glukose\UserBundle\Entity\User", inversedBy="adhesions")
-    */
+     * @ORM\ManyToOne(targetEntity="Glukose\UserBundle\Entity\User", inversedBy="adhesions")
+     */
     private $user;
 
     /**
@@ -73,6 +72,15 @@ class Adhesion
 
     }
 
+    /**
+     * Get dateAdhesion
+     *
+     * @return \DateTime
+     */
+    public function getDateAdhesion()
+    {
+        return $this->dateAdhesion;
+    }
 
     /**
      * Set dateAdhesion
@@ -89,13 +97,13 @@ class Adhesion
     }
 
     /**
-     * Get dateAdhesion
+     * Get montant
      *
-     * @return \DateTime
+     * @return string
      */
-    public function getDateAdhesion()
+    public function getMontant()
     {
-        return $this->dateAdhesion;
+        return $this->montant;
     }
 
     /**
@@ -113,13 +121,13 @@ class Adhesion
     }
 
     /**
-     * Get montant
+     * Get modePaiement
      *
      * @return string
      */
-    public function getMontant()
+    public function getModePaiement()
     {
-        return $this->montant;
+        return $this->modePaiement;
     }
 
     /**
@@ -137,15 +145,14 @@ class Adhesion
     }
 
     /**
-     * Get modePaiement
+     * Get annee
      *
-     * @return string
+     * @return integer
      */
-    public function getModePaiement()
+    public function getAnnee()
     {
-        return $this->modePaiement;
+        return $this->annee;
     }
-
 
     /**
      * Set annee
@@ -162,13 +169,13 @@ class Adhesion
     }
 
     /**
-     * Get annee
+     * Get user
      *
-     * @return integer
+     * @return \Glukose\UserBundle\Entity\User
      */
-    public function getAnnee()
+    public function getUser()
     {
-        return $this->annee;
+        return $this->user;
     }
 
     /**
@@ -183,15 +190,5 @@ class Adhesion
         $this->user = $user;
 
         return $this;
-    }
-
-    /**
-     * Get user
-     *
-     * @return \Glukose\UserBundle\Entity\User
-     */
-    public function getUser()
-    {
-        return $this->user;
     }
 }

@@ -3,13 +3,10 @@
 namespace ChouetteCoop\AdminBundle\Controller;
 
 use Doctrine\ORM\EntityManager;
+use Glukose\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
-use Glukose\UserBundle\Entity\User;
-use Glukose\ContactBundle\Entity\Adresse;
-use Glukose\UserBundle\Entity\Adhesion;
 
 
 class ImportController extends Controller
@@ -35,12 +32,12 @@ class ImportController extends Controller
 
             $flag = false;
             foreach ($user->getAdhesions() as $adhesion) {
-                if($adhesion->getAnnee() == $annee) {
+                if ($adhesion->getAnnee() == $annee) {
                     $flag = true;
                 }
             }
 
-            if(!$flag){
+            if (!$flag) {
                 $user->setEnabled(false);
                 $em->persist($user);
             }
@@ -70,7 +67,7 @@ class ImportController extends Controller
         $users = $userRep->findAll();
 
         foreach ($users as $user) {
-            if($user->isEnabled()){
+            if ($user->isEnabled()) {
                 $ldapService->updateUserOnLDAP($user, null);
             } else {
                 $ldapService->removeUserOnLDAP($user);
@@ -83,6 +80,7 @@ class ImportController extends Controller
         );
 
     }
+
     /**
      * Create Barcodes for users
      * Only for users who have the $annee subscribed
@@ -105,14 +103,14 @@ class ImportController extends Controller
         foreach ($users as $user) {
             $flag = false;
             foreach ($user->getAdhesions() as $adhesion) {
-                if($adhesion->getAnnee() == $annee) {
+                if ($adhesion->getAnnee() == $annee) {
                     $flag = true;
                 }
             }
 
-            if($flag){
+            if ($flag) {
 
-                if($user->getCodeBarre() != ''){
+                if ($user->getCodeBarre() != '') {
                     $i++;
                     $codeBarre = $this->generateEAN(($timestamp + $i));
                     $user->setCodeBarre($codeBarre);
@@ -136,9 +134,8 @@ class ImportController extends Controller
         // Weight for a digit in the checksum is 3, 1, 3.. starting from the last digit.
         // loop backwards to make the loop length-agnostic. The same basic functionality
         // will work for codes of different lengths.
-        for ($i = strlen($code) - 1; $i >= 0; $i--)
-        {
-            $sum += (int)$code[$i] * ($weightflag?3:1);
+        for ($i = strlen($code) - 1; $i >= 0; $i--) {
+            $sum += (int)$code[$i] * ($weightflag ? 3 : 1);
             $weightflag = !$weightflag;
         }
         $code .= (10 - ($sum % 10)) % 10;
@@ -183,20 +180,18 @@ class ImportController extends Controller
                 $file = $form->get('submitFile');
 
                 // Your csv file here when you hit submit button
-                $pathFile  = $file->getData();
-
-
+                $pathFile = $file->getData();
 
 
                 if (($handle = fopen($pathFile->getRealPath(), "r")) !== FALSE) {
-                    while(($row = fgetcsv($handle)) !== FALSE) {
+                    while (($row = fgetcsv($handle)) !== FALSE) {
 
-                        if(filter_var($row[4], FILTER_VALIDATE_EMAIL) != false){
+                        if (filter_var($row[4], FILTER_VALIDATE_EMAIL) != false) {
                             $userOld = $repositoryU->findOneBy(array('email' => $row[4]));
 
-                            if($userOld){
+                            if ($userOld) {
 
-                                if($row[3] != ''){
+                                if ($row[3] != '') {
                                     $userOld->setCodeBarre($row[3]);
                                     $userManager->updateUser($userOld);
                                 }
@@ -280,7 +275,6 @@ class ImportController extends Controller
                 }
 
 
-
             }
 
         }
@@ -312,7 +306,7 @@ class ImportController extends Controller
 
         $users = $repositoryU->findAll();
 
-        foreach($users as $user){
+        foreach ($users as $user) {
             $user->setAccepteMail(true);
             $em->persist($user);
         }
@@ -344,14 +338,13 @@ class ImportController extends Controller
         $repositoryU = $em->getRepository('GlukoseUserBundle:User');
         $users = $repositoryU->findUsersByCreationDate($start, $end);
 
-        if($boolSend){
+        if ($boolSend) {
             $message = \Swift_Message::newInstance()
                 ->setSubject("Weekly integration")
                 ->setFrom('admin@lachouettecoop.fr')
                 ->setTo('ccel781@gmail.com')
                 ->setContentType("text/html")
-                ->setBody('hello ! <a href="https://adminchouettos.lachouettecoop.fr/zduJNFHI4e54qzd5/weeklymail/0"> Télécharger le fichier des nouveaux chouettos barcode</a> !!!')
-            ;
+                ->setBody('hello ! <a href="https://adminchouettos.lachouettecoop.fr/zduJNFHI4e54qzd5/weeklymail/0"> Télécharger le fichier des nouveaux chouettos barcode</a> !!!');
 
             $this->get('mailer')->send($message);
 
@@ -362,16 +355,16 @@ class ImportController extends Controller
         } else {
 
             $container = $this->container;
-            $response = new StreamedResponse(function() use($container, $users) {
+            $response = new StreamedResponse(function () use ($container, $users) {
 
                 $handle = fopen('php://output', 'r+');
-                fprintf($handle, chr(0xEF).chr(0xBB).chr(0xBF));
+                fprintf($handle, chr(0xEF) . chr(0xBB) . chr(0xBF));
 
                 $lineArray = array("name", "email", "barcode");
                 fputcsv($handle, $lineArray, ';');
 
                 /** @var User $user */
-                foreach($users as $user){
+                foreach ($users as $user) {
 
                     $lineArray = array();
                     $lineArray[0] = (string)$user;
@@ -383,14 +376,15 @@ class ImportController extends Controller
             });
 
             $response->headers->set('Content-Type', 'application/force-download');
-            $response->headers->set('Content-Disposition','attachment; filename="exportUsersBarcode.csv"');
+            $response->headers->set('Content-Disposition', 'attachment; filename="exportUsersBarcode.csv"');
 
             return $response;
         }
 
     }
 
-    function dateToSQL($frenchDate, $format) {
+    function dateToSQL($frenchDate, $format)
+    {
         $date = \DateTime::createFromFormat($format, $frenchDate);
         return $date ? $date : null;
     }

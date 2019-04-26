@@ -13,7 +13,6 @@ class LDAPService
     private $ldapMdp;
     private $ds;
 
-
     public function __construct($ldapServerAdress, $ldapUser, $ldapMdp)
     {
 
@@ -21,6 +20,43 @@ class LDAPService
         $this->ldapUser = $ldapUser;
         $this->ldapMdp = $ldapMdp;
 
+    }
+
+    /**
+     * Add user to LDAP
+     *
+     * @param  User $user
+     * @return boolean
+     */
+    public function addUserOnLDAP(User $user)
+    {
+        try {
+            $this->connectToLdapAsAdmin();
+        } catch (\RuntimeException $e) {
+            echo $e->getMessage();
+            return;
+        }
+
+        $info = $this->ldapAdministrableInfosOfUser($user);
+        $info["objectclass"][0] = "posixAccount";
+        $info["objectclass"][1] = "person";
+        $info["objectclass"][2] = "mailAccount";
+        $info["gidNumber"] = 1;
+        $info["homeDirectory"] = (string)$user->getCodeBarre();
+        $info["uid"] = $user->getId();
+        $info["uidNumber"] = $user->getId();
+        $info["userPassword"] = '{MD5}' . base64_encode(pack('H*', md5($user->getMotDePasse())));
+
+        // Ajoute le nouvel user dans LDAP
+        $r = ldap_add($this->ds, $this->userDn($user->getEmail()), $info);
+
+        if (!$r) {
+            throw new \RuntimeException("Echec de l'ajout dans LDAP ...");
+        }
+
+        ldap_close($this->ds);
+
+        return true;
     }
 
     private function connectToLdapAsAdmin()
@@ -56,53 +92,16 @@ class LDAPService
     }
 
     /**
-     * Add user to LDAP
-     *
-     * @param  User   $user
-     * @return boolean
-     */
-    public function addUserOnLDAP(User $user)
-    {
-        try {
-            $this->connectToLdapAsAdmin();
-        } catch(\RuntimeException $e) {
-            echo $e->getMessage();
-            return;
-        }
-
-        $info = $this->ldapAdministrableInfosOfUser($user);
-        $info["objectclass"][0] = "posixAccount";
-        $info["objectclass"][1] = "person";
-        $info["objectclass"][2] = "mailAccount";
-        $info["gidNumber"] = 1;
-        $info["homeDirectory"] = (string)$user->getCodeBarre();
-        $info["uid"] = $user->getId();
-        $info["uidNumber"] = $user->getId();
-        $info["userPassword"] = '{MD5}' . base64_encode(pack('H*',md5($user->getMotDePasse())));
-
-        // Ajoute le nouvel user dans LDAP
-        $r = ldap_add($this->ds, $this->userDn($user->getEmail()), $info);
-
-        if (!$r) {
-            throw new \RuntimeException("Echec de l'ajout dans LDAP ...");
-        }
-
-        ldap_close($this->ds);
-
-        return true;
-    }
-
-    /**
      * remove user entry from LDAP
      *
-     * @param  User   $user
+     * @param  User $user
      * @return boolean
      */
     public function removeUserOnLDAP(User $user)
     {
         try {
             $this->connectToLdapAsAdmin();
-        } catch(\RuntimeException $e) {
+        } catch (\RuntimeException $e) {
             echo $e->getMessage();
             return;
         }
@@ -123,22 +122,22 @@ class LDAPService
     /**
      * Update an user on the LDAP server
      *
-     * @param   User  $user
-     * @param   array  $originalUserData
+     * @param   User $user
+     * @param   array $originalUserData
      * @return boolean
      */
     public function updateUserOnLDAP(User $user, $originalUserData)
     {
         try {
             $this->connectToLdapAsAdmin();
-        } catch(\RuntimeException $e) {
+        } catch (\RuntimeException $e) {
             echo $e->getMessage();
             return;
         }
 
         $info = $this->ldapAdministrableInfosOfUser($user);
 
-        if($originalUserData != null){
+        if ($originalUserData != null) {
             $currentCn = $originalUserData['email'];
             //on vérifie d'abord si l'email change, car c'est l'id sur LDAP et la
             // méthode php est ldsp_rename
@@ -150,7 +149,7 @@ class LDAPService
                 unset($info['cn']);
             }
         } else {
-           $currentCn = $info["mail"];
+            $currentCn = $info["mail"];
         }
 
         $r = ldap_modify($this->ds, $this->userDn($currentCn), $info);

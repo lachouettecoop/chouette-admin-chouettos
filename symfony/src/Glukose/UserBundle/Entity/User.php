@@ -6,10 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gorg\Bundle\LdapOrmBundle\Annotation\Ldap\Attribute;
-use Gorg\Bundle\LdapOrmBundle\Annotation\Ldap\ObjectClass;
-use Gorg\Bundle\LdapOrmBundle\Annotation\Ldap\Dn;
-use Gorg\Bundle\LdapOrmBundle\Annotation\Ldap\Sequence;
-use Gorg\Bundle\LdapOrmBundle\Annotation\Ldap\ArrayField;
 use Gorg\Bundle\LdapOrmBundle\Annotation\Ldap\DnPregMatch;
 
 /**
@@ -136,17 +132,16 @@ class User extends BaseUser
      */
     private $entities = array("accounts");
 
-
-    public function __toString()
-    {
-        return $this->prenom . ' ' . $this->nom;
-    }
-
     public function __construct()
     {
         parent::__construct();
         $this->adhesions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->adresses = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->prenom . ' ' . $this->nom;
     }
 
     public function exportDateNaissance()
@@ -261,6 +256,16 @@ class User extends BaseUser
     }
 
     /**
+     * Get civilite
+     *
+     * @return string
+     */
+    public function getCivilite()
+    {
+        return $this->civilite;
+    }
+
+    /**
      * Set civilite
      *
      * @param string $civilite
@@ -274,13 +279,13 @@ class User extends BaseUser
     }
 
     /**
-     * Get civilite
+     * Get nom
      *
      * @return string
      */
-    public function getCivilite()
+    public function getNom()
     {
-        return $this->civilite;
+        return $this->nom;
     }
 
     /**
@@ -297,13 +302,13 @@ class User extends BaseUser
     }
 
     /**
-     * Get nom
+     * Get prenom
      *
      * @return string
      */
-    public function getNom()
+    public function getPrenom()
     {
-        return $this->nom;
+        return $this->prenom;
     }
 
     /**
@@ -320,13 +325,13 @@ class User extends BaseUser
     }
 
     /**
-     * Get prenom
+     * Get telephone
      *
      * @return string
      */
-    public function getPrenom()
+    public function getTelephone()
     {
-        return $this->prenom;
+        return $this->telephone;
     }
 
     /**
@@ -343,13 +348,13 @@ class User extends BaseUser
     }
 
     /**
-     * Get telephone
+     * Get updated
      *
-     * @return string
+     * @return \DateTime
      */
-    public function getTelephone()
+    public function getUpdated()
     {
-        return $this->telephone;
+        return $this->updated;
     }
 
     /**
@@ -363,16 +368,6 @@ class User extends BaseUser
         $this->updated = $updated;
 
         return $this;
-    }
-
-    /**
-     * Get updated
-     *
-     * @return \DateTime
-     */
-    public function getUpdated()
-    {
-        return $this->updated;
     }
 
     /**
@@ -409,6 +404,16 @@ class User extends BaseUser
     }
 
     /**
+     * Get motDePasse
+     *
+     * @return string
+     */
+    public function getMotDePasse()
+    {
+        return $this->motDePasse;
+    }
+
+    /**
      * Set motDePasse
      *
      * @param string $motDePasse
@@ -423,13 +428,13 @@ class User extends BaseUser
     }
 
     /**
-     * Get motDePasse
+     * Get dateAdhesion
      *
      * @return string
      */
-    public function getMotDePasse()
+    public function getDateAdhesion()
     {
-        return $this->motDePasse;
+        return $this->dateAdhesion;
     }
 
     /**
@@ -447,13 +452,13 @@ class User extends BaseUser
     }
 
     /**
-     * Get dateAdhesion
+     * Get notes
      *
      * @return string
      */
-    public function getDateAdhesion()
+    public function getNotes()
     {
-        return $this->dateAdhesion;
+        return $this->notes;
     }
 
     /**
@@ -468,16 +473,6 @@ class User extends BaseUser
         $this->notes = $notes;
 
         return $this;
-    }
-
-    /**
-     * Get notes
-     *
-     * @return string
-     */
-    public function getNotes()
-    {
-        return $this->notes;
     }
 
     /**
@@ -515,6 +510,16 @@ class User extends BaseUser
     }
 
     /**
+     * Get dateNaissance
+     *
+     * @return \DateTime
+     */
+    public function getDateNaissance()
+    {
+        return $this->dateNaissance;
+    }
+
+    /**
      * Set dateNaissance
      *
      * @param \DateTime $dateNaissance
@@ -529,13 +534,13 @@ class User extends BaseUser
     }
 
     /**
-     * Get dateNaissance
+     * Get domaineCompetence
      *
-     * @return \DateTime
+     * @return string
      */
-    public function getDateNaissance()
+    public function getDomaineCompetence()
     {
-        return $this->dateNaissance;
+        return $this->domaineCompetence;
     }
 
     /**
@@ -553,13 +558,13 @@ class User extends BaseUser
     }
 
     /**
-     * Get domaineCompetence
+     * Get codeBarre
      *
      * @return string
      */
-    public function getDomaineCompetence()
+    public function getCodeBarre()
     {
-        return $this->domaineCompetence;
+        return $this->codeBarre;
     }
 
     /**
@@ -577,13 +582,13 @@ class User extends BaseUser
     }
 
     /**
-     * Get codeBarre
+     * Get created
      *
-     * @return string
+     * @return \DateTime
      */
-    public function getCodeBarre()
+    public function getCreated()
     {
-        return $this->codeBarre;
+        return $this->created;
     }
 
     /**
@@ -601,13 +606,13 @@ class User extends BaseUser
     }
 
     /**
-     * Get created
+     * Get carteImprimee
      *
-     * @return \DateTime
+     * @return boolean
      */
-    public function getCreated()
+    public function getCarteImprimee()
     {
-        return $this->created;
+        return $this->carteImprimee;
     }
 
     /**
@@ -622,15 +627,5 @@ class User extends BaseUser
         $this->carteImprimee = $carteImprimee;
 
         return $this;
-    }
-
-    /**
-     * Get carteImprimee
-     *
-     * @return boolean
-     */
-    public function getCarteImprimee()
-    {
-        return $this->carteImprimee;
     }
 }

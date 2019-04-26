@@ -2,11 +2,10 @@
 
 namespace Glukose\ContactBundle\Controller;
 
+use Glukose\UserBundle\Entity\Adhesion;
+use Glukose\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Glukose\UserBundle\Entity\User;
-use Glukose\UserBundle\Entity\Adhesion;
 
 class DefaultController extends Controller
 {
@@ -14,14 +13,14 @@ class DefaultController extends Controller
     public function addInscriptionAction(Request $request)
     {
         $em = $this
-        ->getDoctrine()
-        ->getManager();
+            ->getDoctrine()
+            ->getManager();
 
         if ($request->isMethod('POST')) {
 
             $user = new User();
             $now = new \DateTime('now');
-            $user->setDateAdhesion( $now->format('d/m/Y'));
+            $user->setDateAdhesion($now->format('d/m/Y'));
             $user->setCivilite($request->request->get('civiliteC'));
             $user->setNom($request->request->get('nomC'));
             $user->setPrenom($request->request->get('prenomC'));

@@ -17,13 +17,11 @@ class UserRepository extends EntityRepository
             ->andWhere('u.created < :end')
             ->andWhere('u.enabled = 1')
             ->setParameter('start', $start)
-            ->setParameter('end', $end)
-        ;
+            ->setParameter('end', $end);
 
         return $qb
             ->getQuery()
-            ->getResult()
-            ;
+            ->getResult();
 
     }
 

@@ -88,11 +88,21 @@ class Adresse
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Get ligne1
+     *
+     * @return string
+     */
+    public function getLigne1()
+    {
+        return $this->ligne1;
     }
 
     /**
@@ -109,13 +119,13 @@ class Adresse
     }
 
     /**
-     * Get ligne1
+     * Get ligne2
      *
-     * @return string 
+     * @return string
      */
-    public function getLigne1()
+    public function getLigne2()
     {
-        return $this->ligne1;
+        return $this->ligne2;
     }
 
     /**
@@ -132,13 +142,13 @@ class Adresse
     }
 
     /**
-     * Get ligne2
+     * Get ligne3
      *
-     * @return string 
+     * @return string
      */
-    public function getLigne2()
+    public function getLigne3()
     {
-        return $this->ligne2;
+        return $this->ligne3;
     }
 
     /**
@@ -155,13 +165,13 @@ class Adresse
     }
 
     /**
-     * Get ligne3
+     * Get codePostal
      *
-     * @return string 
+     * @return integer
      */
-    public function getLigne3()
+    public function getCodePostal()
     {
-        return $this->ligne3;
+        return $this->codePostal;
     }
 
     /**
@@ -178,13 +188,13 @@ class Adresse
     }
 
     /**
-     * Get codePostal
+     * Get ville
      *
-     * @return integer 
+     * @return string
      */
-    public function getCodePostal()
+    public function getVille()
     {
-        return $this->codePostal;
+        return $this->ville;
     }
 
     /**
@@ -201,13 +211,13 @@ class Adresse
     }
 
     /**
-     * Get ville
+     * Get nom
      *
-     * @return string 
+     * @return string
      */
-    public function getVille()
+    public function getNom()
     {
-        return $this->ville;
+        return $this->nom;
     }
 
     /**
@@ -224,13 +234,13 @@ class Adresse
     }
 
     /**
-     * Get nom
+     * Get nPAI
      *
-     * @return string 
+     * @return boolean
      */
-    public function getNom()
+    public function getNPAI()
     {
-        return $this->nom;
+        return $this->nPAI;
     }
 
     /**
@@ -247,13 +257,13 @@ class Adresse
     }
 
     /**
-     * Get nPAI
+     * Get pays
      *
-     * @return boolean 
+     * @return string
      */
-    public function getNPAI()
+    public function getPays()
     {
-        return $this->nPAI;
+        return $this->pays;
     }
 
     /**
@@ -270,13 +280,13 @@ class Adresse
     }
 
     /**
-     * Get pays
+     * Get destinataire
      *
-     * @return string 
+     * @return string
      */
-    public function getPays()
+    public function getDestinataire()
     {
-        return $this->pays;
+        return $this->destinataire;
     }
 
     /**
@@ -290,16 +300,6 @@ class Adresse
         $this->destinataire = $destinataire;
 
         return $this;
-    }
-
-    /**
-     * Get destinataire
-     *
-     * @return string 
-     */
-    public function getDestinataire()
-    {
-        return $this->destinataire;
     }
 
     public function __toString()
