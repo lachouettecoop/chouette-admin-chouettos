@@ -49,39 +49,11 @@ class User extends BaseUser
     private $prenom;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="destination", type="smallint", nullable=true)
-     */
-    private $destination;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="telephone", type="string", length=255, nullable=true)
      */
     private $telephone;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="portable", type="string", length=255, nullable=true)
-     */
-    private $portable;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="fax", type="string", length=255, nullable=true)
-     */
-    private $fax;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="statusAssociatif", type="string", length=255, nullable=true)
-     */
-    private $statusAssociatif;
 
     /**
      * @var string
@@ -93,34 +65,6 @@ class User extends BaseUser
     /**
      * @var string
      *
-     * @ORM\Column(name="typeCotisation", type="string", length=255, nullable=true)
-     */
-    private $typeCotisation;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="montant", type="string", length=255, nullable=true)
-     */
-    private $montant;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="modePaiement", type="string", length=255, nullable=true)
-     */
-    private $modePaiement;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="presentAzendoo", type="string", length=255, nullable=true)
-     */
-    private $presentAzendoo;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="codeBarre", type="string", length=255, nullable=true)
      */
     private $codeBarre;
@@ -128,23 +72,9 @@ class User extends BaseUser
     /**
      * @var string
      *
-     * @ORM\Column(name="csp", type="string", length=255, nullable=true)
-     */
-    private $csp;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="domaineCompetence", type="string", length=255, nullable=true)
      */
     private $domaineCompetence;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="dateAzendoo", type="string", length=255, nullable=true)
-     */
-    private $dateAzendoo;
 
     /**
      * @var date
@@ -184,33 +114,14 @@ class User extends BaseUser
     private $updated;
 
     /**
-    * @ORM\ManyToMany(targetEntity="Glukose\ContactBundle\Entity\Adresse", cascade={"persist"}, orphanRemoval=true)
-    */
+     * @ORM\ManyToMany(targetEntity="Glukose\ContactBundle\Entity\Adresse", cascade={"persist"}, orphanRemoval=true)
+     */
     private $adresses;
 
     /**
-    * @ORM\OneToMany(targetEntity="Glukose\UserBundle\Entity\Adhesion", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
-    */
+     * @ORM\OneToMany(targetEntity="Glukose\UserBundle\Entity\Adhesion", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
     private $adhesions;
-
-    /**
-    * @ORM\ManyToMany(targetEntity="Glukose\UserBundle\Entity\Groupe", mappedBy="membres")
-    */
-    private $groupes;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="accepteMail", type="boolean", nullable=true)
-     */
-    private $accepteMail = true;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="membreActif", type="boolean", nullable=true)
-     */
-    private $membreActif = false;
 
     /**
      * @var bool
@@ -226,9 +137,9 @@ class User extends BaseUser
     private $entities = array("accounts");
 
 
-
-    public function __toString(){
-        return $this->prenom.' '.$this->nom;
+    public function __toString()
+    {
+        return $this->prenom . ' ' . $this->nom;
     }
 
     public function __construct()
@@ -241,7 +152,7 @@ class User extends BaseUser
     public function exportDateNaissance()
     {
         $output = ' ';
-        if ($this->dateNaissance != ''){
+        if ($this->dateNaissance != '') {
             $output = $this->dateNaissance->format('d/m/Y');
         }
         return $output;
@@ -250,8 +161,8 @@ class User extends BaseUser
     public function exportdAhesionAnnee()
     {
         $output = '';
-        foreach($this->adhesions as $adhesion){
-            $output.= $adhesion->getAnnee().', ';
+        foreach ($this->adhesions as $adhesion) {
+            $output .= $adhesion->getAnnee() . ', ';
         }
 
         return $output;
@@ -260,19 +171,20 @@ class User extends BaseUser
     public function exportAdhesionDate()
     {
         $output = '';
-        foreach($this->adhesions as $adhesion){
-          if($adhesion->getDateAdhesion() != null && $adhesion->getDateAdhesion()!= ''){
-            $output.= $adhesion->getDateAdhesion()->format('d/m/Y').', ';
+        foreach ($this->adhesions as $adhesion) {
+            if ($adhesion->getDateAdhesion() != null && $adhesion->getDateAdhesion() != '') {
+                $output .= $adhesion->getDateAdhesion()->format('d/m/Y') . ', ';
             }
         }
 
         return $output;
     }
+
     public function exportAdhesionMontant()
     {
         $output = '';
-        foreach($this->adhesions as $adhesion){
-            $output.= $adhesion->getMontant().', ';
+        foreach ($this->adhesions as $adhesion) {
+            $output .= $adhesion->getMontant() . ', ';
         }
 
         return $output;
@@ -281,8 +193,8 @@ class User extends BaseUser
     public function exportAdresse()
     {
         $output = '';
-        foreach($this->adresses as $adresse){
-            $output.= $adresse->getDestinataire();
+        foreach ($this->adresses as $adresse) {
+            $output .= $adresse->getDestinataire();
         }
 
         return $output;
@@ -291,8 +203,8 @@ class User extends BaseUser
     public function exportAdresse1()
     {
         $output = '';
-        foreach($this->adresses as $adresse){
-            $output.= $adresse->getLigne1();
+        foreach ($this->adresses as $adresse) {
+            $output .= $adresse->getLigne1();
         }
 
         return $output;
@@ -301,8 +213,8 @@ class User extends BaseUser
     public function exportAdresse2()
     {
         $output = '';
-        foreach($this->adresses as $adresse){
-            $output.= $adresse->getLigne2();
+        foreach ($this->adresses as $adresse) {
+            $output .= $adresse->getLigne2();
         }
 
         return $output;
@@ -311,8 +223,8 @@ class User extends BaseUser
     public function exportAdresse3()
     {
         $output = '';
-        foreach($this->adresses as $adresse){
-            $output.= $adresse->getLigne3();
+        foreach ($this->adresses as $adresse) {
+            $output .= $adresse->getLigne3();
         }
 
         return $output;
@@ -321,32 +233,33 @@ class User extends BaseUser
     public function exportAdresse4()
     {
         $output = '';
-        foreach($this->adresses as $adresse){
-            $output.= $adresse->getCodePostal();
+        foreach ($this->adresses as $adresse) {
+            $output .= $adresse->getCodePostal();
         }
 
         return $output;
     }
 
- public function exportAdresse5()
+    public function exportAdresse5()
     {
         $output = '';
-        foreach($this->adresses as $adresse){
-            $output.= $adresse->getVille();
+        foreach ($this->adresses as $adresse) {
+            $output .= $adresse->getVille();
         }
 
         return $output;
     }
 
- public function exportAdresse6()
+    public function exportAdresse6()
     {
         $output = '';
-        foreach($this->adresses as $adresse){
-            $output.= $adresse->getPays();
+        foreach ($this->adresses as $adresse) {
+            $output .= $adresse->getPays();
         }
 
         return $output;
     }
+
     /**
      * Set civilite
      *
@@ -417,29 +330,6 @@ class User extends BaseUser
     }
 
     /**
-     * Set destination
-     *
-     * @param integer $destination
-     * @return User
-     */
-    public function setDestination($destination)
-    {
-        $this->destination = $destination;
-
-        return $this;
-    }
-
-    /**
-     * Get destination
-     *
-     * @return integer
-     */
-    public function getDestination()
-    {
-        return $this->destination;
-    }
-
-    /**
      * Set telephone
      *
      * @param string $telephone
@@ -460,52 +350,6 @@ class User extends BaseUser
     public function getTelephone()
     {
         return $this->telephone;
-    }
-
-    /**
-     * Set portable
-     *
-     * @param string $portable
-     * @return User
-     */
-    public function setPortable($portable)
-    {
-        $this->portable = $portable;
-
-        return $this;
-    }
-
-    /**
-     * Get portable
-     *
-     * @return string
-     */
-    public function getPortable()
-    {
-        return $this->portable;
-    }
-
-    /**
-     * Set fax
-     *
-     * @param string $fax
-     * @return User
-     */
-    public function setFax($fax)
-    {
-        $this->fax = $fax;
-
-        return $this;
-    }
-
-    /**
-     * Get fax
-     *
-     * @return string
-     */
-    public function getFax()
-    {
-        return $this->fax;
     }
 
     /**
@@ -565,30 +409,6 @@ class User extends BaseUser
     }
 
     /**
-     * Set uid
-     *
-     * @param integer $uid
-     *
-     * @return User
-     */
-    public function setUid($uid)
-    {
-        $this->uid = $uid;
-
-        return $this;
-    }
-
-    /**
-     * Get uid
-     *
-     * @return integer
-     */
-    public function getUid()
-    {
-        return $this->uid;
-    }
-
-    /**
      * Set motDePasse
      *
      * @param string $motDePasse
@@ -613,30 +433,6 @@ class User extends BaseUser
     }
 
     /**
-     * Set statusAssociatif
-     *
-     * @param string $statusAssociatif
-     *
-     * @return User
-     */
-    public function setStatusAssociatif($statusAssociatif)
-    {
-        $this->statusAssociatif = $statusAssociatif;
-
-        return $this;
-    }
-
-    /**
-     * Get statusAssociatif
-     *
-     * @return string
-     */
-    public function getStatusAssociatif()
-    {
-        return $this->statusAssociatif;
-    }
-
-    /**
      * Set dateAdhesion
      *
      * @param string $dateAdhesion
@@ -658,127 +454,6 @@ class User extends BaseUser
     public function getDateAdhesion()
     {
         return $this->dateAdhesion;
-    }
-
-    /**
-     * Set typeCotisation
-     *
-     * @param string $typeCotisation
-     *
-     * @return User
-     */
-    public function setTypeCotisation($typeCotisation)
-    {
-        $this->typeCotisation = $typeCotisation;
-
-        return $this;
-    }
-
-    /**
-     * Get typeCotisation
-     *
-     * @return string
-     */
-    public function getTypeCotisation()
-    {
-        return $this->typeCotisation;
-    }
-
-    /**
-     * Set montant
-     *
-     * @param string $montant
-     *
-     * @return User
-     */
-    public function setMontant($montant)
-    {
-        $this->montant = $montant;
-
-        return $this;
-    }
-
-    /**
-     * Get montant
-     *
-     * @return string
-     */
-    public function getMontant()
-    {
-        return $this->montant;
-    }
-
-    /**
-     * Set modePaiement
-     *
-     * @param string $modePaiement
-     *
-     * @return User
-     */
-    public function setModePaiement($modePaiement)
-    {
-        $this->modePaiement = $modePaiement;
-
-        return $this;
-    }
-
-    /**
-     * Get modePaiement
-     *
-     * @return string
-     */
-    public function getModePaiement()
-    {
-        return $this->modePaiement;
-    }
-
-    /**
-     * Set presentAzendoo
-     *
-     * @param string $presentAzendoo
-     *
-     * @return User
-     */
-    public function setPresentAzendoo($presentAzendoo)
-    {
-        $this->presentAzendoo = $presentAzendoo;
-
-        return $this;
-    }
-
-    /**
-     * Get presentAzendoo
-     *
-     * @return string
-     */
-    public function getPresentAzendoo()
-    {
-        return $this->presentAzendoo;
-    }
-
-
-    /**
-     * Set dateAzendoo
-     *
-     * @param string $dateAzendoo
-     *
-     * @return User
-     */
-    public function setDateAzendoo($dateAzendoo)
-    {
-        $this->dateAzendoo = $dateAzendoo;
-
-        return $this;
-    }
-
-    /**
-     * Get dateAzendoo
-     *
-     * @return string
-     */
-    public function getDateAzendoo()
-    {
-        return $this->dateAzendoo;
     }
 
     /**
@@ -840,64 +515,6 @@ class User extends BaseUser
     }
 
     /**
-     * Add groupe
-     *
-     * @param \Glukose\UserBundle\Entity\Groupe $groupe
-     *
-     * @return User
-     */
-    public function addGroupe(\Glukose\UserBundle\Entity\Groupe $groupe)
-    {
-        $this->groupes[] = $groupe;
-
-        return $this;
-    }
-
-    /**
-     * Remove groupe
-     *
-     * @param \Glukose\UserBundle\Entity\Groupe $groupe
-     */
-    public function removeGroupe(\Glukose\UserBundle\Entity\Groupe $groupe)
-    {
-        $this->groupes->removeElement($groupe);
-    }
-
-    /**
-     * Get groupes
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getGroupes()
-    {
-        return $this->groupes;
-    }
-
-    /**
-     * Set csp
-     *
-     * @param string $csp
-     *
-     * @return User
-     */
-    public function setCsp($csp)
-    {
-        $this->csp = $csp;
-
-        return $this;
-    }
-
-    /**
-     * Get csp
-     *
-     * @return string
-     */
-    public function getCsp()
-    {
-        return $this->csp;
-    }
-
-    /**
      * Set dateNaissance
      *
      * @param \DateTime $dateNaissance
@@ -946,30 +563,6 @@ class User extends BaseUser
     }
 
     /**
-     * Set accepteMail
-     *
-     * @param boolean $accepteMail
-     *
-     * @return User
-     */
-    public function setAccepteMail($accepteMail)
-    {
-        $this->accepteMail = $accepteMail;
-
-        return $this;
-    }
-
-    /**
-     * Get accepteMail
-     *
-     * @return boolean
-     */
-    public function getAccepteMail()
-    {
-        return $this->accepteMail;
-    }
-
-    /**
      * Set codeBarre
      *
      * @param string $codeBarre
@@ -991,30 +584,6 @@ class User extends BaseUser
     public function getCodeBarre()
     {
         return $this->codeBarre;
-    }
-
-    /**
-     * Set membreActif
-     *
-     * @param boolean $membreActif
-     *
-     * @return User
-     */
-    public function setMembreActif($membreActif)
-    {
-        $this->membreActif = $membreActif;
-
-        return $this;
-    }
-
-    /**
-     * Get membreActif
-     *
-     * @return boolean
-     */
-    public function getMembreActif()
-    {
-        return $this->membreActif;
     }
 
     /**

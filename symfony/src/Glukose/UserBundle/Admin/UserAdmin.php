@@ -22,16 +22,6 @@ class UserAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            //->add('username')
-
-            //->add('motDePasse')
-            /*->add('plainPassword', 'repeated', array(
-                'type' => 'password',
-                'options' => array('translation_domain' => 'FOSUserBundle'),
-                'first_options' => array('label' => 'form.password'),
-                'second_options' => array('label' => 'form.password_confirmation'),
-                'invalid_message' => 'fos_user.password.mismatch',
-            ))*/
             ->with('Civilité', array(
                 'class'       => 'col-md-6'
             ))
@@ -40,7 +30,6 @@ class UserAdmin extends Admin
                   array('choices' => array(
                       'mme' => 'Madame',
                       'mr' => 'Monsieur'
-                      //,'mlle' => 'Mademoiselle'
                   )
                        ))
             ->add('nom')
@@ -50,26 +39,17 @@ class UserAdmin extends Admin
             ->add('dateNaissance', 'sonata_type_date_picker', array(
                 'required' => false,
                 'format'=>'dd/MM/yyyy',
-                /*'dp_min_date' => $start->format('m/d/Y'),
-                'dp_max_date' => $end->format('m/d/Y'),*/
                 'attr' => array(
                     'data-date-format' => 'DD/MM/YYYY',
                 )
             ))
             ->add('enabled', null, array('required' => false, 'label' => 'Membre ?'))
             ->add('carteImprimee', null, array('required' => false, 'label' => 'Carte imprimée ?'))
-            ->add('accepteMail', null, array('required' => false, 'label' => 'Accepte les emails ?'))
-            //->add('membreActif', null, array('required' => false, 'label' => 'Membre actif ?'))
             ->end()
             ->with('Association', array(
                 'class'       => 'col-md-6'
             ))
-            //->add('statusAssociatif')
             ->add('dateAdhesion', null, array('label' => 'Date première adhésion'))
-            ->add('montant')
-            ->add('modePaiement')
-            //->add('presentAzendoo')
-            ->add('csp', null, array('label' => 'Catégorie socio-profesionnelle'))
             ->add('domaineCompetence', null, array('label' => 'Domaines de compétences'))
             ->add('notes')
 
@@ -104,7 +84,7 @@ class UserAdmin extends Admin
 
     public function getExportFields()
     {
-        return array('id', 'civilite', 'nom','prenom', 'codebarre', 'email','exportDateNaissance', 'csp', 'dateAdhesion', 'telephone','enabled', 'accepteMail', 'domaineCompetence', 'exportAdresse', 'exportAdresse1', 'exportAdresse2', 'exportAdresse3', 'exportAdresse4', 'exportAdresse5', 'exportAdresse6', 'adhesions', 'exportdAhesionAnnee', 'exportAdhesionDate', 'exportAdhesionMontant');
+        return array('id', 'civilite', 'nom','prenom', 'codebarre', 'email','exportDateNaissance', 'dateAdhesion', 'telephone','enabled', 'domaineCompetence', 'exportAdresse', 'exportAdresse1', 'exportAdresse2', 'exportAdresse3', 'exportAdresse4', 'exportAdresse5', 'exportAdresse6', 'adhesions', 'exportdAhesionAnnee', 'exportAdhesionDate', 'exportAdhesionMontant');
     }
 
 
@@ -129,7 +109,6 @@ class UserAdmin extends Admin
             ->addIdentifier('nom')
             ->add('prenom')
             ->add('telephone')
-            ->add('groupes')
             ->add('notes', 'string', array('template' => 'GlukoseUserBundle:Admin:resetPassword.html.twig'))
             ->add('adhesions')
             ->add('enabled', null, array('label' => 'Activé', 'editable'=>true))
