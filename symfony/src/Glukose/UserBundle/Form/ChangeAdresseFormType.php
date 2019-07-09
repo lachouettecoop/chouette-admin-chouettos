@@ -11,8 +11,6 @@ class ChangeAdresseFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nom', null, array('label' => 'Intitulé de l\'adresse', 'attr' => array('class' => 'form-control')))
-            ->add('destinataire', null, array('label' => 'Destinataire (Nom Prénom)', 'required' => true, 'attr' => array('class' => 'form-control', 'maxlength' => '38')))
             ->add('ligne1', null, array('label' => 'Adresse', 'required' => true, 'attr' => array('class' => 'form-control', 'maxlength' => '38')))
             ->add('ligne2', null, array('label' => ' ', 'attr' => array('class' => 'form-control', 'maxlength' => '38')))
             ->add('ville', null, array('label' => 'Ville', 'required' => true, 'attr' => array('class' => 'form-control')))

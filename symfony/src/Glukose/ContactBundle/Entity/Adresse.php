@@ -64,21 +64,6 @@ class Adresse
     private $ville;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="nom", type="string", length=255, nullable=true)
-     */
-    private $nom;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="destinataire", type="string", length=38, nullable=true)
-     */
-    private $destinataire;
-
-
-    /**
      * Get id
      *
      * @return integer
@@ -181,29 +166,6 @@ class Adresse
     }
 
     /**
-     * Get nom
-     *
-     * @return string
-     */
-    public function getNom()
-    {
-        return $this->nom;
-    }
-
-    /**
-     * Set nom
-     *
-     * @param string $nom
-     * @return Adresse
-     */
-    public function setNom($nom)
-    {
-        $this->nom = $nom;
-
-        return $this;
-    }
-
-    /**
      * Get nPAI
      *
      * @return boolean
@@ -245,29 +207,6 @@ class Adresse
     public function setPays($pays)
     {
         $this->pays = $pays;
-
-        return $this;
-    }
-
-    /**
-     * Get destinataire
-     *
-     * @return string
-     */
-    public function getDestinataire()
-    {
-        return $this->destinataire;
-    }
-
-    /**
-     * Set destinataire
-     *
-     * @param string $destinataire
-     * @return Adresse
-     */
-    public function setDestinataire($destinataire)
-    {
-        $this->destinataire = $destinataire;
 
         return $this;
     }

@@ -12,7 +12,6 @@ class AdresseAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('destinataire')
             ->add('ligne1', 'textarea')
             ->add('ligne2')
             ->add('codePostal')
@@ -23,7 +22,6 @@ class AdresseAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('nom')
             ->add('ligne1')
             ->add('ligne2');
     }
@@ -31,7 +29,6 @@ class AdresseAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('id')
-            ->add('destinataire');
+            ->addIdentifier('id');
     }
 }

@@ -185,16 +185,6 @@ class User extends BaseUser
         return $output;
     }
 
-    public function exportAdresse()
-    {
-        $output = '';
-        foreach ($this->adresses as $adresse) {
-            $output .= $adresse->getDestinataire();
-        }
-
-        return $output;
-    }
-
     public function exportAdresse1()
     {
         $output = '';
