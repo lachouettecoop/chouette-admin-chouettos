@@ -12,15 +12,13 @@
 namespace Glukose\UserBundle\Controller;
 
 use FOS\UserBundle\Controller\ResettingController as BaseController;
-
-use FOS\UserBundle\FOSUserEvents;
+use FOS\UserBundle\Event\FilterUserResponseEvent;
 use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Event\GetResponseUserEvent;
-use FOS\UserBundle\Event\FilterUserResponseEvent;
+use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Model\UserInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -39,7 +37,6 @@ class ResettingController extends BaseController
     {
         return $this->render('FOSUserBundle:Resetting:request.html.twig');
     }
-
 
     /**
      * Request reset user password: submit form and send email
@@ -66,10 +63,27 @@ class ResettingController extends BaseController
         $user->setPasswordRequestedAt(new \DateTime());
         $this->get('fos_user.user_manager')->updateUser($user);
         return new RedirectResponse($this->generateUrl('fos_user_resetting_check_email',
-                                                       array('email' => $this->getObfuscatedEmail($user))
-                                                      ));
+            array('email' => $this->getObfuscatedEmail($user))
+        ));
     }
 
+    /**
+     * Get the truncated email displayed when requesting the resetting.
+     *
+     * The default implementation only keeps the part following @ in the address.
+     *
+     * @param \FOS\UserBundle\Model\UserInterface $user
+     *
+     * @return string
+     */
+    protected function getObfuscatedEmail(UserInterface $user)
+    {
+        $email = $user->getEmail();
+        if (false !== $pos = strpos($email, '@')) {
+            $email = '...' . substr($email, $pos);
+        }
+        return $email;
+    }
 
     /**
      * Tell the user to check his email provider
@@ -85,7 +99,6 @@ class ResettingController extends BaseController
             'email' => $email,
         ));
     }
-
 
     /**
      * Reset user password
@@ -123,11 +136,11 @@ class ResettingController extends BaseController
                 // Connexion avec une identité qui permet les modifications
                 $r = ldap_bind($ds, $this->container->getParameter('ldapUser'), $this->container->getParameter('ldapMdp'));
                 $info = [
-                    "userPassword" => '{MD5}' . base64_encode(pack('H*',md5($user->getPlainPassword())))
+                    "userPassword" => '{MD5}' . base64_encode(pack('H*', md5($user->getPlainPassword())))
                 ];
 
                 // Ajoute les données au dossier
-                $r = ldap_modify($ds, "cn=".$user->getEmail().",ou=membres,o=lachouettecoop,dc=lachouettecoop,dc=fr", $info);
+                $r = ldap_modify($ds, "cn=" . $user->getEmail() . ",ou=membres,o=lachouettecoop,dc=lachouettecoop,dc=fr", $info);
                 ldap_close($ds);
             }
 
@@ -143,25 +156,6 @@ class ResettingController extends BaseController
             'token' => $token,
             'form' => $form->createView(),
         ));
-    }
-
-
-    /**
-     * Get the truncated email displayed when requesting the resetting.
-     *
-     * The default implementation only keeps the part following @ in the address.
-     *
-     * @param \FOS\UserBundle\Model\UserInterface $user
-     *
-     * @return string
-     */
-    protected function getObfuscatedEmail(UserInterface $user)
-    {
-        $email = $user->getEmail();
-        if (false !== $pos = strpos($email, '@')) {
-            $email = '...' . substr($email, $pos);
-        }
-        return $email;
     }
 
 }

@@ -12,8 +12,7 @@ class UserAdminController extends CRUDController
 
     public function batchActionImprimeCarte(ProxyQueryInterface $selectedModelQuery)
     {
-        if (!$this->admin->isGranted('EDIT'))
-        {
+        if (!$this->admin->isGranted('EDIT')) {
             throw new AccessDeniedException();
         }
 
@@ -28,14 +27,14 @@ class UserAdminController extends CRUDController
             $this->addFlash('sonata_flash_error', 'Une erreur est survenue');
 
             return new RedirectResponse(
-                $this->admin->generateUrl('list',$this->admin->getFilterParameters())
+                $this->admin->generateUrl('list', $this->admin->getFilterParameters())
             );
         }
 
         $this->addFlash('sonata_flash_success', 'Impeccable ! T’es au top, merci…');
 
         return new RedirectResponse(
-            $this->admin->generateUrl('list',$this->admin->getFilterParameters())
+            $this->admin->generateUrl('list', $this->admin->getFilterParameters())
         );
     }
 

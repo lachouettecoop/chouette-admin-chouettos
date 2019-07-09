@@ -24,19 +24,7 @@ services:
         calls:
             - [ setTranslationDomain, [GlukoseAdminContactBundle]]
             - [ setLdapService, [@chouette.admin.ldap]]
-            
-    sonata.admin.groupes:
-        class: Glukose\UserBundle\Admin\GroupeAdmin
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: "Gestion des membres", label: "Groupes", icon: %iconUser% }
-        arguments:
-            - ~
-            - Glukose\UserBundle\Entity\Groupe
-            - ~
-        calls:
-            - [ setTranslationDomain, [GlukoseAdminContactBundle]]
-            - [ setLdapService, [@chouette.admin.ldap]]
-            
+
     sonata.admin.adhesion:
         class: Glukose\UserBundle\Admin\AdhesionAdmin
         tags:
@@ -44,6 +32,17 @@ services:
         arguments:
             - ~
             - Glukose\UserBundle\Entity\Adhesion
+            - ~
+        calls:
+            - [ setTranslationDomain, [GlukoseAdminContactBundle]]
+
+    sonata.admin.paiement:
+        class: Glukose\UserBundle\Admin\PaiementAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Gestion des membres", label: "Paiements", icon: %iconUser%, show_in_dashboard: true }
+        arguments:
+            - ~
+            - Glukose\UserBundle\Entity\Paiement
             - ~
         calls:
             - [ setTranslationDomain, [GlukoseAdminContactBundle]]

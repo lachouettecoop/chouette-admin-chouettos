@@ -10,8 +10,10 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity
  */
-class Adhesion
+class Paiement
 {
+    const MONTANT_NOMINAL = 100;
+
     /**
      * @var integer
      *
@@ -25,21 +27,14 @@ class Adhesion
     /**
      * @var date
      *
-     * @ORM\Column(name="dateAdhesion", type="date", nullable=true)
+     * @ORM\Column(name="$dateEcheance", type="date", nullable=true)
      */
-    private $dateAdhesion;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="annee", type="integer", nullable=true)
-     */
-    private $annee;
+    private $dateEcheance;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="montant", type="string", length=255, nullable=true)
+     * @ORM\Column(name="montant", type="integer", length=255, nullable=true)
      */
     private $montant;
 
@@ -51,77 +46,75 @@ class Adhesion
     private $modePaiement;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="effectif", type="boolean", nullable=true)
+     */
+    private $effectif;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Glukose\UserBundle\Entity\User", inversedBy="adhesions")
      */
     private $user;
 
     /**
-     * Get id
-     *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
         return $this->id;
     }
 
-    public function __toString()
-    {
-        return $this->annee;
-
-    }
-
     /**
-     * Get dateAdhesion
-     *
-     * @return \DateTime
+     * @param int $id
+     * @return Paiement
      */
-    public function getDateAdhesion()
+    public function setId($id)
     {
-        return $this->dateAdhesion;
-    }
-
-    /**
-     * Set dateAdhesion
-     *
-     * @param \DateTime $dateAdhesion
-     *
-     * @return Adhesion
-     */
-    public function setDateAdhesion($dateAdhesion)
-    {
-        $this->dateAdhesion = $dateAdhesion;
-
+        $this->id = $id;
         return $this;
     }
 
     /**
-     * Get montant
-     *
+     * @return date
+     */
+    public function getDateEcheance()
+    {
+        return $this->dateEcheance;
+    }
+
+    /**
+     * @param date $dateEcheance
+     * @return Paiement
+     */
+    public function setDateEcheance($dateEcheance)
+    {
+        $this->dateEcheance = $dateEcheance;
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function getMontant()
     {
+        if (is_null($this->montant)) {
+            return static::MONTANT_NOMINAL;
+        }
         return $this->montant;
     }
 
     /**
-     * Set montant
-     *
      * @param string $montant
-     *
-     * @return Adhesion
+     * @return Paiement
      */
     public function setMontant($montant)
     {
         $this->montant = $montant;
-
         return $this;
     }
 
     /**
-     * Get modePaiement
-     *
      * @return string
      */
     public function getModePaiement()
@@ -130,47 +123,17 @@ class Adhesion
     }
 
     /**
-     * Set modePaiement
-     *
      * @param string $modePaiement
-     *
-     * @return Adhesion
+     * @return Paiement
      */
     public function setModePaiement($modePaiement)
     {
         $this->modePaiement = $modePaiement;
-
         return $this;
     }
 
     /**
-     * Get annee
-     *
-     * @return integer
-     */
-    public function getAnnee()
-    {
-        return $this->annee;
-    }
-
-    /**
-     * Set annee
-     *
-     * @param integer $annee
-     *
-     * @return Adhesion
-     */
-    public function setAnnee($annee)
-    {
-        $this->annee = $annee;
-
-        return $this;
-    }
-
-    /**
-     * Get user
-     *
-     * @return \Glukose\UserBundle\Entity\User
+     * @return mixed
      */
     public function getUser()
     {
@@ -178,16 +141,29 @@ class Adhesion
     }
 
     /**
-     * Set user
-     *
-     * @param \Glukose\UserBundle\Entity\User $user
-     *
-     * @return Adhesion
+     * @param mixed $user
+     * @return Paiement
      */
-    public function setUser(\Glukose\UserBundle\Entity\User $user = null)
+    public function setUser(User $user)
     {
         $this->user = $user;
+        return $this;
+    }
 
+    /**
+     * @return bool
+     */
+    public function isEffectif()
+    {
+        return $this->effectif;
+    }
+
+    /**
+     * @param bool $effectif
+     */
+    public function setEffectif($effectif)
+    {
+        $this->effectif = $effectif;
         return $this;
     }
 }

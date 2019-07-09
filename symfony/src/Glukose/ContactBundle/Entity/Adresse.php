@@ -38,13 +38,6 @@ class Adresse
     /**
      * @var string
      *
-     * @ORM\Column(name="ligne3", type="string", length=255, nullable=true)
-     */
-    private $ligne3;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="NPAI", type="boolean", nullable=true, options={"default" = 0})
      */
     private $nPAI;
@@ -71,28 +64,23 @@ class Adresse
     private $ville;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="nom", type="string", length=255, nullable=true)
-     */
-    private $nom;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="destinataire", type="string", length=38, nullable=true)
-     */
-    private $destinataire;
-
-
-    /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Get ligne1
+     *
+     * @return string
+     */
+    public function getLigne1()
+    {
+        return $this->ligne1;
     }
 
     /**
@@ -109,13 +97,13 @@ class Adresse
     }
 
     /**
-     * Get ligne1
+     * Get ligne2
      *
-     * @return string 
+     * @return string
      */
-    public function getLigne1()
+    public function getLigne2()
     {
-        return $this->ligne1;
+        return $this->ligne2;
     }
 
     /**
@@ -132,36 +120,13 @@ class Adresse
     }
 
     /**
-     * Get ligne2
+     * Get codePostal
      *
-     * @return string 
+     * @return integer
      */
-    public function getLigne2()
+    public function getCodePostal()
     {
-        return $this->ligne2;
-    }
-
-    /**
-     * Set ligne3
-     *
-     * @param string $ligne3
-     * @return Adresse
-     */
-    public function setLigne3($ligne3)
-    {
-        $this->ligne3 = $ligne3;
-
-        return $this;
-    }
-
-    /**
-     * Get ligne3
-     *
-     * @return string 
-     */
-    public function getLigne3()
-    {
-        return $this->ligne3;
+        return $this->codePostal;
     }
 
     /**
@@ -178,13 +143,13 @@ class Adresse
     }
 
     /**
-     * Get codePostal
+     * Get ville
      *
-     * @return integer 
+     * @return string
      */
-    public function getCodePostal()
+    public function getVille()
     {
-        return $this->codePostal;
+        return $this->ville;
     }
 
     /**
@@ -201,36 +166,13 @@ class Adresse
     }
 
     /**
-     * Get ville
+     * Get nPAI
      *
-     * @return string 
+     * @return boolean
      */
-    public function getVille()
+    public function getNPAI()
     {
-        return $this->ville;
-    }
-
-    /**
-     * Set nom
-     *
-     * @param string $nom
-     * @return Adresse
-     */
-    public function setNom($nom)
-    {
-        $this->nom = $nom;
-
-        return $this;
-    }
-
-    /**
-     * Get nom
-     *
-     * @return string 
-     */
-    public function getNom()
-    {
-        return $this->nom;
+        return $this->nPAI;
     }
 
     /**
@@ -247,13 +189,13 @@ class Adresse
     }
 
     /**
-     * Get nPAI
+     * Get pays
      *
-     * @return boolean 
+     * @return string
      */
-    public function getNPAI()
+    public function getPays()
     {
-        return $this->nPAI;
+        return $this->pays;
     }
 
     /**
@@ -267,39 +209,6 @@ class Adresse
         $this->pays = $pays;
 
         return $this;
-    }
-
-    /**
-     * Get pays
-     *
-     * @return string 
-     */
-    public function getPays()
-    {
-        return $this->pays;
-    }
-
-    /**
-     * Set destinataire
-     *
-     * @param string $destinataire
-     * @return Adresse
-     */
-    public function setDestinataire($destinataire)
-    {
-        $this->destinataire = $destinataire;
-
-        return $this;
-    }
-
-    /**
-     * Get destinataire
-     *
-     * @return string 
-     */
-    public function getDestinataire()
-    {
-        return $this->destinataire;
     }
 
     public function __toString()
