@@ -51,6 +51,11 @@ class UserAdmin extends Admin
                 $adhesion->setUser($user);
             }
         }
+        if ($user->getPaiements() != null) {
+            foreach ($user->getPaiements() as $paiement) {
+                $paiement->setUser($user);
+            }
+        }
     }
 
     public function postUpdate($user)
@@ -117,9 +122,8 @@ class UserAdmin extends Admin
     {
         $formMapper
             ->with('Civilité', array(
-                'class' => 'col-md-6'
+                'class' => 'col-md-5'
             ))
-            ->add('email')
             ->add('civilite', 'choice',
                 array('choices' => array(
                     'mme' => 'Madame',
@@ -128,8 +132,6 @@ class UserAdmin extends Admin
             )
             ->add('nom')
             ->add('prenom')
-            ->add('telephone')
-            ->add('codeBarre')
             ->add('dateNaissance', 'sonata_type_date_picker', array(
                 'required' => false,
                 'format' => 'dd/MM/yyyy',
@@ -137,21 +139,19 @@ class UserAdmin extends Admin
                     'data-date-format' => 'DD/MM/YYYY',
                 )
             ))
+            ->add('telephone')
+            ->add('email')
+            ->add('codeBarre')
             ->add('enabled', null, array('required' => false, 'label' => 'Membre ?'))
+            ->add('actif', null, array('required' => false, 'label' => 'Actif·ve dans un groupe ?'))
             ->add('carteImprimee', null, array('required' => false, 'label' => 'Carte imprimée ?'))
             ->end()
-            ->with('Association', array(
-                'class' => 'col-md-6'
-            ))
-            ->add('dateAdhesion', null, array('label' => 'Date première adhésion'))
-            ->add('domaineCompetence', null, array('label' => 'Domaines de compétences'))
-            ->add('notes')
-            ->end()
-            ->with('Historique des adhésions', array(
-                'class' => 'col-md-12'
+
+            ->with('Adresse', array(
+                'class' => 'col-md-7'
             ))
             ->add(
-                'adhesions',
+                'adresses',
                 'sonata_type_collection',
                 array(
                     'required' => false,
@@ -162,11 +162,36 @@ class UserAdmin extends Admin
                 )
             )
             ->end()
-            ->with('Adresse', array(
+
+            ->with('Association', array(
+                'class' => 'col-md-12'
+            ))
+            ->add('dateAdhesion', null, array('label' => 'Date première adhésion'))
+            ->add('domaineCompetence', null, array('label' => 'Domaines de compétences'))
+            ->add('notes')
+            ->end()
+
+            ->with('Paiements des parts sociales', array(
                 'class' => 'col-md-12'
             ))
             ->add(
-                'adresses',
+                'paiements',
+                'sonata_type_collection',
+                array(
+                    'required' => false,
+                ),
+                array(
+                    'edit' => 'inline',
+                    'inline' => 'table',
+                )
+            )
+            ->end()
+
+            ->with('Historique des adhésions', array(
+                'class' => 'col-md-12'
+            ))
+            ->add(
+                'adhesions',
                 'sonata_type_collection',
                 array(
                     'required' => false,
@@ -185,6 +210,7 @@ class UserAdmin extends Admin
             ->add('nom')
             ->add('prenom')
             ->add('email')
+            ->add('dateAdhesion', null, array('label' => 'Date de souscription'))
             ->add('carteImprimee', null, ['label' => 'Carte imprimée ?'])
             ->add('enabled', null, ['label' => 'Actif ?']);
     }

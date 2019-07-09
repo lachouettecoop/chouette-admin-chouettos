@@ -35,3 +35,14 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [GlukoseAdminContactBundle]]
+
+    sonata.admin.paiement:
+        class: Glukose\UserBundle\Admin\PaiementAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Gestion des membres", label: "Paiements", icon: %iconUser%, show_in_dashboard: true }
+        arguments:
+            - ~
+            - Glukose\UserBundle\Entity\Paiement
+            - ~
+        calls:
+            - [ setTranslationDomain, [GlukoseAdminContactBundle]]

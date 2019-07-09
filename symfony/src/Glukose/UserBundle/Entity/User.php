@@ -87,6 +87,13 @@ class User extends BaseUser
     private $notes;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="actif", type="boolean", nullable=true)
+     */
+    private $actif;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="motDePasse", type="string", length=255, nullable=true)
@@ -120,6 +127,11 @@ class User extends BaseUser
     private $adhesions;
 
     /**
+     * @ORM\OneToMany(targetEntity="Glukose\UserBundle\Entity\Paiement", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    private $paiements;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="carteImprimee", type="boolean", nullable=true, options={"default" : 0})
@@ -137,6 +149,7 @@ class User extends BaseUser
         parent::__construct();
         $this->adhesions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->adresses = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->paiements = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function __toString()
@@ -490,6 +503,40 @@ class User extends BaseUser
     }
 
     /**
+     * Add paiement
+     *
+     * @param \Glukose\UserBundle\Entity\Paiement $paiement
+     *
+     * @return User
+     */
+    public function addPaiement(\Glukose\UserBundle\Entity\Paiement $paiement)
+    {
+        $this->paiements[] = $paiement;
+
+        return $this;
+    }
+
+    /**
+     * Remove paiement
+     *
+     * @param \Glukose\UserBundle\Entity\Paiement $paiement
+     */
+    public function removePaiement(\Glukose\UserBundle\Entity\Paiement $paiement)
+    {
+        $this->paiements->removeElement($paiement);
+    }
+
+    /**
+     * Get paiements
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPaiements()
+    {
+        return $this->paiements;
+    }
+
+    /**
      * Get dateNaissance
      *
      * @return \DateTime
@@ -606,6 +653,23 @@ class User extends BaseUser
     {
         $this->carteImprimee = $carteImprimee;
 
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isActif()
+    {
+        return $this->actif;
+    }
+
+    /**
+     * @param bool $actif
+     */
+    public function setActif($actif)
+    {
+        $this->actif = $actif;
         return $this;
     }
 }
