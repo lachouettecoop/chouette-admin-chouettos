@@ -15,7 +15,6 @@ class ChangeAdresseFormType extends AbstractType
             ->add('destinataire', null, array('label' => 'Destinataire (Nom Prénom)', 'required' => true, 'attr' => array('class' => 'form-control', 'maxlength' => '38')))
             ->add('ligne1', null, array('label' => 'Adresse', 'required' => true, 'attr' => array('class' => 'form-control', 'maxlength' => '38')))
             ->add('ligne2', null, array('label' => ' ', 'attr' => array('class' => 'form-control', 'maxlength' => '38')))
-            ->add('ligne3', null, array('label' => ' ', 'attr' => array('class' => 'form-control', 'maxlength' => '38')))
             ->add('ville', null, array('label' => 'Ville', 'required' => true, 'attr' => array('class' => 'form-control')))
             ->add('codePostal', null, array('label' => 'Code Postal', 'required' => true, 'attr' => array('class' => 'form-control')))
             ->add('pays', 'country', array('label' => 'Pays', 'attr' => array('class' => 'form-control'), 'preferred_choices' => array('FR')))

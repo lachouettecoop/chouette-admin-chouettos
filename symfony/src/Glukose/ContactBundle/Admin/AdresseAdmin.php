@@ -12,14 +12,11 @@ class AdresseAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            //->add('nom', 'textarea', array('label' => 'Nom adresse'))
-            ->add('destinataire', 'textarea')
+            ->add('destinataire')
             ->add('ligne1', 'textarea')
-            ->add('ligne2', 'textarea')
-            ->add('ligne3', 'textarea')
-            ->add('codePostal', 'textarea')
-            ->add('ville', 'textarea')
-            //->add('pays', 'country')
+            ->add('ligne2')
+            ->add('codePostal')
+            ->add('ville')
             ->add('nPAI');
     }
 
@@ -28,8 +25,7 @@ class AdresseAdmin extends Admin
         $datagridMapper
             ->add('nom')
             ->add('ligne1')
-            ->add('ligne2')
-            ->add('ligne3');
+            ->add('ligne2');
     }
 
     protected function configureListFields(ListMapper $listMapper)

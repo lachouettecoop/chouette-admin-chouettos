@@ -215,16 +215,6 @@ class User extends BaseUser
         return $output;
     }
 
-    public function exportAdresse3()
-    {
-        $output = '';
-        foreach ($this->adresses as $adresse) {
-            $output .= $adresse->getLigne3();
-        }
-
-        return $output;
-    }
-
     public function exportAdresse4()
     {
         $output = '';

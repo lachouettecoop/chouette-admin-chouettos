@@ -38,13 +38,6 @@ class Adresse
     /**
      * @var string
      *
-     * @ORM\Column(name="ligne3", type="string", length=255, nullable=true)
-     */
-    private $ligne3;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="NPAI", type="boolean", nullable=true, options={"default" = 0})
      */
     private $nPAI;
@@ -137,29 +130,6 @@ class Adresse
     public function setLigne2($ligne2)
     {
         $this->ligne2 = $ligne2;
-
-        return $this;
-    }
-
-    /**
-     * Get ligne3
-     *
-     * @return string
-     */
-    public function getLigne3()
-    {
-        return $this->ligne3;
-    }
-
-    /**
-     * Set ligne3
-     *
-     * @param string $ligne3
-     * @return Adresse
-     */
-    public function setLigne3($ligne3)
-    {
-        $this->ligne3 = $ligne3;
 
         return $this;
     }

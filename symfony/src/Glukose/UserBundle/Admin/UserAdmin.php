@@ -21,7 +21,7 @@ class UserAdmin extends Admin
 
     public function getExportFields()
     {
-        return array('id', 'civilite', 'nom', 'prenom', 'codebarre', 'email', 'exportDateNaissance', 'dateAdhesion', 'telephone', 'enabled', 'domaineCompetence', 'exportAdresse', 'exportAdresse1', 'exportAdresse2', 'exportAdresse3', 'exportAdresse4', 'exportAdresse5', 'exportAdresse6', 'adhesions', 'exportdAhesionAnnee', 'exportAdhesionDate', 'exportAdhesionMontant');
+        return array('id', 'civilite', 'nom', 'prenom', 'codebarre', 'email', 'exportDateNaissance', 'dateAdhesion', 'telephone', 'enabled', 'domaineCompetence', 'exportAdresse', 'exportAdresse1', 'exportAdresse2', 'exportAdresse4', 'exportAdresse5', 'exportAdresse6', 'adhesions', 'exportdAhesionAnnee', 'exportAdhesionDate', 'exportAdhesionMontant');
     }
 
     public function getBatchActions()
