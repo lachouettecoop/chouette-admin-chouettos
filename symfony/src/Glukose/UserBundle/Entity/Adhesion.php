@@ -63,7 +63,6 @@ class Adhesion
     public function getId()
     {
         return $this->id;
-
     }
 
     public function __toString()
