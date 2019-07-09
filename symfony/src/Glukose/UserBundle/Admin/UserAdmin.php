@@ -21,7 +21,7 @@ class UserAdmin extends Admin
 
     public function getExportFields()
     {
-        return array('id', 'civilite', 'nom', 'prenom', 'codebarre', 'email', 'exportDateNaissance', 'dateAdhesion', 'telephone', 'enabled', 'domaineCompetence', 'exportAdresse1', 'exportAdresse2', 'exportAdresse4', 'exportAdresse5', 'exportAdresse6', 'adhesions', 'exportdAhesionAnnee', 'exportAdhesionDate', 'exportAdhesionMontant');
+        return array('id', 'civilite', 'nom', 'prenom', 'codebarre', 'email', 'exportDateNaissance', 'telephone', 'enabled', 'domaineCompetence', 'exportAdresse1', 'exportAdresse2', 'exportAdresse4', 'exportAdresse5', 'exportAdresse6', 'adhesions', 'exportdAhesionAnnee', 'exportAdhesionDate', 'exportAdhesionMontant');
     }
 
     public function getBatchActions()
@@ -166,7 +166,6 @@ class UserAdmin extends Admin
             ->with('Association', array(
                 'class' => 'col-md-12'
             ))
-            ->add('dateAdhesion', null, array('label' => 'Date première adhésion'))
             ->add('domaineCompetence', null, array('label' => 'Domaines de compétences'))
             ->add('notes')
             ->end()

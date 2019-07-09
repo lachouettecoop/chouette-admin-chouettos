@@ -20,7 +20,6 @@ class DefaultController extends Controller
 
             $user = new User();
             $now = new \DateTime('now');
-            $user->setDateAdhesion($now->format('d/m/Y'));
             $user->setCivilite($request->request->get('civiliteC'));
             $user->setNom($request->request->get('nomC'));
             $user->setPrenom($request->request->get('prenomC'));

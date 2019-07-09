@@ -54,13 +54,6 @@ class User extends BaseUser
     /**
      * @var string
      *
-     * @ORM\Column(name="dateAdhesion", type="string", length=255, nullable=true)
-     */
-    private $dateAdhesion;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="codeBarre", type="string", length=255, nullable=true)
      */
     private $codeBarre;
@@ -416,30 +409,6 @@ class User extends BaseUser
     public function setMotDePasse($motDePasse)
     {
         $this->motDePasse = $motDePasse;
-
-        return $this;
-    }
-
-    /**
-     * Get dateAdhesion
-     *
-     * @return string
-     */
-    public function getDateAdhesion()
-    {
-        return $this->dateAdhesion;
-    }
-
-    /**
-     * Set dateAdhesion
-     *
-     * @param string $dateAdhesion
-     *
-     * @return User
-     */
-    public function setDateAdhesion($dateAdhesion)
-    {
-        $this->dateAdhesion = $dateAdhesion;
 
         return $this;
     }
