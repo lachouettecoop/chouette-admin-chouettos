@@ -28,3 +28,15 @@ Cela nous permet de recommander la commande suivante pour réaliser une nouvelle
 ```bash
 npx standard-version && git push --follow-tags origin master
 ```
+
+## Déploiement
+
+Afin de déployer une nouvelle version en production, voici la marche à suivre :
+
+* se connecter sur `Hedwige`
+* se rendre dans le projet `cd docker/adminchouettos/`
+* récupérer la version souhaitée : `sudo git checkout v1.2.0`
+* vérifier les modifications à apporter sur la base de données : `sudo docker-compose run --rm php app/console doctrine:sch:update --complete --dump-sql`
+* le cas échéant, les exécuter : `sudo docker-compose run --rm php app/console doctrine:sch:update --complete --force`
+* vider les caches : `sudo docker-compose run --rm php app/console cache:clear --env=prod`
+* **IMPORTANT :** remettre des droits d'écriture `sudo chmod -R 777 symfony/app/{cache,logs}` sur les dossiers applicatifs
