@@ -209,7 +209,6 @@ class UserAdmin extends Admin
             ->add('nom')
             ->add('prenom')
             ->add('email')
-            ->add('dateAdhesion', null, array('label' => 'Date de souscription'))
             ->add('carteImprimee', null, ['label' => 'Carte imprimée ?'])
             ->add('enabled', null, ['label' => 'Actif ?']);
     }
