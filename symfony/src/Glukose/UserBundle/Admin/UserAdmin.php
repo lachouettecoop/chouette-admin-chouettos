@@ -122,7 +122,7 @@ class UserAdmin extends Admin
     {
         $formMapper
             ->with('Civilité', array(
-                'class' => 'col-md-5'
+                'class' => 'col-md-6'
             ))
             ->add('civilite', 'choice',
                 array('choices' => array(
@@ -147,8 +147,15 @@ class UserAdmin extends Admin
             ->add('carteImprimee', null, array('required' => false, 'label' => 'Carte imprimée ?'))
             ->end()
 
+            ->with('Association', array(
+                'class' => 'col-md-6'
+            ))
+            ->add('domaineCompetence', null, array('label' => 'Domaines de compétences'))
+            ->add('notes')
+            ->end()
+
             ->with('Adresse', array(
-                'class' => 'col-md-7'
+                'class' => 'col-md-12'
             ))
             ->add(
                 'adresses',
@@ -161,13 +168,6 @@ class UserAdmin extends Admin
                     'inline' => 'table',
                 )
             )
-            ->end()
-
-            ->with('Association', array(
-                'class' => 'col-md-12'
-            ))
-            ->add('domaineCompetence', null, array('label' => 'Domaines de compétences'))
-            ->add('notes')
             ->end()
 
             ->with('Paiements des parts sociales', array(
