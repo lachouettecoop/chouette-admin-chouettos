@@ -50,7 +50,7 @@ class Paiement
      *
      * @ORM\Column(name="effectif", type="boolean", nullable=true)
      */
-    private $effectif;
+    private $effectif = true;
 
     /**
      * @ORM\ManyToOne(targetEntity="Glukose\UserBundle\Entity\User", inversedBy="adhesions")
