@@ -16,7 +16,7 @@ services:
     sonata.admin.utilisateur:
         class: Glukose\UserBundle\Admin\UserAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Gestion des membres", label: "Utilisateurs", icon: %iconUser% }
+            - { name: sonata.admin, manager_type: orm, group: "Gestion des membres", label: "Chouettos", icon: %iconUser% }
         arguments:
             - ~
             - Glukose\UserBundle\Entity\User
