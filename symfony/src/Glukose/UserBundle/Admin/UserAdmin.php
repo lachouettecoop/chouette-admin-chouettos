@@ -6,6 +6,8 @@ use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\CoreBundle\Form\Type\BooleanType;
+use Sonata\CoreBundle\Form\Type\EqualType;
 
 class UserAdmin extends Admin
 {
@@ -13,6 +15,14 @@ class UserAdmin extends Admin
 
     private $originalUserData;
     private $ldapService;
+
+    protected $datagridValues = [
+        '_sort_by' => 'nom',
+    ];
+
+    protected $maxPerPage = 100;
+
+    protected $perPageOptions = array(10, 20, 50, 100, 500, 1000);
 
     public function setLdapService($ldapService)
     {
@@ -206,22 +216,39 @@ class UserAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('nom')
-            ->add('prenom')
-            ->add('email')
+            ->add('nom', null, [
+                'show_filter' => true
+            ])
+            ->add('prenom', null, [
+                'label' => 'Prénom',
+                'show_filter' => true
+            ])
+            ->add('email', null, [
+                'show_filter' => true
+            ])
             ->add('carteImprimee', null, ['label' => 'Carte imprimée ?'])
             ->add('enabled', null, ['label' => 'Actif ?']);
+    }
+
+    public function getFilterParameters()
+    {
+        $this->datagridValues = array_merge([
+            'enabled' => [
+                'type'  => EqualType::TYPE_IS_EQUAL,
+                'value' => BooleanType::TYPE_YES
+            ]
+        ], $this->datagridValues);
+
+        return parent::getFilterParameters();
     }
 
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('id')
-            ->addIdentifier('email')
             ->addIdentifier('nom')
-            ->add('prenom')
+            ->add('prenom', null, array('label' => 'Prénom'))
+            ->addIdentifier('email')
             ->add('telephone')
-            ->add('notes', 'string', array('template' => 'GlukoseUserBundle:Admin:resetPassword.html.twig'))
             ->add('adhesions')
             ->add('enabled', null, array('label' => 'Activé', 'editable' => true))
             ->add('carteImprimee', null, array('label' => 'Carte imprimée', 'editable' => true));
