@@ -12,10 +12,20 @@ class AdresseAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('ligne1', 'textarea')
-            ->add('ligne2')
-            ->add('codePostal')
-            ->add('ville')
+            ->add('ligne1', 'textarea', array(
+                'label' => 'Adresse',
+                'attr' => array('placeholder' => '12 rue de la liberté')
+            ))
+            ->add('ligne2', null, array(
+                'label' => "Complément d'adresse",
+                'attr' => array('placeholder' => 'Bât B, appt 17')
+            ))
+            ->add('codePostal', null, array(
+                'attr' => array('placeholder' => '31000')
+            ))
+            ->add('ville', null, array(
+                'attr' => array('placeholder' => 'Ramonville Saint Agne')
+            ))
             ->add('nPAI');
     }
 
