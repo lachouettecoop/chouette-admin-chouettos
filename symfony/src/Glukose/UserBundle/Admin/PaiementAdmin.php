@@ -19,6 +19,7 @@ class PaiementAdmin extends Admin
                 'format' => 'dd/MM/yyyy',
                 'attr' => array(
                     'data-date-format' => 'DD/MM/YYYY',
+                    'placeholder' => date('25/m/Y')
                 )
             ))
             ->add('montant')

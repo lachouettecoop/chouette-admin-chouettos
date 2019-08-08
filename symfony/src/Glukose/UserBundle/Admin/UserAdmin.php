@@ -132,40 +132,76 @@ class UserAdmin extends Admin
     {
         $formMapper
             ->with('Civilité', array(
-                'class' => 'col-md-6'
+                'class' => 'col-md-6',
+                'description' => '
+                    Cette section contient les informations principales d’une personne.
+                    <br>Dans un souci d’homogénéïté, merci de <strong>bien veiller à respecter le format proposé</strong> (majuscules, espaces…).
+                    <br>L’édition du <strong>nom, prénom, email et téléphone</strong> ne doivent être effectuées qu’en connaissance de cause
+                    (dans le cadre du suivi d’une procédure définie).
+                    
+                '
             ))
-            ->add('civilite', 'choice',
-                array('choices' => array(
+            ->add('civilite', 'choice', array(
+                'label' => 'Civilité',
+                'choices' => array(
                     'mme' => 'Madame',
                     'mr' => 'Monsieur'
-                ))
-            )
-            ->add('nom')
-            ->add('prenom')
+                )
+            ))
+            ->add('nom', null, array(
+                'attr' => array('placeholder' => 'Tibou')
+            ))
+            ->add('prenom', null, array(
+                'label' => 'Prénom',
+                'attr' => array('placeholder' => 'Jean')
+            ))
             ->add('dateNaissance', 'sonata_type_date_picker', array(
                 'required' => false,
                 'format' => 'dd/MM/yyyy',
                 'attr' => array(
                     'data-date-format' => 'DD/MM/YYYY',
+                    'placeholder' => '31/01/1970'
                 )
             ))
-            ->add('telephone')
-            ->add('email')
-            ->add('codeBarre')
-            ->add('enabled', null, array('required' => false, 'label' => 'Membre ?'))
+            ->add('telephone', null, array(
+                'label' => 'Téléphone',
+                'attr' => array('placeholder' => '06 02 03 04 05')
+            ))
+            ->add('email', null, array(
+                'attr' => array('placeholder' => 'j.tibou@example.com'),
+                'help' => "Utilisée notamment pour se connecter à l'espace membres et pour retrouver la personne à travers les différents outils."
+            ))
+            ->add('codeBarre', null, array(
+                'read_only' => true,
+                'help' => 'Le code barre est généré automatiquement à la création du Chouettos. Il n\'est pas possible de le modifier ici afin d\'éviter les mauvaises manipulations.'
+            ))
+            ->add('enabled', null, array(
+                'required' => false,
+                'label' => 'Membre ?',
+                'help' => '
+                    Le fait de cocher cette case autorise le passage en caisse et l’accès aux différents outils réservés aux membres.
+                    La décoche supprime ces autorisations.
+                    <br><em>Il faut compter environ 1 journée afin que la modification se propage au sein des différents outils.</em>
+                '
+            ))
             ->add('actif', null, array('required' => false, 'label' => 'Actif·ve dans un groupe ?'))
             ->add('carteImprimee', null, array('required' => false, 'label' => 'Carte imprimée ?'))
             ->end()
 
             ->with('Association', array(
-                'class' => 'col-md-6'
+                'class' => 'col-md-6',
+                'description' => 'Informations additionnelles pouvant être utiles pour le projet coopératif.'
             ))
-            ->add('domaineCompetence', null, array('label' => 'Domaines de compétences'))
+            ->add('domaineCompetence', null, array(
+                'label' => 'Domaines de compétences',
+                'attr' => array('placeholder' => 'Électricité, Réalisation de site web, Communication')
+            ))
             ->add('notes')
             ->end()
 
             ->with('Adresse', array(
-                'class' => 'col-md-12'
+                'class' => 'col-md-12',
+                'description' => 'Localisation de la personne, pour lui transmettre des courriers et avoir une idée de répartition géographique des membres.'
             ))
             ->add(
                 'adresses',
@@ -181,7 +217,11 @@ class UserAdmin extends Admin
             ->end()
 
             ->with('Paiements des parts sociales', array(
-                'class' => 'col-md-12'
+                'class' => 'col-md-12',
+                'description' => '
+                    Pour les coopérateurs et coopératrices uniquement.
+                    Permet de faire le suivi des souscriptions de parts suite à la réunion initiale.
+                '
             ))
             ->add(
                 'paiements',
@@ -197,7 +237,8 @@ class UserAdmin extends Admin
             ->end()
 
             ->with('Historique des adhésions', array(
-                'class' => 'col-md-12'
+                'class' => 'col-md-12',
+                'description' => 'Pour les membres de l’association « Les Amis de La Chouette Coop ».'
             ))
             ->add(
                 'adhesions',
