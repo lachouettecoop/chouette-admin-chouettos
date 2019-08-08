@@ -264,6 +264,9 @@ class UserAdmin extends Admin
                 'callback' => [$this, 'getFullTextFilter'],
                 'field_type' => 'text'
             ])
+            ->add('paiements.dateEcheance', 'doctrine_orm_date_range', [
+                'label' => 'Date de souscription'
+            ])
             ->add('nom')
             ->add('prenom', null, [
                 'label' => 'Prénom',
