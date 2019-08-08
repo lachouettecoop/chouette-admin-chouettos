@@ -8,6 +8,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\CoreBundle\Form\Type\BooleanType;
 use Sonata\CoreBundle\Form\Type\EqualType;
+use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
 
 class UserAdmin extends Admin
 {
@@ -257,18 +258,43 @@ class UserAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('nom', null, [
-                'show_filter' => true
+            ->add('full_text', 'doctrine_orm_callback', [
+                'label' => 'Recherche rapide',
+                'show_filter' => true,
+                'callback' => [$this, 'getFullTextFilter'],
+                'field_type' => 'text'
             ])
+            ->add('nom')
             ->add('prenom', null, [
                 'label' => 'Prénom',
-                'show_filter' => true
             ])
-            ->add('email', null, [
-                'show_filter' => true
-            ])
+            ->add('email')
             ->add('carteImprimee', null, ['label' => 'Carte imprimée ?'])
-            ->add('enabled', null, ['label' => 'Actif ?']);
+            ->add('enabled', null, ['label' => 'Actif ?'])
+        ;
+    }
+
+    public function getFullTextFilter($queryBuilder, $alias, $field, $value)
+    {
+        if (!$value['value']) {
+            return;
+        }
+
+        $words = array_filter(
+            array_map('trim', explode(' ', $value['value']))
+        );
+
+        foreach ($words as $word) {
+            // Use `andWhere` instead of `where` to prevent overriding existing `where` conditions
+            $literal = $queryBuilder->expr()->literal('%' . $word . '%');
+            $queryBuilder->andWhere($queryBuilder->expr()->orX(
+                $queryBuilder->expr()->like($alias.'.nom', $literal),
+                $queryBuilder->expr()->like($alias.'.prenom', $literal),
+                $queryBuilder->expr()->like($alias.'.email', $literal)
+            ));
+        }
+
+        return true;
     }
 
     public function getFilterParameters()
@@ -294,6 +320,5 @@ class UserAdmin extends Admin
             ->add('enabled', null, array('label' => 'Activé', 'editable' => true))
             ->add('carteImprimee', null, array('label' => 'Carte imprimée', 'editable' => true));
     }
-
 
 }
