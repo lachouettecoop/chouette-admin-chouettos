@@ -117,6 +117,8 @@ sonata_block:
       contexts: [admin]
     sonata.admin.block.search_result:
       contexts: [admin]
+    sonata.block.service.text:
+      contexts: [admin]
     #My blocks
 
 knp_menu:
@@ -172,7 +174,7 @@ sonata_doctrine_orm_admin:
         choice: SonataAdminBundle:CRUD:show_choice.html.twig
         url: SonataAdminBundle:CRUD:show_url.html.twig
 sonata_admin:
-  title: Chouettos Admin
+  title: Admin Chouettos
   title_logo: bundles/sonataadmin/logo_title.png
   templates:
     layout: ChouetteCoopAdminBundle:Admin:standard_layout.html.twig
@@ -185,6 +187,47 @@ sonata_admin:
     use_icheck: true # enable iCheck
     dropdown_number_groups_per_colums: 2 # max items per column in dropdown menu (add button in top nav)
     title_mode: "single_text" # 'both', 'single_text' or 'single_image'
+  dashboard:
+    blocks:
+      - position: left
+        type: sonata.block.service.text
+        settings:
+          content: >
+            <h2>Bienvenue dans Admin Chouettos !</h2>
+
+            <h3>Admin Chouettos est l’annuaire des Chouettos.</h3>
+            <p>
+              Il permet d’autoriser l’accès aux outils de La Chouette Coop (passage en caisse, espace membres, …) à un·e Chouettos.
+            </p>
+            <p>
+              Pour celà : sa fiche doit être créée dans Admin Chouettos,
+              <strong>ET</strong> sa fiche doit être activée (en cochant la case « Membre ? »).
+            </p>
+            <p>
+              Admin Chouettos permet également de stocker les données recueillies pour chaque Chouettos.
+            </p>
+
+            <h3>Quand et pour quelle opération utiliser Admin Chouettos ?</h3>
+            <ul>
+              <li>
+                Lors d’une nouvelle adhésion :
+                création de la fiche du Chouettos (nouvel adhérent)
+              </li>
+              <li>
+                Lors d’un renouvellement d’adhésion :
+                ajout d’une adhésion sur la fiche et modifications éventuelles de certaines données (ex: adresse)
+              </li>
+              <li>
+                Lorsqu’on recueille de nouvelles informations sur un Chouettos (date de naissance, nouvelle adresse...) :
+                modification de la fiche
+              </li>
+              <li>
+                Lorsqu’une adhésion devient effective (adhésion à l’année en cours faite en fin d’année précédente) :
+                activation de la fiche
+              </li>
+            </ul>
+      - position: right
+        type: sonata.admin.block.admin_list
 
 stof_doctrine_extensions:
   default_locale: fr_FR

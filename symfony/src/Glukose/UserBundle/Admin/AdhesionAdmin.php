@@ -20,9 +20,12 @@ class AdhesionAdmin extends Admin
                 'dp_max_date' => $end->format('m/d/Y'),*/
                 'attr' => array(
                     'data-date-format' => 'DD/MM/YYYY',
+                    'placeholder' => date('25/m/Y')
                 )
             ))
-            ->add('annee')
+            ->add('annee', null, array(
+                'attr' => array('placeholder' => date('Y'))
+            ))
             ->add('montant')
             ->add('modePaiement', 'choice',
                 array('choices' => array(

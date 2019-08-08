@@ -16,7 +16,7 @@ services:
     sonata.admin.utilisateur:
         class: Glukose\UserBundle\Admin\UserAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Gestion des membres", label: "Utilisateurs", icon: %iconUser% }
+            - { name: sonata.admin, manager_type: orm, group: "Gestion des membres", label: "Chouettos", icon: %iconUser% }
         arguments:
             - ~
             - Glukose\UserBundle\Entity\User
@@ -28,7 +28,7 @@ services:
     sonata.admin.adhesion:
         class: Glukose\UserBundle\Admin\AdhesionAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Gestion des membres", label: "Adhesions", icon: %iconUser%, show_in_dashboard: true }
+            - { name: sonata.admin, manager_type: orm, group: "Gestion des membres", label: "Adhesions", icon: %iconUser%, show_in_dashboard: false }
         arguments:
             - ~
             - Glukose\UserBundle\Entity\Adhesion
@@ -39,7 +39,7 @@ services:
     sonata.admin.paiement:
         class: Glukose\UserBundle\Admin\PaiementAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Gestion des membres", label: "Paiements", icon: %iconUser%, show_in_dashboard: true }
+            - { name: sonata.admin, manager_type: orm, group: "Gestion des membres", label: "Paiements", icon: %iconUser%, show_in_dashboard: false }
         arguments:
             - ~
             - Glukose\UserBundle\Entity\Paiement
