@@ -53,6 +53,7 @@ class UserAdmin extends Admin
         $this->syncRelations($user);
         $em = $this->getModelManager()->getEntityManager($this->getClass());
         $this->originalUserData = $em->getUnitOfWork()->getOriginalEntityData($user);
+        $this->manageFileUpload($user);
     }
 
     public function syncRelations($user)
@@ -82,6 +83,13 @@ class UserAdmin extends Admin
         }
     }
 
+
+    private function manageFileUpload($user) {
+        if ($user->getFile()) {
+            $user->refreshUpdated();
+        }
+    }
+
     public function prePersist($user)
     {
         $PasswordLDAP = $user->getMotDePasse();
@@ -104,6 +112,8 @@ class UserAdmin extends Admin
         }
 
         $this->syncRelations($user);
+
+        $this->manageFileUpload($user);
     }
 
     private function generateEAN($number)
@@ -129,8 +139,16 @@ class UserAdmin extends Admin
         }
     }
 
+
     protected function configureFormFields(FormMapper $formMapper)
     {
+        $user = $this->getSubject();
+
+       $fileFieldOptions = array('required' => false);
+        if ($user && ($webPath = $user->getPhoto())) {
+            $fileFieldOptions['help'] = '<img src="/uploads/'.$webPath.'" class="admin-preview" style="width: 300px;" />';
+        }
+
         $formMapper
             ->with('Civilité', array(
                 'class' => 'col-md-6',
@@ -141,7 +159,7 @@ class UserAdmin extends Admin
                     (dans le cadre du suivi d’une procédure définie).
                     
                 '
-            ))
+            ))  
             ->add('civilite', 'choice', array(
                 'label' => 'Civilité',
                 'choices' => array(
@@ -187,6 +205,11 @@ class UserAdmin extends Admin
             ))
             ->add('actif', null, array('required' => false, 'label' => 'Actif·ve dans un groupe ?'))
             ->add('carteImprimee', null, array('required' => false, 'label' => 'Carte imprimée ?'))
+            ->end()
+            ->with('Photo', array(
+                'class' => 'col-md-6'
+            ))
+            ->add('file', 'file', $fileFieldOptions)
             ->end()
 
             ->with('Association', array(

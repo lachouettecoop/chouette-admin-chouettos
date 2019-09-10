@@ -7,13 +7,18 @@ use FOS\UserBundle\Model\User as BaseUser;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gorg\Bundle\LdapOrmBundle\Annotation\Ldap\Attribute;
 use Gorg\Bundle\LdapOrmBundle\Annotation\Ldap\DnPregMatch;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * @ORM\Entity(repositoryClass="Glukose\UserBundle\Entity\UserRepository")
  * @ORM\Table(name="fos_user")
+ * @ORM\HasLifecycleCallbacks()
  */
 class User extends BaseUser
 {
+    //todo: change directory
+    const SERVER_PATH_TO_IMAGE_FOLDER = '/var/www/symfony/web/uploads/';
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -64,6 +69,13 @@ class User extends BaseUser
      * @ORM\Column(name="domaineCompetence", type="string", length=255, nullable=true)
      */
     private $domaineCompetence;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="photo", type="string", length=255, nullable=true)
+     */
+    private $photo;
 
     /**
      * @var date
@@ -131,11 +143,18 @@ class User extends BaseUser
      */
     private $carteImprimee = false;
 
-
     /**
      * @DnPregMatch("/ou=([a-zA-Z0-9\.]+)/")
      */
     private $entities = array("accounts");
+
+
+
+    /**
+     * Unmapped property to handle file uploads
+     */
+    private $file;
+
 
     public function __construct()
     {
@@ -148,6 +167,68 @@ class User extends BaseUser
     public function __toString()
     {
         return $this->prenom . ' ' . $this->nom;
+    }
+
+    /**
+     * Sets file.
+     *
+     * @param UploadedFile $file
+     */
+    public function setFile(UploadedFile $file = null)
+    {
+        $this->file = $file;
+    }
+
+    /**
+     * Get file.
+     *
+     * @return UploadedFile
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
+     * Manages the copying of the file to the relevant place on the server
+     */
+    public function upload()
+    {
+        // the file property can be empty if the field is not required
+        if (null === $this->getFile()) {
+            return;
+        }
+
+        // we use the original file name here but you should
+        // sanitize it at least to avoid any security issues
+
+        $filename =uniqid().'-'.$this->getFile()->getClientOriginalName();
+        // move takes the target directory and target filename as params
+        $this->getFile()->move(
+            User::SERVER_PATH_TO_IMAGE_FOLDER,
+            $filename
+        );
+
+        // set the path property to the filename where you've saved the file
+        $this->photo = $filename;
+
+        // clean up the file property as you won't need it anymore
+        $this->setFile(null);
+    }
+
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function lifecycleFileUpload() {
+        $this->upload();
+    }
+
+    /**
+     * Updates the hash value to force the preUpdate and postUpdate events to fire
+     */
+    public function refreshUpdated() {
+        $this->setUpdated(new \DateTime("now"));
     }
 
     public function exportDateNaissance()
@@ -640,5 +721,39 @@ class User extends BaseUser
     {
         $this->actif = $actif;
         return $this;
+    }
+
+    /**
+     * Set photo
+     *
+     * @param string $photo
+     *
+     * @return User
+     */
+    public function setPhoto($photo)
+    {
+        $this->photo = $photo;
+
+        return $this;
+    }
+
+    /**
+     * Get photo
+     *
+     * @return string
+     */
+    public function getPhoto()
+    {
+        return $this->photo;
+    }
+
+    /**
+     * Get actif
+     *
+     * @return boolean
+     */
+    public function getActif()
+    {
+        return $this->actif;
     }
 }
