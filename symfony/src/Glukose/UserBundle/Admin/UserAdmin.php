@@ -2,13 +2,13 @@
 
 namespace Glukose\UserBundle\Admin;
 
+use Exporter\Source\IteratorCallbackSourceIterator;
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\CoreBundle\Form\Type\BooleanType;
 use Sonata\CoreBundle\Form\Type\EqualType;
-use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
 
 class UserAdmin extends Admin
 {
@@ -33,6 +33,14 @@ class UserAdmin extends Admin
     public function getExportFields()
     {
         return array('id', 'civilite', 'nom', 'prenom', 'codebarre', 'email', 'exportDateNaissance', 'telephone', 'enabled', 'domaineCompetence', 'exportAdresse1', 'exportAdresse2', 'exportAdresse4', 'exportAdresse5', 'exportAdresse6', 'adhesions', 'exportdAhesionAnnee', 'exportAdhesionDate', 'exportAdhesionMontant');
+    }
+
+    public function getDataSourceIterator()
+    {
+        return new IteratorCallbackSourceIterator(parent::getDataSourceIterator(), function($data) {
+            $data['nom'] = strtoupper($data['nom']);
+            return $data;
+        });
     }
 
     public function getBatchActions()
