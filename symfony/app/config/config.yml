@@ -187,6 +187,25 @@ sonata_admin:
     use_icheck: true # enable iCheck
     dropdown_number_groups_per_colums: 2 # max items per column in dropdown menu (add button in top nav)
     title_mode: "single_text" # 'both', 'single_text' or 'single_image'
+  assets:
+    stylesheets:
+      # Defaults:
+      - bundles/sonatacore/vendor/bootstrap/dist/css/bootstrap.min.css
+      - bundles/sonatacore/vendor/components-font-awesome/css/font-awesome.min.css
+      - bundles/sonatacore/vendor/ionicons/css/ionicons.min.css
+      - bundles/sonataadmin/vendor/admin-lte/dist/css/AdminLTE.min.css
+      - bundles/sonataadmin/vendor/admin-lte/dist/css/skins/skin-black.min.css
+      - bundles/sonataadmin/vendor/iCheck/skins/square/blue.css
+      - bundles/sonatacore/vendor/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css
+      - bundles/sonataadmin/vendor/jqueryui/themes/base/jquery-ui.css
+      - bundles/sonatacore/vendor/select2/select2.css
+      - bundles/sonatacore/vendor/select2-bootstrap-css/select2-bootstrap.min.css
+      - bundles/sonataadmin/vendor/x-editable/dist/bootstrap3-editable/css/bootstrap-editable.css
+      - bundles/sonataadmin/css/styles.css
+      - bundles/sonataadmin/css/layout.css
+      - bundles/sonataadmin/css/tree.css
+      # Ours
+      - bundles/chouettecoopadmin/css/style-custom.css
   dashboard:
     blocks:
       - position: left
