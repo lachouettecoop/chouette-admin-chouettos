@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.4.1](https://github.com/lachouettecoop/chouette-admin-chouettos/compare/v1.4.0...v1.4.1) (2019-10-11)
+
+
+### Bug Fixes
+
+* correction des caractères spéciaux dans l'export des noms en ([57beefb](https://github.com/lachouettecoop/chouette-admin-chouettos/commit/57beefbb77c11239b2a802a3f46d1c9adf5c3fb9))
+
 ## [1.4.0](https://github.com/lachouettecoop/chouette-admin-chouettos/compare/v1.3.0...v1.4.0) (2019-10-10)
 
 
