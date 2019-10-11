@@ -38,7 +38,7 @@ class UserAdmin extends Admin
     public function getDataSourceIterator()
     {
         return new IteratorCallbackSourceIterator(parent::getDataSourceIterator(), function($data) {
-            $data['nom'] = strtoupper($data['nom']);
+            $data['nom'] = mb_strtoupper($data['nom']);
             return $data;
         });
     }
