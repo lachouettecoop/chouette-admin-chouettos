@@ -223,7 +223,8 @@ sonata_admin:
               <strong>ET</strong> sa fiche doit être activée (en cochant la case « Membre ? »).
             </p>
             <p>
-              Admin Chouettos permet également de stocker les données recueillies pour chaque Chouettos.
+              Admin Chouettos permet également de stocker les données recueillies pour chaque Chouettos ou personne
+              s'étant déclarée intéréssée par le projet (lors d'une réunion d'acceuil par exemple).
             </p>
 
             <h3>Quand et pour quelle opération utiliser Admin Chouettos ?</h3>
