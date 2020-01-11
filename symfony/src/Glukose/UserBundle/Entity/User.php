@@ -328,7 +328,8 @@ class User extends BaseUser
      */
     public function setTelephone($telephone)
     {
-        $this->telephone = $telephone;
+        $numeros = preg_replace('/[^0-9]+/', '', $telephone);
+        $this->telephone = wordwrap($numeros, 2, " ", true);
 
         return $this;
     }
