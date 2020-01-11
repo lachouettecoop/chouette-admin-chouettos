@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://github.com/lachouettecoop/chouette-admin-chouettos/compare/v1.4.1...v1.5.0) (2020-01-11)
+
+
+### Features
+
+* ajout de la date de souscription des parts à l'export ([ceaaea7](https://github.com/lachouettecoop/chouette-admin-chouettos/commit/ceaaea764042603577323d80f509c3644b1ab525)), closes [#27](https://github.com/lachouettecoop/chouette-admin-chouettos/issues/27)
+* création d'une liste administrable de personnes intéréssées par le ([4edccf6](https://github.com/lachouettecoop/chouette-admin-chouettos/commit/4edccf65866ed90c8e01b7e5dbc54f9f8861e3f2)), closes [#24](https://github.com/lachouettecoop/chouette-admin-chouettos/issues/24)
+* déplacement du champ « Date de naissance » sous « Email » ([bc400d0](https://github.com/lachouettecoop/chouette-admin-chouettos/commit/bc400d0bbdcf0cb5bed146129a4723cfe4114348)), closes [#25](https://github.com/lachouettecoop/chouette-admin-chouettos/issues/25)
+* permet de saisir des numéros de téléphone dans divers formats et ([4e9e227](https://github.com/lachouettecoop/chouette-admin-chouettos/commit/4e9e227bbbb562d70118f77fde78845c467b1422)), closes [#26](https://github.com/lachouettecoop/chouette-admin-chouettos/issues/26)
+
 ### [1.4.1](https://github.com/lachouettecoop/chouette-admin-chouettos/compare/v1.4.0...v1.4.1) (2019-10-11)
 
 
