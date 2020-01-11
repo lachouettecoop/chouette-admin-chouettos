@@ -37,6 +37,7 @@ class AppKernel extends Kernel
             new Glukose\UserBundle\GlukoseUserBundle(),
             new Glukose\ContactBundle\GlukoseContactBundle(),
             new ChouetteCoop\AdminBundle\ChouetteCoopAdminBundle(),
+            new ChouetteCoop\PersonnesInteresseesBundle\ChouetteCoopPersonnesInteresseesBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

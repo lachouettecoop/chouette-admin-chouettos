@@ -1,0 +1,11 @@
+services:
+    sonata.admin.personne:
+        class: ChouetteCoop\PersonnesInteresseesBundle\Admin\PersonneAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Gestion des membres", label: "Personnes intéréssées", icon: %iconUser% }
+        arguments:
+            - ~
+            - ChouetteCoop\PersonnesInteresseesBundle\Entity\Personne
+            - ~
+        calls:
+            - [ setTranslationDomain, [GlukoseAdminContactBundle]]
