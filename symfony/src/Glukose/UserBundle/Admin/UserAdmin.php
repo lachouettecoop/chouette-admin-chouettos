@@ -164,14 +164,6 @@ class UserAdmin extends Admin
                 'label' => 'Prénom',
                 'attr' => array('placeholder' => 'Jean')
             ))
-            ->add('dateNaissance', 'sonata_type_date_picker', array(
-                'required' => false,
-                'format' => 'dd/MM/yyyy',
-                'attr' => array(
-                    'data-date-format' => 'DD/MM/YYYY',
-                    'placeholder' => '31/01/1970'
-                )
-            ))
             ->add('telephone', null, array(
                 'label' => 'Téléphone',
                 'attr' => array('placeholder' => '06 02 03 04 05')
@@ -179,6 +171,15 @@ class UserAdmin extends Admin
             ->add('email', null, array(
                 'attr' => array('placeholder' => 'j.tibou@example.com'),
                 'help' => "Utilisée notamment pour se connecter à l'espace membres et pour retrouver la personne à travers les différents outils."
+            ))
+            ->add('dateNaissance', 'sonata_type_date_picker', array(
+                'label' => 'Date de naissance',
+                'required' => false,
+                'format' => 'dd/MM/yyyy',
+                'attr' => array(
+                    'data-date-format' => 'DD/MM/YYYY',
+                    'placeholder' => '31/01/1970'
+                )
             ))
             ->add('codeBarre', null, array(
                 'read_only' => true,
