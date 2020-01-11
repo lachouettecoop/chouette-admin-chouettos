@@ -191,6 +191,20 @@ class User extends BaseUser
         return $output;
     }
 
+    public function exportSouscriptionDate()
+    {
+        $output = '';
+
+        $echeances = array_map(function(Paiement $paiement) {
+            return $paiement->getDateEcheance();
+        }, $this->getPaiements()->toArray());
+        if (!empty($echeances)) {
+            $output = min($echeances)->format('d/m/Y');
+        }
+
+        return $output;
+    }
+
     public function exportAdresse1()
     {
         $output = '';
