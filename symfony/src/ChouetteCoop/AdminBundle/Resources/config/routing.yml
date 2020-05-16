@@ -2,6 +2,10 @@ chouette_coop_admin_homepage:
     path:     /
     defaults: { _controller: ChouetteCoopAdminBundle:Main:index }
 
+chouette_coop_admin_export_gh:
+    path:     /api/export/gh
+    defaults: { _controller: ChouetteCoopAdminBundle:Main:exportGHCodeBarre }
+
 chouette_coop_admin_import_membres:
     path:     admin/import-membres
     defaults: { _controller: ChouetteCoopAdminBundle:Import:importMembres }

@@ -195,6 +195,7 @@ class UserAdmin extends Admin
                 '
             ))
             ->add('actif', null, array('required' => false, 'label' => 'Actif·ve dans un groupe ?'))
+            ->add('gh', null, array('required' => false, 'label' => 'Grand Hibou ? (donne authorisation d\'ouvrir la porte du supermarché) '))
             ->add('carteImprimee', null, array('required' => false, 'label' => 'Carte imprimée ?'))
             ->end()
 

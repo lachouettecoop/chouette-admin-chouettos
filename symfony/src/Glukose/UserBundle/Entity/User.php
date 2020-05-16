@@ -131,6 +131,13 @@ class User extends BaseUser
      */
     private $carteImprimee = false;
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="gh", type="boolean", nullable=true, options={"default" : 0})
+     */
+    private $gh = false;
+
 
     /**
      * @DnPregMatch("/ou=([a-zA-Z0-9\.]+)/")
@@ -637,6 +644,29 @@ class User extends BaseUser
     {
         $this->carteImprimee = $carteImprimee;
 
+        return $this;
+    }
+
+    /**
+     * Get gh
+     *
+     * @return boolean
+     */
+    public function getGh()
+    {
+        return $this->gh;
+    }
+
+    /**
+     * Set gh
+     *
+     * @param boolean $gh
+     *
+     * @return User
+     */
+    public function setGh($gh)
+    {
+        $this->gh = $gh;
         return $this;
     }
 
