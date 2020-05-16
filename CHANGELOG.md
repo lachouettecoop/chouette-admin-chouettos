@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.1](https://github.com/lachouettecoop/chouette-admin-chouettos/compare/v1.5.0...v1.5.1) (2020-05-16)
+
+
+### Features
+
+* ajout d'un booleen GH ([70abb3](https://github.com/lachouettecoop/chouette-admin-chouettos/commit/70abb334bbe859d07bff055cdf2b37b1e6258915))
+
+
 ## [1.5.0](https://github.com/lachouettecoop/chouette-admin-chouettos/compare/v1.4.1...v1.5.0) (2020-01-11)
 
 
