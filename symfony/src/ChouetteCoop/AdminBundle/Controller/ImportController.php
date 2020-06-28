@@ -15,29 +15,18 @@ class ImportController extends Controller
     /**
      * Disable users who have not an adhesion for $annee
      *
-     * @param  Request $request
      * @return View
      */
-    public function desactivationMembresAction($annee, Request $request)
+    public function desactivationMembresAction()
     {
         $em = $this
             ->getDoctrine()
             ->getManager();
 
         $userRep = $em->getRepository('GlukoseUserBundle:User');
-
         $users = $userRep->findAll();
-
         foreach ($users as $user) {
-
-            $flag = false;
-            foreach ($user->getAdhesions() as $adhesion) {
-                if ($adhesion->getAnnee() == $annee) {
-                    $flag = true;
-                }
-            }
-
-            if (!$flag) {
+            if (!$user->hasBeenCoop()) {
                 $user->setEnabled(false);
                 $em->persist($user);
             }

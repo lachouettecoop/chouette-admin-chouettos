@@ -528,6 +528,15 @@ class User extends BaseUser
     }
 
     /**
+     * @return bool
+     */
+    public function hasBeenCoop()
+    {
+        $paiements = $this->getPaiements();
+        return !$paiements->isEmpty();
+    }
+
+    /**
      * Get dateNaissance
      *
      * @return \DateTime
