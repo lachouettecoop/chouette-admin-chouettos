@@ -38,3 +38,45 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    admin.adresse:
+        class: App\Admin\AdresseAdmin
+        arguments: [~, App\Entity\Adresse, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Adresse, show_in_dashboard: false }
+        public: true
+
+    sonata.admin.utilisateur:
+        class: App\Admin\UserAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Gestion des membres", label: "Chouettos" }
+        arguments:
+            - ~
+            - App\Entity\User
+            - ~
+        calls:
+            - [ setTranslationDomain, [ GlukoseAdminContactBundle ] ]
+            - [ setLdapService, [ '@App\Controller\LdapController' ] ]
+            - [setUserPasswordEncoder, ['@security.password_encoder']]
+
+    sonata.admin.adhesion:
+        class: App\Admin\AdhesionAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Gestion des membres", label: "Adhesions", show_in_dashboard: false }
+        arguments:
+            - ~
+            - App\Entity\Adhesion
+            - ~
+        calls:
+            - [ setTranslationDomain, [ GlukoseAdminContactBundle ] ]
+
+    sonata.admin.paiement:
+        class: App\Admin\PaiementAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Gestion des membres", label: "Paiements", show_in_dashboard: false }
+        arguments:
+            - ~
+            - App\Entity\Paiement
+            - ~
+        calls:
+            - [ setTranslationDomain, [ GlukoseAdminContactBundle ] ]

@@ -170,7 +170,7 @@ class Adhesion
     /**
      * Get user
      *
-     * @return \App\User
+     * @return \App\Entity\User
      */
     public function getUser()
     {
@@ -180,11 +180,11 @@ class Adhesion
     /**
      * Set user
      *
-     * @param \App\User $user
+     * @param \App\Entity\User $user
      *
      * @return Adhesion
      */
-    public function setUser(\App\User $user = null)
+    public function setUser(\App\Entity\User $user = null)
     {
         $this->user = $user;
 

@@ -1,8 +1,11 @@
 sonata_admin:
-    title: 'Sonata Admin'
+    title: 'Admin chouettos'
+
     dashboard:
         blocks:
             - { type: sonata.admin.block.admin_list, position: left }
+    templates:
+        layout:               'standard_layout.html.twig'
     options:
         legacy_twig_text_extension: false
 

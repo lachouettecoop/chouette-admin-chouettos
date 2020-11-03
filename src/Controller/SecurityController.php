@@ -92,7 +92,7 @@ class SecurityController extends AbstractController
     /**
      * @Route("/reset_password/{token}", name="app_reset_password")
      */
-    public function resetPassword(Request $request, string $token, UserPasswordEncoderInterface $passwordEncoder)
+    public function resetPassword(Request $request, string $token, UserPasswordEncoderInterface $passwordEncoder, LdapController $ldapController)
     {
 
         if ($request->isMethod('POST')) {
@@ -110,6 +110,10 @@ class SecurityController extends AbstractController
                 $this->addFlash('danger', 'Les deux mots de passe ne correspondent pas');
             } else {
                 $user->setConfirmationToken(null);
+                $user->setMotDePasse($request->request->get('password'));
+                $ldapController->updateUserPassOnLDAP($user);
+
+
                 $user->setPassword($passwordEncoder->encodePassword($user, $request->request->get('password')));
                 $entityManager->flush();
 

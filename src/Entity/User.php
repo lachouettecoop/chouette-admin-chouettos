@@ -154,7 +154,7 @@ class User implements UserInterface
      * @var \DateTime
      *
      * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(name="updated", type="datetime")
+     * @ORM\Column(name="updated", type="datetime", nullable=true)
      */
     private $updated;
 
@@ -200,6 +200,8 @@ class User implements UserInterface
      */
     private $file;
 
+
+
     public function __construct()
     {
         $this->adresses = new ArrayCollection();
@@ -210,6 +212,27 @@ class User implements UserInterface
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function __toString()
+    {
+        return $this->nom.' '.$this->prenom;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
+     * @param mixed $file
+     */
+    public function setFile($file): void
+    {
+        $this->file = $file;
     }
 
     public function getEmail(): ?string
