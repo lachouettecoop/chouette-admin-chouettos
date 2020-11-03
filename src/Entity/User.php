@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -198,6 +200,13 @@ class User implements UserInterface
      */
     private $file;
 
+    public function __construct()
+    {
+        $this->adresses = new ArrayCollection();
+        $this->adhesions = new ArrayCollection();
+        $this->paiements = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -274,5 +283,300 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getEnabled(): ?bool
+    {
+        return $this->enabled;
+    }
+
+    public function setEnabled(bool $enabled): self
+    {
+        $this->enabled = $enabled;
+
+        return $this;
+    }
+
+    public function setSalt(?string $salt): self
+    {
+        $this->salt = $salt;
+
+        return $this;
+    }
+
+    public function getConfirmationToken(): ?string
+    {
+        return $this->confirmationToken;
+    }
+
+    public function setConfirmationToken(?string $confirmationToken): self
+    {
+        $this->confirmationToken = $confirmationToken;
+
+        return $this;
+    }
+
+    public function getCivilite(): ?string
+    {
+        return $this->civilite;
+    }
+
+    public function setCivilite(?string $civilite): self
+    {
+        $this->civilite = $civilite;
+
+        return $this;
+    }
+
+    public function getNom(): ?string
+    {
+        return $this->nom;
+    }
+
+    public function setNom(?string $nom): self
+    {
+        $this->nom = $nom;
+
+        return $this;
+    }
+
+    public function getPrenom(): ?string
+    {
+        return $this->prenom;
+    }
+
+    public function setPrenom(?string $prenom): self
+    {
+        $this->prenom = $prenom;
+
+        return $this;
+    }
+
+    public function getTelephone(): ?string
+    {
+        return $this->telephone;
+    }
+
+    public function setTelephone(?string $telephone): self
+    {
+        $this->telephone = $telephone;
+
+        return $this;
+    }
+
+    public function getCodeBarre(): ?string
+    {
+        return $this->codeBarre;
+    }
+
+    public function setCodeBarre(?string $codeBarre): self
+    {
+        $this->codeBarre = $codeBarre;
+
+        return $this;
+    }
+
+    public function getDomaineCompetence(): ?string
+    {
+        return $this->domaineCompetence;
+    }
+
+    public function setDomaineCompetence(?string $domaineCompetence): self
+    {
+        $this->domaineCompetence = $domaineCompetence;
+
+        return $this;
+    }
+
+    public function getPhoto(): ?string
+    {
+        return $this->photo;
+    }
+
+    public function setPhoto(?string $photo): self
+    {
+        $this->photo = $photo;
+
+        return $this;
+    }
+
+    public function getDateNaissance(): ?\DateTimeInterface
+    {
+        return $this->dateNaissance;
+    }
+
+    public function setDateNaissance(?\DateTimeInterface $dateNaissance): self
+    {
+        $this->dateNaissance = $dateNaissance;
+
+        return $this;
+    }
+
+    public function getNotes(): ?string
+    {
+        return $this->notes;
+    }
+
+    public function setNotes(?string $notes): self
+    {
+        $this->notes = $notes;
+
+        return $this;
+    }
+
+    public function getActif(): ?bool
+    {
+        return $this->actif;
+    }
+
+    public function setActif(?bool $actif): self
+    {
+        $this->actif = $actif;
+
+        return $this;
+    }
+
+    public function getMotDePasse(): ?string
+    {
+        return $this->motDePasse;
+    }
+
+    public function setMotDePasse(?string $motDePasse): self
+    {
+        $this->motDePasse = $motDePasse;
+
+        return $this;
+    }
+
+    public function getCreated(): ?\DateTimeInterface
+    {
+        return $this->created;
+    }
+
+    public function setCreated(?\DateTimeInterface $created): self
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    public function getUpdated(): ?\DateTimeInterface
+    {
+        return $this->updated;
+    }
+
+    public function setUpdated(\DateTimeInterface $updated): self
+    {
+        $this->updated = $updated;
+
+        return $this;
+    }
+
+    public function getCarteImprimee(): ?bool
+    {
+        return $this->carteImprimee;
+    }
+
+    public function setCarteImprimee(?bool $carteImprimee): self
+    {
+        $this->carteImprimee = $carteImprimee;
+
+        return $this;
+    }
+
+    public function getGh(): ?bool
+    {
+        return $this->gh;
+    }
+
+    public function setGh(?bool $gh): self
+    {
+        $this->gh = $gh;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Adresse[]
+     */
+    public function getAdresses(): Collection
+    {
+        return $this->adresses;
+    }
+
+    public function addAdress(Adresse $adress): self
+    {
+        if (!$this->adresses->contains($adress)) {
+            $this->adresses[] = $adress;
+        }
+
+        return $this;
+    }
+
+    public function removeAdress(Adresse $adress): self
+    {
+        $this->adresses->removeElement($adress);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Adhesion[]
+     */
+    public function getAdhesions(): Collection
+    {
+        return $this->adhesions;
+    }
+
+    public function addAdhesion(Adhesion $adhesion): self
+    {
+        if (!$this->adhesions->contains($adhesion)) {
+            $this->adhesions[] = $adhesion;
+            $adhesion->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAdhesion(Adhesion $adhesion): self
+    {
+        if ($this->adhesions->removeElement($adhesion)) {
+            // set the owning side to null (unless already changed)
+            if ($adhesion->getUser() === $this) {
+                $adhesion->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Paiement[]
+     */
+    public function getPaiements(): Collection
+    {
+        return $this->paiements;
+    }
+
+    public function addPaiement(Paiement $paiement): self
+    {
+        if (!$this->paiements->contains($paiement)) {
+            $this->paiements[] = $paiement;
+            $paiement->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePaiement(Paiement $paiement): self
+    {
+        if ($this->paiements->removeElement($paiement)) {
+            // set the owning side to null (unless already changed)
+            if ($paiement->getUser() === $this) {
+                $paiement->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

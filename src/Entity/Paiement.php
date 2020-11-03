@@ -53,7 +53,7 @@ class Paiement
     private $effectif = true;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="adhesions")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="paiements")
      */
     private $user;
 
