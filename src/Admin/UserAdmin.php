@@ -333,6 +333,7 @@ class UserAdmin extends AbstractAdmin
                 'label' => 'Prénom',
             ])
             ->add('email')
+            ->add('gh')
             ->add('carteImprimee', null, ['label' => 'Carte imprimée ?'])
             ->add('enabled', null, ['label' => 'Actif ?'])
         ;

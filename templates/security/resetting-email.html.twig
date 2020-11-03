@@ -1,0 +1,15 @@
+{% autoescape false %}
+    Bonjour {{ user }} !
+    <br /><br />
+    Pour réinitialiser votre mot de passe, merci de vous rendre sur <a href="{{ confirmationUrl }}"> {{ confirmationUrl }}</a>
+    <br /><br />
+    Cordialement,<br />
+    L'équipe.<br />
+    <p>
+        <span style="color: red;">POUR VOTRE INFORMATION :</span> pour les Chouettos qui ont un profil Facebook, <i>n'hésitez pas à rejoindre le groupe des Chouettos
+            sur Facebook !</i> Ce groupe est réservé aux membres de La Chouette Coop pour échanger et fédérer les énergies autour du projet de supermarché coopératif et participatif.
+        Pour ce faire rendez vous sur <a href="https://www.facebook.com/groups/lesChouettos/">le Facebook les Chouettos</a>.
+    </p>
+    <br />
+    <img src="https://lachouettecoop.fr/wp-content/uploads/2017/07/bandeauresetting.jpg" />
+{% endautoescape %}

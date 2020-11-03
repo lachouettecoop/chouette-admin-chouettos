@@ -78,7 +78,7 @@ class SecurityController extends AbstractController
                 ->from('bureau-des-membres@lachouettecoop.fr')
                 ->to($user->getEmail())
                 ->html(
-                    "Bonjour,<br /><br /> Vous pouvez changer votre mot de passe en suivant le lien suivant <a href=\"" . $url. '">'.$url.'</a> <br /><br /> La Chouette Coop',
+                    $this->renderView('security/resetting-email.html.twig', ['confirmationUrl' => $url, 'user' =>$user]),
                     'text/html'
                 );
 
