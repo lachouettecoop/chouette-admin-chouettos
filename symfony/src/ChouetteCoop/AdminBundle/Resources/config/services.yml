@@ -1,4 +1,0 @@
-services:
-    chouette.admin.ldap:
-        class:     ChouetteCoop\AdminBundle\LDAP\LDAPService
-        arguments: [%ldapServerAdress%, %ldapUser%, %ldapMdp%]

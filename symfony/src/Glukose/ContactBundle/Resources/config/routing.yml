@@ -1,3 +1,0 @@
-glukose_contact_add:
-    path:     /inscription
-    defaults: { _controller: GlukoseContactBundle:Default:addInscription }

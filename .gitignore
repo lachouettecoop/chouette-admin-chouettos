@@ -1,50 +1,11 @@
-/logs
 
-
-# Cache and logs (Symfony2)
-/symfony/app/cache/*
-/symfony/app/logs/*
-!app/cache/.gitkeep
-!app/logs/.gitkeep
-*.php~
-
-# Cache and logs (Symfony3)
-/symfony/var/cache/*
-/symfony/var/logs/*
-!var/cache/.gitkeep
-!var/logs/.gitkeep
-
-# Parameters
-/symfony/app/config/parameters.yml
-/symfony/app/config/parameters.ini
-
-# Managed by Composer
-/symfony/app/bootstrap.php.cache
-/symfony/var/bootstrap.php.cache
-/symfony/bin/*
-!bin/console
-!bin/symfony_requirements
-/symfony/vendor/
-
-# Assets and user uploads
-/symfony/web/bundles/
-/symfony/web/uploads/
-
-# PHPUnit
-/symfony/app/phpunit.xml
-/symfony/phpunit.xml
-
-# Build data
-/symfony/build/
-
-# Composer PHAR
-/symfony/composer.phar
-
-# Docker
-/symfony/docker-compose.yml
-/docker-compose.yml
-
-.idea/*
-data/
-dataOld/
-*.php~
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
+.idea
+###< symfony/framework-bundle ###
