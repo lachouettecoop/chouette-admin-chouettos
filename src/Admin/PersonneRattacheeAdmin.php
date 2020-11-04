@@ -35,7 +35,7 @@ final class PersonneRattacheeAdmin extends AbstractAdmin
 
         $fileFieldOptions = array('required' => false);
         if ($user && ($webPath = $user->getPhoto())) {
-            $fileFieldOptions['help'] = '<img src="uploads/documents/'.$webPath.'" class="admin-preview" style="width: 300px;" />';
+            $fileFieldOptions['help'] = '<img src="/uploads/documents/'.$webPath.'" class="admin-preview" style="width: 300px;" />';
         }
 
         $formMapper
