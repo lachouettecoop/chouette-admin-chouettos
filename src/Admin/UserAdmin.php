@@ -90,7 +90,7 @@ class UserAdmin extends AbstractAdmin
         $this->syncRelations($user);
         $em = $this->getModelManager()->getEntityManager($this->getClass());
         $this->originalUserData = $em->getUnitOfWork()->getOriginalEntityData($user);
-        //$this->manageFileUpload($user);
+        $this->manageFileUpload($user);
     }
 
     public function syncRelations($user)
@@ -182,7 +182,7 @@ class UserAdmin extends AbstractAdmin
 
        $fileFieldOptions = array('required' => false);
         if ($user && ($webPath = $user->getPhoto())) {
-            $fileFieldOptions['help'] = '<img src="/uploads/'.$webPath.'" class="admin-preview" style="width: 300px;" />';
+            $fileFieldOptions['help'] = '<img src="uploads/documents/'.$webPath.'" class="admin-preview" style="width: 300px;" />';
         }
 
         $formMapper
@@ -267,6 +267,22 @@ class UserAdmin extends AbstractAdmin
             ))
             ->add(
                 'adresses',
+                CollectionType::class,
+                array(
+                    'required' => false,
+                ),
+                array(
+                    'edit' => 'inline',
+                    'inline' => 'table',
+                )
+            )
+            ->end()
+            ->with('Personne Ratachée', array(
+                'class' => 'col-md-12',
+                'description' => ''
+            ))
+            ->add(
+                'personneRattachee',
                 CollectionType::class,
                 array(
                     'required' => false,

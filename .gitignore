@@ -9,3 +9,4 @@
 /vendor/
 .idea
 ###< symfony/framework-bundle ###
+/public/uploads/

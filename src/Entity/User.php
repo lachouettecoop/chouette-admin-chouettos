@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -16,8 +17,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements UserInterface
 {
-    //todo: change directory
-    const SERVER_PATH_TO_IMAGE_FOLDER = '/var/www/symfony/web/uploads/';
+    const SERVER_PATH_TO_IMAGE_FOLDER = __DIR__.'/../../public/uploads/documents/';
 
     /**
      * @ORM\Id
@@ -200,6 +200,11 @@ class User implements UserInterface
      */
     private $file;
 
+    /**
+     * @ORM\OneToMany(targetEntity=PersonneRattachee::class, mappedBy="user",cascade={"persist"})
+     */
+    private $personneRattachee;
+
 
 
     public function __construct()
@@ -207,6 +212,7 @@ class User implements UserInterface
         $this->adresses = new ArrayCollection();
         $this->adhesions = new ArrayCollection();
         $this->paiements = new ArrayCollection();
+        $this->personneRattachee = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -219,8 +225,22 @@ class User implements UserInterface
         return $this->nom.' '.$this->prenom;
     }
 
+
+
     /**
-     * @return mixed
+     * Sets file.
+     *
+     * @param UploadedFile $file
+     */
+    public function setFile(UploadedFile $file = null)
+    {
+        $this->file = $file;
+    }
+
+    /**
+     * Get file.
+     *
+     * @return UploadedFile
      */
     public function getFile()
     {
@@ -228,11 +248,45 @@ class User implements UserInterface
     }
 
     /**
-     * @param mixed $file
+     * Manages the copying of the file to the relevant place on the server
      */
-    public function setFile($file): void
+    public function upload()
     {
-        $this->file = $file;
+        // the file property can be empty if the field is not required
+        if (null === $this->getFile()) {
+            return;
+        }
+
+        // we use the original file name here but you should
+        // sanitize it at least to avoid any security issues
+
+        $filename =uniqid().'-'.$this->getFile()->getClientOriginalName();
+        // move takes the target directory and target filename as params
+        $this->getFile()->move(
+            User::SERVER_PATH_TO_IMAGE_FOLDER,
+            $filename
+        );
+
+        // set the path property to the filename where you've saved the file
+        $this->photo = $filename;
+
+        // clean up the file property as you won't need it anymore
+        $this->setFile(null);
+    }
+
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function lifecycleFileUpload() {
+        $this->upload();
+    }
+
+    /**
+     * Updates the hash value to force the preUpdate and postUpdate events to fire
+     */
+    public function refreshUpdated() {
+        $this->setUpdated(new \DateTime("now"));
     }
 
     public function getEmail(): ?string
@@ -597,6 +651,36 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($paiement->getUser() === $this) {
                 $paiement->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PersonneRattachee[]
+     */
+    public function getPersonneRattachee(): Collection
+    {
+        return $this->personneRattachee;
+    }
+
+    public function addPersonneRattachee(PersonneRattachee $personneRattachee): self
+    {
+        if (!$this->personneRattachee->contains($personneRattachee)) {
+            $this->personneRattachee[] = $personneRattachee;
+            $personneRattachee->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePersonneRattachee(PersonneRattachee $personneRattachee): self
+    {
+        if ($this->personneRattachee->removeElement($personneRattachee)) {
+            // set the owning side to null (unless already changed)
+            if ($personneRattachee->getUser() === $this) {
+                $personneRattachee->setUser(null);
             }
         }
 

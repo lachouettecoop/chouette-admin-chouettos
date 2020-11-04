@@ -91,3 +91,10 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [ GlukoseAdminContactBundle ] ]
+
+    admin.personne_rattachee:
+        class: App\Admin\PersonneRattacheeAdmin
+        arguments: [~, App\Entity\PersonneRattachee, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: PersonneRattachee }
+        public: true
