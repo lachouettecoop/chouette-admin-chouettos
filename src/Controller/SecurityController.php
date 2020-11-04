@@ -68,7 +68,7 @@ class SecurityController extends AbstractController
                 $entityManager->flush();
             } catch (\Exception $e) {
                 $this->addFlash('warning', $e->getMessage());
-                return $this->redirectToRoute('glukose_ecommerce_homepage');
+                return $this->redirectToRoute('main');
             }
 
             $url = $this->generateUrl('app_reset_password', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL);
@@ -119,7 +119,7 @@ class SecurityController extends AbstractController
 
                 $this->addFlash('info', 'Mot de passe mis à jour, vous pouvez vous connecter !');
 
-                return $this->redirectToRoute('app_login');
+                return $this->redirectToRoute('main');
             }
         }
         return $this->render('security/resetting_password.html.twig', ['token' => $token]);
