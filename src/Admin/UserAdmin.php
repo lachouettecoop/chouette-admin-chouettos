@@ -199,8 +199,8 @@ class UserAdmin extends AbstractAdmin
             ->add('civilite', ChoiceType::class, array(
                 'label' => 'Civilité',
                 'choices' => array(
-                    'mme' => 'Madame',
-                    'mr' => 'Monsieur'
+                    'Madame' => 'mme',
+                    'Monsieur' => 'mr'
                 )
             ))
             ->add('nom', null, array(

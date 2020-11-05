@@ -36,7 +36,7 @@ class AdhesionAdmin extends AbstractAdmin
                     'especes' => 'especes',
                     'cb' => 'cb',
                     'virement' => 'virement',
-                    'solViolette' => 'sol violette',
+                    'sol violette' => 'solViolette',
                     'autre' => 'autre'
                 )
                 ))
