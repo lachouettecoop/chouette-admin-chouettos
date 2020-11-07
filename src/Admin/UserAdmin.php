@@ -4,12 +4,12 @@ namespace App\Admin;
 
 use App\Controller\LdapController;
 use App\Entity\User;
-use Exporter\Source\IteratorCallbackSourceIterator;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\Operator\EqualOperatorType;
+use Sonata\Exporter\Source\IteratorCallbackSourceIterator;
 use Sonata\Form\Type\BooleanType;
 use Sonata\Form\Type\CollectionType;
 use Sonata\Form\Type\DatePickerType;
@@ -64,13 +64,13 @@ class UserAdmin extends AbstractAdmin
         return array('id', 'civilite', 'nom', 'prenom', 'codebarre', 'email', 'exportDateNaissance', 'telephone', 'enabled', 'domaineCompetence', 'exportAdresse1', 'exportAdresse2', 'exportAdresse4', 'exportAdresse5', 'exportAdresse6', 'adhesions', 'exportdAhesionAnnee', 'exportAdhesionDate', 'exportAdhesionMontant', 'exportSouscriptionDate');
     }
 
-    public function getDataSourceIterator()
+    /*public function getDataSourceIterator()
     {
         return new IteratorCallbackSourceIterator(parent::getDataSourceIterator(), function($data) {
             $data['nom'] = mb_strtoupper($data['nom']);
             return $data;
         });
-    }
+    }*/
 
     public function getBatchActions()
     {

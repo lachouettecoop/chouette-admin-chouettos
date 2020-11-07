@@ -686,4 +686,109 @@ class User implements UserInterface
 
         return $this;
     }
+
+    public function exportDateNaissance()
+    {
+        $output = ' ';
+        if ($this->dateNaissance != '') {
+            $output = $this->dateNaissance->format('d/m/Y');
+        }
+        return $output;
+    }
+
+    public function exportdAhesionAnnee()
+    {
+        $output = '';
+        foreach ($this->adhesions as $adhesion) {
+            $output .= $adhesion->getAnnee() . ', ';
+        }
+
+        return $output;
+    }
+
+    public function exportAdhesionDate()
+    {
+        $output = '';
+        foreach ($this->adhesions as $adhesion) {
+            if ($adhesion->getDateAdhesion() != null && $adhesion->getDateAdhesion() != '') {
+                $output .= $adhesion->getDateAdhesion()->format('d/m/Y') . ', ';
+            }
+        }
+
+        return $output;
+    }
+
+    public function exportAdhesionMontant()
+    {
+        $output = '';
+        foreach ($this->adhesions as $adhesion) {
+            $output .= $adhesion->getMontant() . ', ';
+        }
+
+        return $output;
+    }
+
+    public function exportSouscriptionDate()
+    {
+        $output = '';
+
+        $echeances = array_map(function(Paiement $paiement) {
+            return $paiement->getDateEcheance();
+        }, $this->getPaiements()->toArray());
+        if (!empty($echeances)) {
+            $output = min($echeances)->format('d/m/Y');
+        }
+
+        return $output;
+    }
+
+    public function exportAdresse1()
+    {
+        $output = '';
+        foreach ($this->adresses as $adresse) {
+            $output .= $adresse->getLigne1();
+        }
+
+        return $output;
+    }
+
+    public function exportAdresse2()
+    {
+        $output = '';
+        foreach ($this->adresses as $adresse) {
+            $output .= $adresse->getLigne2();
+        }
+
+        return $output;
+    }
+
+    public function exportAdresse4()
+    {
+        $output = '';
+        foreach ($this->adresses as $adresse) {
+            $output .= $adresse->getCodePostal();
+        }
+
+        return $output;
+    }
+
+    public function exportAdresse5()
+    {
+        $output = '';
+        foreach ($this->adresses as $adresse) {
+            $output .= $adresse->getVille();
+        }
+
+        return $output;
+    }
+
+    public function exportAdresse6()
+    {
+        $output = '';
+        foreach ($this->adresses as $adresse) {
+            $output .= $adresse->getPays();
+        }
+
+        return $output;
+    }
 }

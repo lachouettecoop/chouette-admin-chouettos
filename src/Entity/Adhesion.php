@@ -67,7 +67,7 @@ class Adhesion
 
     public function __toString()
     {
-        return $this->annee;
+        return (string)$this->annee;
 
     }
 
