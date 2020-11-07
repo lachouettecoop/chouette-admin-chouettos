@@ -18,6 +18,7 @@
         "sonata-project/admin-bundle": "^3.78",
         "sonata-project/doctrine-orm-admin-bundle": "^3.24",
         "stof/doctrine-extensions-bundle": "^1.5",
+        "symfony/apache-pack": "^1.0",
         "symfony/asset": "4.4.*",
         "symfony/console": "4.4.*",
         "symfony/dotenv": "4.4.*",
