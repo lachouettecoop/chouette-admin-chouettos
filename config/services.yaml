@@ -98,3 +98,10 @@ services:
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: PersonneRattachee, show_in_dashboard: false }
         public: true
+
+    admin.piaf:
+        class: App\Admin\PIAFAdmin
+        arguments: [~, App\Entity\PIAF, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: PIAF, show_in_dashboard: true }
+        public: true

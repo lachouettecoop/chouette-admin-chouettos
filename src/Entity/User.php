@@ -205,6 +205,11 @@ class User implements UserInterface
      */
     private $personneRattachee;
 
+    /**
+     * @ORM\OneToMany(targetEntity=PIAF::class, mappedBy="piaffeur")
+     */
+    private $pIAFs;
+
 
 
     public function __construct()
@@ -213,6 +218,7 @@ class User implements UserInterface
         $this->adhesions = new ArrayCollection();
         $this->paiements = new ArrayCollection();
         $this->personneRattachee = new ArrayCollection();
+        $this->pIAFs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -790,5 +796,35 @@ class User implements UserInterface
         }
 
         return $output;
+    }
+
+    /**
+     * @return Collection|PIAF[]
+     */
+    public function getPIAFs(): Collection
+    {
+        return $this->pIAFs;
+    }
+
+    public function addPIAF(PIAF $pIAF): self
+    {
+        if (!$this->pIAFs->contains($pIAF)) {
+            $this->pIAFs[] = $pIAF;
+            $pIAF->setPiaffeur($this);
+        }
+
+        return $this;
+    }
+
+    public function removePIAF(PIAF $pIAF): self
+    {
+        if ($this->pIAFs->removeElement($pIAF)) {
+            // set the owning side to null (unless already changed)
+            if ($pIAF->getPiaffeur() === $this) {
+                $pIAF->setPiaffeur(null);
+            }
+        }
+
+        return $this;
     }
 }
