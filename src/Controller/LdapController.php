@@ -78,6 +78,22 @@ class LdapController
         return true;
     }
 
+    public function connectToLdapAsUser($user, $password)
+    {
+        $this->ds = ldap_connect($this->ldapServerAdress, 389);
+        ldap_set_option($this->ds, LDAP_OPT_PROTOCOL_VERSION, 3);
+        if (!$this->ds) {
+            throw new \RuntimeException("Impossible de se connecter au serveur LDAP");
+        }
+
+        // Connexion avec une identité qui permet les modifications
+        $r = ldap_bind($this->ds,$this->userDn($user),$password);
+        if (!$r) {
+            throw new \RuntimeException("Connexion LDAP échouée...");
+        }
+        return true;
+    }
+
     private function ldapAdministrableInfosOfUser(User $user)
     {
         $info["cn"] = $user->getEmail();

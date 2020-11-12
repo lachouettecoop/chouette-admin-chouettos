@@ -3,7 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Security\LoginFormAuthenticator;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
@@ -12,6 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
+use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
@@ -31,6 +35,34 @@ class SecurityController extends AbstractController
         $lastUsername = $authenticationUtils->getLastUsername();
 
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+    }
+
+    /**
+     * @Route("/login_api", name="app_login_api")
+     */
+    public function loginAPI(LdapController $ldapController,
+                             Request $request,
+                             EntityManagerInterface $em,
+                             GuardAuthenticatorHandler $guardHandler,
+                             LoginFormAuthenticator $formAuthenticator): Response
+    {
+        $email = $request->get('username');
+        $password = $request->get('password');
+
+        $response = $ldapController->connectToLdapAsUser($email, $password);
+        if($response){
+            $user = $em->getRepository('App:User')->findOneByEmail($email);
+            if($user){
+                $guardHandler->authenticateUserAndHandleSuccess(
+                    $user,
+                    $request,
+                    $formAuthenticator,
+                    'main'
+                );
+                return new JsonResponse(['etat' => 'success']);
+            }
+        }
+        return new JsonResponse(['etat' => 'failure']);
     }
 
     /**
