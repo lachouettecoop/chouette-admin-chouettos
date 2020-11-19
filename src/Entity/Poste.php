@@ -22,7 +22,7 @@ class Poste
     private $id;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Role::class, inversedBy="postes")
+     * @ORM\ManyToOne(targetEntity=Role::class, inversedBy="postes")
      */
     private $role;
 
@@ -36,39 +36,11 @@ class Poste
      */
     private $creneauGenerique;
 
-    public function __construct()
-    {
-        $this->role = new ArrayCollection();
-    }
-
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return Collection|Role[]
-     */
-    public function getRole(): Collection
-    {
-        return $this->role;
-    }
-
-    public function addRole(Role $role): self
-    {
-        if (!$this->role->contains($role)) {
-            $this->role[] = $role;
-        }
-
-        return $this;
-    }
-
-    public function removeRole(Role $role): self
-    {
-        $this->role->removeElement($role);
-
-        return $this;
-    }
 
     public function getReservationChouettos(): ?User
     {
@@ -90,6 +62,18 @@ class Poste
     public function setCreneauGenerique(?CreneauGenerique $creneauGenerique): self
     {
         $this->creneauGenerique = $creneauGenerique;
+
+        return $this;
+    }
+
+    public function getRole(): ?Role
+    {
+        return $this->role;
+    }
+
+    public function setRole(?Role $role): self
+    {
+        $this->role = $role;
 
         return $this;
     }

@@ -27,9 +27,14 @@ class Role
     private $libelle;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Poste::class, mappedBy="role")
+     * @ORM\OneToMany(targetEntity=Poste::class, mappedBy="role")
      */
     private $postes;
+
+    public function __toString()
+    {
+        return $this->libelle;
+    }
 
     public function __construct()
     {

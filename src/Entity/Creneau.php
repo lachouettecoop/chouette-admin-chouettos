@@ -47,7 +47,7 @@ class Creneau
     private $informations;
 
     /**
-     * @ORM\OneToMany(targetEntity=Piaf::class, mappedBy="creneau", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Piaf::class, mappedBy="creneau", orphanRemoval=true, cascade={"persist"})
      */
     private $piafs;
 
@@ -144,6 +144,11 @@ class Creneau
         }
 
         return $this;
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 
 }

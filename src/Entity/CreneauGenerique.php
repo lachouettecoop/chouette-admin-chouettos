@@ -42,7 +42,7 @@ class CreneauGenerique
     private $heureFin;
 
     /**
-     * @ORM\OneToMany(targetEntity=Poste::class, mappedBy="creneauGenerique")
+     * @ORM\OneToMany(targetEntity=Poste::class, mappedBy="creneauGenerique", cascade={"persist"})
      */
     private $postes;
 
@@ -50,6 +50,11 @@ class CreneauGenerique
      * @ORM\OneToMany(targetEntity=Creneau::class, mappedBy="creneauGenerique")
      */
     private $creneaux;
+
+    public function __toString()
+    {
+        return $this->getFrequence().' '.$this->getJour();
+    }
 
 
     public function __construct()
