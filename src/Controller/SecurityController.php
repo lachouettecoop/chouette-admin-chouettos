@@ -59,10 +59,14 @@ class SecurityController extends AbstractController
                     $formAuthenticator,
                     'main'
                 );
-                return new JsonResponse(['etat' => 'success']);
+                $responsejson = new JsonResponse(['etat' => 'success']);
+                $responsejson->headers->set('Access-Control-Allow-Origin', '*');
+                return $responsejson;
             }
         }
-        return new JsonResponse(['etat' => 'failure']);
+        $responsejson = new JsonResponse(['etat' => 'failure']);
+        $responsejson->headers->set('Access-Control-Allow-Origin', '*');
+        return $responsejson;
     }
 
     /**

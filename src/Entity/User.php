@@ -205,10 +205,16 @@ class User implements UserInterface
      */
     private $personneRattachee;
 
+
     /**
-     * @ORM\OneToMany(targetEntity=PIAF::class, mappedBy="piaffeur")
+     * @ORM\OneToOne(targetEntity=Poste::class, mappedBy="reservationChouettos", cascade={"persist", "remove"})
      */
-    private $pIAFs;
+    private $poste;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Piaf::class, mappedBy="piaffeur")
+     */
+    private $piafs;
 
 
 
@@ -218,7 +224,7 @@ class User implements UserInterface
         $this->adhesions = new ArrayCollection();
         $this->paiements = new ArrayCollection();
         $this->personneRattachee = new ArrayCollection();
-        $this->pIAFs = new ArrayCollection();
+        $this->piafs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -798,30 +804,49 @@ class User implements UserInterface
         return $output;
     }
 
-    /**
-     * @return Collection|PIAF[]
-     */
-    public function getPIAFs(): Collection
+
+    public function getPoste(): ?Poste
     {
-        return $this->pIAFs;
+        return $this->poste;
     }
 
-    public function addPIAF(PIAF $pIAF): self
+    public function setPoste(?Poste $poste): self
     {
-        if (!$this->pIAFs->contains($pIAF)) {
-            $this->pIAFs[] = $pIAF;
-            $pIAF->setPiaffeur($this);
+        $this->poste = $poste;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newReservationChouettos = null === $poste ? null : $this;
+        if ($poste->getReservationChouettos() !== $newReservationChouettos) {
+            $poste->setReservationChouettos($newReservationChouettos);
         }
 
         return $this;
     }
 
-    public function removePIAF(PIAF $pIAF): self
+    /**
+     * @return Collection|Piaf[]
+     */
+    public function getPiafs(): Collection
     {
-        if ($this->pIAFs->removeElement($pIAF)) {
+        return $this->piafs;
+    }
+
+    public function addPiaf(Piaf $piaf): self
+    {
+        if (!$this->piafs->contains($piaf)) {
+            $this->piafs[] = $piaf;
+            $piaf->setPiaffeur($this);
+        }
+
+        return $this;
+    }
+
+    public function removePiaf(Piaf $piaf): self
+    {
+        if ($this->piafs->removeElement($piaf)) {
             // set the owning side to null (unless already changed)
-            if ($pIAF->getPiaffeur() === $this) {
-                $pIAF->setPiaffeur(null);
+            if ($piaf->getPiaffeur() === $this) {
+                $piaf->setPiaffeur(null);
             }
         }
 
