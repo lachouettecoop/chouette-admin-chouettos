@@ -2,9 +2,11 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\PIAFRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource()
@@ -14,17 +16,20 @@ class Piaf
 {
     /**
      * @ORM\Id
+     * @ApiProperty(identifier=true)
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    public $id;
 
     /**
+     * @Groups({"read:creneauGenerique"})
      * @ORM\ManyToOne(targetEntity=Role::class)
      */
     private $role;
 
     /**
+     * @Groups({"read:creneauGenerique"})
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="piafs")
      */
     private $piaffeur;
@@ -36,6 +41,7 @@ class Piaf
     private $creneau;
 
     /**
+     * @Groups({"read:creneauGenerique"})
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $visible = true;

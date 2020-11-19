@@ -7,6 +7,7 @@ use App\Repository\PosteRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource()
@@ -22,11 +23,13 @@ class Poste
     private $id;
 
     /**
+     * @Groups({"read:creneauGenerique"})
      * @ORM\ManyToOne(targetEntity=Role::class, inversedBy="postes")
      */
     private $role;
 
     /**
+     * @Groups({"read:creneauGenerique"})
      * @ORM\OneToOne(targetEntity=User::class, inversedBy="poste", cascade={"persist", "remove"})
      */
     private $reservationChouettos;

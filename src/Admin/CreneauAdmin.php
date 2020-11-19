@@ -45,6 +45,7 @@ final class CreneauAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $formMapper
+            ->add('creneauGenerique')
             ->add('date')
             ->add('heureDebut')
             ->add('heureFin')

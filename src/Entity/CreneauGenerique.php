@@ -3,13 +3,14 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 use App\Repository\CreneauGeneriqueRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ApiResource()
+ * @ApiResource(normalizationContext={"groups"={"read:creneauGenerique"}},)
  * @ORM\Entity(repositoryClass=CreneauGeneriqueRepository::class)
  */
 class CreneauGenerique
@@ -22,31 +23,37 @@ class CreneauGenerique
     private $id;
 
     /**
+     * @Groups({"read:creneauGenerique"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $frequence;
 
     /**
+     * @Groups({"read:creneauGenerique"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $jour;
 
     /**
+     * @Groups({"read:creneauGenerique"})
      * @ORM\Column(type="time", nullable=true)
      */
     private $heureDebut;
 
     /**
+     * @Groups({"read:creneauGenerique"})
      * @ORM\Column(type="time", nullable=true)
      */
     private $heureFin;
 
     /**
+     * @Groups({"read:creneauGenerique"})
      * @ORM\OneToMany(targetEntity=Poste::class, mappedBy="creneauGenerique", cascade={"persist"})
      */
     private $postes;
 
     /**
+     * @Groups({"read:creneauGenerique"})
      * @ORM\OneToMany(targetEntity=Creneau::class, mappedBy="creneauGenerique")
      */
     private $creneaux;

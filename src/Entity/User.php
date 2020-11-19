@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -9,11 +10,16 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="fos_user")
  * @ORM\HasLifecycleCallbacks()
+ * @ApiResource(
+ *     collectionOperations={"get"},
+ *     itemOperations={"get"}
+ * )
  */
 class User implements UserInterface
 {
@@ -73,7 +79,7 @@ class User implements UserInterface
     /**
      * @var string
      * @Attribute("nom")
-     *
+     * @Groups({"read:creneauGenerique"})
      * @ORM\Column(name="nom", type="string", length=255, nullable=true)
      */
     private $nom;
@@ -81,7 +87,7 @@ class User implements UserInterface
     /**
      * @var string
      * @Attribute("firstname")
-     *
+     * @Groups({"read:creneauGenerique"})
      * @ORM\Column(name="prenom", type="string", length=255, nullable=true)
      */
     private $prenom;

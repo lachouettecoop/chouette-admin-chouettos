@@ -7,6 +7,7 @@ use App\Repository\CreneauRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource()
@@ -27,26 +28,31 @@ class Creneau
     private $creneauGenerique;
 
     /**
+     * @Groups({"read:creneauGenerique"})
      * @ORM\Column(type="date", nullable=true)
      */
     private $date;
 
     /**
+     * @Groups({"read:creneauGenerique"})
      * @ORM\Column(type="time", nullable=true)
      */
     private $heureDebut;
 
     /**
+     * @Groups({"read:creneauGenerique"})
      * @ORM\Column(type="time", nullable=true)
      */
     private $heureFin;
 
     /**
+     * @Groups({"read:creneauGenerique"})
      * @ORM\Column(type="text", nullable=true)
      */
     private $informations;
 
     /**
+     * @Groups({"read:creneauGenerique"})
      * @ORM\OneToMany(targetEntity=Piaf::class, mappedBy="creneau", orphanRemoval=true, cascade={"persist"})
      */
     private $piafs;
