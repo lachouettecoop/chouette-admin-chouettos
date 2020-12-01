@@ -33,6 +33,11 @@ class Role
      */
     private $postes;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="rolesChouette")
+     */
+    private $users;
+
     public function __toString()
     {
         return $this->libelle;
@@ -41,6 +46,7 @@ class Role
     public function __construct()
     {
         $this->postes = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -82,6 +88,33 @@ class Role
     {
         if ($this->postes->removeElement($poste)) {
             $poste->removeRole($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->addRolesChouette($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->removeElement($user)) {
+            $user->removeRolesChouette($this);
         }
 
         return $this;

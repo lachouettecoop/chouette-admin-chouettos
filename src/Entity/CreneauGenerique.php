@@ -30,7 +30,7 @@ class CreneauGenerique
 
     /**
      * @Groups({"read:creneauGenerique"})
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $jour;
 
@@ -58,9 +58,15 @@ class CreneauGenerique
      */
     private $creneaux;
 
+    /**
+     * @Groups({"read:creneauGenerique"})
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $titre;
+
     public function __toString()
     {
-        return $this->getFrequence().' '.$this->getJour();
+        return $this->getFrequence();
     }
 
 
@@ -87,17 +93,6 @@ class CreneauGenerique
         return $this;
     }
 
-    public function getJour(): ?string
-    {
-        return $this->jour;
-    }
-
-    public function setJour(?string $jour): self
-    {
-        $this->jour = $jour;
-
-        return $this;
-    }
 
     public function getHeureDebut(): ?\DateTimeInterface
     {
@@ -179,6 +174,30 @@ class CreneauGenerique
                 $creneaux->setCreneauGenerique(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTitre(): ?string
+    {
+        return $this->titre;
+    }
+
+    public function setTitre(?string $titre): self
+    {
+        $this->titre = $titre;
+
+        return $this;
+    }
+
+    public function getJour(): ?int
+    {
+        return $this->jour;
+    }
+
+    public function setJour(?int $jour): self
+    {
+        $this->jour = $jour;
 
         return $this;
     }

@@ -49,7 +49,13 @@ class Piaf
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    private $remplacement;
+    private $pourvu;
+
+    /**
+     * @Groups({"read:creneauGenerique"})
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $statut;
 
     public function getRole(): ?Role
     {

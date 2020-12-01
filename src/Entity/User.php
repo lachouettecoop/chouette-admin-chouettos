@@ -222,6 +222,11 @@ class User implements UserInterface
      */
     private $piafs;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Role::class, inversedBy="users")
+     */
+    private $rolesChouette;
+
 
 
     public function __construct()
@@ -231,6 +236,7 @@ class User implements UserInterface
         $this->paiements = new ArrayCollection();
         $this->personneRattachee = new ArrayCollection();
         $this->piafs = new ArrayCollection();
+        $this->rolesChouette = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -855,6 +861,30 @@ class User implements UserInterface
                 $piaf->setPiaffeur(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Role[]
+     */
+    public function getRolesChouette(): Collection
+    {
+        return $this->rolesChouette;
+    }
+
+    public function addRolesChouette(Role $rolesChouette): self
+    {
+        if (!$this->rolesChouette->contains($rolesChouette)) {
+            $this->rolesChouette[] = $rolesChouette;
+        }
+
+        return $this;
+    }
+
+    public function removeRolesChouette(Role $rolesChouette): self
+    {
+        $this->rolesChouette->removeElement($rolesChouette);
 
         return $this;
     }

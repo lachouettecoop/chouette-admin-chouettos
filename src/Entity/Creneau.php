@@ -49,6 +49,12 @@ class Creneau
      * @Groups({"read:creneauGenerique"})
      * @ORM\Column(type="text", nullable=true)
      */
+    private $titre;
+
+    /**
+     * @Groups({"read:creneauGenerique"})
+     * @ORM\Column(type="text", nullable=true)
+     */
     private $informations;
 
     /**
@@ -155,6 +161,18 @@ class Creneau
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getTitre(): ?string
+    {
+        return $this->titre;
+    }
+
+    public function setTitre(?string $titre): self
+    {
+        $this->titre = $titre;
+
+        return $this;
     }
 
 }
