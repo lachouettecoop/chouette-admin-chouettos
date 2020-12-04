@@ -64,6 +64,11 @@ class CreneauGenerique
      */
     private $titre;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Reserve::class, mappedBy="creneauGeneriques")
+     */
+    private $reserves;
+
     public function __toString()
     {
         return $this->getFrequence();
@@ -74,6 +79,7 @@ class CreneauGenerique
     {
         $this->postes = new ArrayCollection();
         $this->creneaux = new ArrayCollection();
+        $this->reserves = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -198,6 +204,33 @@ class CreneauGenerique
     public function setJour(?int $jour): self
     {
         $this->jour = $jour;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Reserve[]
+     */
+    public function getReserves(): Collection
+    {
+        return $this->reserves;
+    }
+
+    public function addReserf(Reserve $reserf): self
+    {
+        if (!$this->reserves->contains($reserf)) {
+            $this->reserves[] = $reserf;
+            $reserf->addCreneauGenerique($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReserf(Reserve $reserf): self
+    {
+        if ($this->reserves->removeElement($reserf)) {
+            $reserf->removeCreneauGenerique($this);
+        }
 
         return $this;
     }

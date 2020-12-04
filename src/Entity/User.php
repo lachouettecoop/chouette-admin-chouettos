@@ -232,6 +232,16 @@ class User implements UserInterface
      */
     private $apiToken;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Statut::class, mappedBy="user")
+     */
+    private $statuts;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Reserve::class, mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $reserve;
+
 
 
     public function __construct()
@@ -242,6 +252,7 @@ class User implements UserInterface
         $this->personneRattachee = new ArrayCollection();
         $this->piafs = new ArrayCollection();
         $this->rolesChouette = new ArrayCollection();
+        $this->statuts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -902,6 +913,54 @@ class User implements UserInterface
     public function setApiToken(?string $apiToken): self
     {
         $this->apiToken = $apiToken;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Statut[]
+     */
+    public function getStatuts(): Collection
+    {
+        return $this->statuts;
+    }
+
+    public function addStatut(Statut $statut): self
+    {
+        if (!$this->statuts->contains($statut)) {
+            $this->statuts[] = $statut;
+            $statut->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStatut(Statut $statut): self
+    {
+        if ($this->statuts->removeElement($statut)) {
+            // set the owning side to null (unless already changed)
+            if ($statut->getUser() === $this) {
+                $statut->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getReserve(): ?Reserve
+    {
+        return $this->reserve;
+    }
+
+    public function setReserve(?Reserve $reserve): self
+    {
+        $this->reserve = $reserve;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newUser = null === $reserve ? null : $this;
+        if ($reserve->getUser() !== $newUser) {
+            $reserve->setUser($newUser);
+        }
 
         return $this;
     }
