@@ -53,13 +53,17 @@ class SecurityController extends AbstractController
         if($response){
             $user = $em->getRepository('App:User')->findOneByEmail($email);
             if($user){
+                $user->setApiToken(rtrim(strtr(base64_encode(random_bytes(32)), '+/', '-_'), '='));
+                $em->persist($user);
+                $em->flush();
+
                 $guardHandler->authenticateUserAndHandleSuccess(
                     $user,
                     $request,
                     $formAuthenticator,
                     'main'
                 );
-                $responsejson = new JsonResponse(['etat' => 'success']);
+                $responsejson = new JsonResponse(['etat' => 'success', 'userId' => $user->getId(), 'token' => $user->getApiToken()]);
                 $responsejson->headers->set('Access-Control-Allow-Origin', '*');
                 return $responsejson;
             }

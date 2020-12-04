@@ -227,6 +227,11 @@ class User implements UserInterface
      */
     private $rolesChouette;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $apiToken;
+
 
 
     public function __construct()
@@ -885,6 +890,18 @@ class User implements UserInterface
     public function removeRolesChouette(Role $rolesChouette): self
     {
         $this->rolesChouette->removeElement($rolesChouette);
+
+        return $this;
+    }
+
+    public function getApiToken(): ?string
+    {
+        return $this->apiToken;
+    }
+
+    public function setApiToken(?string $apiToken): self
+    {
+        $this->apiToken = $apiToken;
 
         return $this;
     }
