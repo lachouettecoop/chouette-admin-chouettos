@@ -20,7 +20,7 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         api:
-            pattern: ^/api/
+            pattern: /dist_api/
             provider: app_user_provider_api
             guard:
                 authenticators:
@@ -46,5 +46,6 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/api, roles: ROLE_USER }
+        - { path: ^/docs, roles: ROLE_USER }
+        - { path: ^/api, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         #- { path: ^/profile, roles: ROLE_USER }
