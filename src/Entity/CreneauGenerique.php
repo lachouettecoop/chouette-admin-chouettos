@@ -3,14 +3,22 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
 use App\Repository\CreneauGeneriqueRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\NumericFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ApiResource(normalizationContext={"groups"={"read:creneauGenerique"}},)
+ * @ApiFilter(NumericFilter::class, properties={"jour"})
+ * @ApiFilter(SearchFilter::class, properties={"frequence": "exact"})
+ * @ApiFilter(SearchFilter::class, properties={"postes": "exact"})
+ * @ApiFilter(DateFilter::class, properties={"heureDebut"})
  * @ORM\Entity(repositoryClass=CreneauGeneriqueRepository::class)
  */
 class CreneauGenerique
