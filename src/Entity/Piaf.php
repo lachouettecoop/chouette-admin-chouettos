@@ -2,14 +2,21 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use App\Repository\PIAFRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     collectionOperations={"get"}
+ * )
+ * @ApiFilter(SearchFilter::class, properties={"piaffeur": "exact"})
+ * @ApiFilter(BooleanFilter::class, properties={"visible": "exact"})
  * @ORM\Entity(repositoryClass=PIAFRepository::class)
  */
 class Piaf
@@ -105,17 +112,6 @@ class Piaf
         return $this;
     }
 
-    public function getRemplacement(): ?bool
-    {
-        return $this->remplacement;
-    }
-
-    public function setRemplacement(?bool $remplacement): self
-    {
-        $this->remplacement = $remplacement;
-
-        return $this;
-    }
 
 
 }
