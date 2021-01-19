@@ -34,13 +34,13 @@ class PersonneAdmin extends AbstractAdmin
         return array('nom', 'prenom', 'email', 'exportDatePremiereReunion');
     }
 
-    public function getDataSourceIterator()
+    /*public function getDataSourceIterator()
     {
         return new IteratorCallbackSourceIterator(parent::getDataSourceIterator(), function($data) {
             $data['nom'] = mb_strtoupper($data['nom']);
             return $data;
         });
-    }
+    }*/
 
     protected function configureFormFields(FormMapper $formMapper)
     {
