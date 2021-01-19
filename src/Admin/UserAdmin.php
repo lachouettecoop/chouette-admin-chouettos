@@ -64,13 +64,13 @@ class UserAdmin extends AbstractAdmin
         return array('id', 'civilite', 'nom', 'prenom', 'codebarre', 'email', 'exportDateNaissance', 'telephone', 'enabled', 'domaineCompetence', 'exportAdresse1', 'exportAdresse2', 'exportAdresse4', 'exportAdresse5', 'exportAdresse6', 'adhesions', 'exportdAhesionAnnee', 'exportAdhesionDate', 'exportAdhesionMontant', 'exportSouscriptionDate');
     }
 
-    /*public function getDataSourceIterator()
+    public function getDataSourceIterator()
     {
         return new IteratorCallbackSourceIterator(parent::getDataSourceIterator(), function($data) {
             $data['nom'] = mb_strtoupper($data['nom']);
             return $data;
         });
-    }*/
+    }
 
     public function getBatchActions()
     {
@@ -180,7 +180,7 @@ class UserAdmin extends AbstractAdmin
     {
         $user = $this->getSubject();
 
-       $fileFieldOptions = array('required' => false);
+       $fileFieldOptions = array('required' => false, 'mapped'=>false,);
         if ($user && ($webPath = $user->getPhoto())) {
             $fileFieldOptions['help'] = '<img src="/uploads/documents/'.$webPath.'" class="admin-preview" style="width: 300px;" />';
         }
@@ -277,7 +277,7 @@ class UserAdmin extends AbstractAdmin
                 )
             )
             ->end()
-            ->with('Personne Ratachée', array(
+            ->with('Personne Rattachée', array(
                 'class' => 'col-md-12',
                 'description' => ''
             ))

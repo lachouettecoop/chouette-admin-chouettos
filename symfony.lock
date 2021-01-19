@@ -122,6 +122,9 @@
     "knplabs/knp-menu-bundle": {
         "version": "v3.0.0"
     },
+    "monolog/monolog": {
+        "version": "1.26.0"
+    },
     "nelmio/cors-bundle": {
         "version": "1.5",
         "recipe": {
@@ -141,7 +144,7 @@
         "version": "2.2.3"
     },
     "php": {
-        "version": "7.3"
+        "version": "7.4"
     },
     "phpdocumentor/reflection-common": {
         "version": "2.2.0"
@@ -361,6 +364,24 @@
     },
     "symfony/mime": {
         "version": "v4.4.16"
+    },
+    "symfony/monolog-bridge": {
+        "version": "v4.4.18"
+    },
+    "symfony/monolog-bundle": {
+        "version": "3.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.3",
+            "ref": "d7249f7d560f6736115eee1851d02a65826f0a56"
+        },
+        "files": [
+            "config/packages/dev/monolog.yaml",
+            "config/packages/prod/deprecations.yaml",
+            "config/packages/prod/monolog.yaml",
+            "config/packages/test/monolog.yaml"
+        ]
     },
     "symfony/options-resolver": {
         "version": "v4.4.16"

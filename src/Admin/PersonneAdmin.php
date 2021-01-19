@@ -34,13 +34,13 @@ class PersonneAdmin extends AbstractAdmin
         return array('nom', 'prenom', 'email', 'exportDatePremiereReunion');
     }
 
-    /*public function getDataSourceIterator()
+    public function getDataSourceIterator()
     {
-        return new IteratorCallbackSourceIterator(parent::getDataSourceIterator(), function($data) {
+        return new \Sonata\Exporter\Source\IteratorCallbackSourceIterator(parent::getDataSourceIterator(), function($data) {
             $data['nom'] = mb_strtoupper($data['nom']);
             return $data;
         });
-    }*/
+    }
 
     protected function configureFormFields(FormMapper $formMapper)
     {
@@ -64,7 +64,7 @@ class PersonneAdmin extends AbstractAdmin
                 'help' => "Utilisée pour recontacter cette personne et savoir qu'elle est déjà venue à une réunion si elle nous contacte."
             ))
             ->add('datePremiereReunion', DatePickerType::class, array(
-                'label' => 'Date de participation à sa première réunion',
+                'label' => "Date de participation à sa dernière réunion d'accueil",
                 'required' => false,
                 'format' => 'dd/MM/yyyy',
                 'attr' => array(

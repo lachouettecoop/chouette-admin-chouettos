@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\UserRepository;
+use Doctrine\Common\Annotations\Annotation\IgnoreAnnotation;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -115,7 +116,6 @@ class User implements UserInterface
 
     /**
      * @var string
-     *
      * @ORM\Column(name="photo", type="string", length=255, nullable=true)
      */
     private $photo;
@@ -241,8 +241,6 @@ class User implements UserInterface
      * @ORM\OneToOne(targetEntity=Reserve::class, mappedBy="user", cascade={"persist", "remove"})
      */
     private $reserve;
-
-
 
     public function __construct()
     {

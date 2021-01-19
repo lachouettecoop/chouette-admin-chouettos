@@ -113,6 +113,35 @@ class Piaf
         return $this;
     }
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getPourvu(): ?bool
+    {
+        return $this->pourvu;
+    }
+
+    public function setPourvu(?bool $pourvu): self
+    {
+        $this->pourvu = $pourvu;
+
+        return $this;
+    }
+
+    public function getStatut(): ?string
+    {
+        return $this->statut;
+    }
+
+    public function setStatut(?string $statut): self
+    {
+        $this->statut = $statut;
+
+        return $this;
+    }
+
 
 
 }
