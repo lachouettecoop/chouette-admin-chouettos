@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class LdapController
 {
@@ -89,7 +90,7 @@ class LdapController
         // Connexion avec une identité qui permet les modifications
         $r = ldap_bind($this->ds,$this->userDn($user),$password);
         if (!$r) {
-            throw new \RuntimeException("Connexion LDAP échouée...");
+            throw new AccessDeniedException("Connexion LDAP échouée ou mauvais identifiants !");
         }
         return true;
     }
