@@ -48,7 +48,8 @@ class PlanningController extends AbstractController
 
             for($i=0; $i < 8; $i++){
                 //find date for next occurence
-                $nextDate = $this->nextOccurence($startDate->modify('+'.$i.' month'), $creneauGenerique->getFrequence(), $creneauGenerique->getJour());
+                $startDateLocal = clone $startDate;
+                $nextDate = $this->nextOccurence($startDateLocal->modify('+'.$i.' month'), $creneauGenerique->getFrequence(), $creneauGenerique->getJour());
 
                 //Check if another creneau is not already generated for the same time, same dau
                 //dump($creneauxRepository->findByCreneauGenerique($creneauGenerique->getId(), $nextDate, $creneauGenerique->getHeureDebut()));
