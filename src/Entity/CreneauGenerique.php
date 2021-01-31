@@ -77,6 +77,12 @@ class CreneauGenerique
      */
     private $reserves;
 
+    /**
+     * @Groups({"read:creneauGenerique"})
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $actif = true;
+
     public function __toString()
     {
         return $this->getFrequence();
@@ -239,6 +245,18 @@ class CreneauGenerique
         if ($this->reserves->removeElement($reserf)) {
             $reserf->removeCreneauGenerique($this);
         }
+
+        return $this;
+    }
+
+    public function getActif(): ?bool
+    {
+        return $this->actif;
+    }
+
+    public function setActif(?bool $actif): self
+    {
+        $this->actif = $actif;
 
         return $this;
     }

@@ -22,19 +22,22 @@ class CreneauRepository extends ServiceEntityRepository
     // /**
     //  * @return Creneau[] Returns an array of Creneau objects
     //  */
-    /*
-    public function findByExampleField($value)
+
+    public function findByCreneauGenerique($idCG, $date, $heureDebut)
     {
         return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
+            ->leftJoin('c.creneauGenerique', 'cg')
+            ->andWhere('cg.id = :val')
+            ->andWhere('c.date = :date')
+            ->andWhere('c.heureDebut = :heure')
+            ->setParameter('val', $idCG)
+            ->setParameter('date', $date)
+            ->setParameter('heure', $heureDebut)
             ->getQuery()
-            ->getResult()
+            ->getOneOrNullResult()
         ;
     }
-    */
+
 
     /*
     public function findOneBySomeField($value): ?Creneau

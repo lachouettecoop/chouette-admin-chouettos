@@ -10,6 +10,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 final class CreneauGeneriqueAdmin extends AbstractAdmin
 {
@@ -17,7 +18,16 @@ final class CreneauGeneriqueAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $formMapper
-            ->add('frequence')
+            ->add('frequence', ChoiceType::class,
+                ['choices' =>
+                    [
+                        'A' => '0',
+                        'B' => '1',
+                        'C' => '2',
+                        'D' => '3',
+                    ]
+                ]
+            )
             ->add('jour')
             ->add('heureDebut')
             ->add('heureFin')
@@ -32,6 +42,7 @@ final class CreneauGeneriqueAdmin extends AbstractAdmin
                     'inline' => 'table',
                 )
             )
+            ->add('actif')
         ;
     }
 
@@ -43,7 +54,7 @@ final class CreneauGeneriqueAdmin extends AbstractAdmin
             ->add('jour')
             ->add('heureDebut')
             ->add('heureFin')
-            ;
+        ;
     }
 
     protected function configureListFields(ListMapper $listMapper): void
@@ -73,6 +84,6 @@ final class CreneauGeneriqueAdmin extends AbstractAdmin
             ->add('jour')
             ->add('heureDebut')
             ->add('heureFin')
-            ;
+        ;
     }
 }

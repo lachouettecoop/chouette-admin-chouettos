@@ -19,7 +19,7 @@ final class PiafAdmin extends AbstractAdmin
             ->add('role')
             ->add('piaffeur')
             ->add('visible')
-            ->add('remplacement')
+            /*->add('remplacement')*/
         ;
     }
 
@@ -28,7 +28,7 @@ final class PiafAdmin extends AbstractAdmin
         $datagridMapper
             ->add('id')
             ->add('visible')
-            ->add('remplacement')
+
             ;
     }
 
@@ -37,7 +37,7 @@ final class PiafAdmin extends AbstractAdmin
         $listMapper
             ->add('id')
             ->add('visible')
-            ->add('remplacement')
+
             ->add('_action', null, [
                 'actions' => [
                     'show' => [],
