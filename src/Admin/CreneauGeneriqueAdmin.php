@@ -21,14 +21,26 @@ final class CreneauGeneriqueAdmin extends AbstractAdmin
             ->add('frequence', ChoiceType::class,
                 ['choices' =>
                     [
-                        'A' => '0',
-                        'B' => '1',
-                        'C' => '2',
-                        'D' => '3',
+                        'A' => '1',
+                        'B' => '2',
+                        'C' => '3',
+                        'D' => '4',
                     ]
                 ]
             )
-            ->add('jour')
+            ->add('jour', ChoiceType::class,
+                ['choices' =>
+                    [
+                        'lundi' => '0',
+                        'mardi' => '1',
+                        'mercredi' => '2',
+                        'jeudi' => '3',
+                        'vendredi' => '4',
+                        'samedi' => '5',
+                        'dimanche' => '6',
+                    ]
+                ]
+            )
             ->add('heureDebut')
             ->add('heureFin')
             ->add(
