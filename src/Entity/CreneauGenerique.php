@@ -56,13 +56,13 @@ class CreneauGenerique
 
     /**
      * @Groups({"read:creneauGenerique"})
-     * @ORM\OneToMany(targetEntity=Poste::class, mappedBy="creneauGenerique", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=Poste::class, mappedBy="creneauGenerique", cascade={"persist", "remove"})
      */
     private $postes;
 
     /**
      * @Groups({"read:creneauGenerique"})
-     * @ORM\OneToMany(targetEntity=Creneau::class, mappedBy="creneauGenerique")
+     * @ORM\OneToMany(targetEntity=Creneau::class, mappedBy="creneauGenerique", orphanRemoval=true)
      */
     private $creneaux;
 
