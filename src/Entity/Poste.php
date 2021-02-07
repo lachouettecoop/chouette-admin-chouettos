@@ -30,7 +30,7 @@ class Poste
 
     /**
      * @Groups({"read:creneauGenerique"})
-     * @ORM\OneToOne(targetEntity=User::class, inversedBy="poste", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=User::class, inversedBy="poste")
      */
     private $reservationChouettos;
 
