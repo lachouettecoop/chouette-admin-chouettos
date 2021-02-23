@@ -8,6 +8,7 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use Sonata\AdminBundle\Form\Type\Operator\EqualOperatorType;
 use Sonata\Exporter\Source\IteratorCallbackSourceIterator;
 use Sonata\Form\Type\BooleanType;
@@ -210,6 +211,14 @@ class UserAdmin extends AbstractAdmin
                 'label' => 'Prénom',
                 'attr' => array('placeholder' => 'Jean')
             ))
+            ->add('rolesChouette', ModelAutocompleteType::class, array(
+                    'class' => 'App\Entity\Role',
+                    'property' => 'libelle',
+                    'help' => 'Merci de choisir le rôle "Chouettos" pour toute nouvelle création de fiche !',
+                    'placeholder' => 'Taper les première lettres',
+                    'multiple' => true,
+                    'required' => false)
+            )
             ->add('telephone', null, array(
                 'label' => 'Téléphone',
                 'attr' => array('placeholder' => '06 02 03 04 05')
