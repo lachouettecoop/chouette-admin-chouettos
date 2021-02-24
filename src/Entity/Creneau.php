@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource()
- * @ApiFilter(DateFilter::class, properties={"date"})
+ * @ApiFilter(DateFilter::class, properties={"debut"})
  * @ORM\Entity(repositoryClass=CreneauRepository::class)
  */
 class Creneau
