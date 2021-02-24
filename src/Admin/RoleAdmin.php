@@ -17,7 +17,7 @@ final class RoleAdmin extends AbstractAdmin
     {
         $formMapper
             ->add('libelle')
-            ->add('role_unique_id', null , ['label' => 'Identifiant unique du rôle', 'help' => 'Mettre GH pour le rôle "Grand Hibou", mettre CA pour "Caissier" etc...'])
+            ->add('role_unique_id', null , ['label' => 'Identifiant unique du rôle', 'help' => 'Mettre GH pour le rôle "Grand Hibou", mettre CA pour "Caissier" etc...s'])
         ;
     }
 
