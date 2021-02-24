@@ -18,9 +18,8 @@ final class CreneauAdmin extends AbstractAdmin
     {
         $datagridMapper
             ->add('id')
-            ->add('date')
-            ->add('heureDebut')
-            ->add('heureFin')
+            ->add('debut')
+            ->add('fin')
             ->add('informations')
             ;
     }
@@ -29,9 +28,8 @@ final class CreneauAdmin extends AbstractAdmin
     {
         $listMapper
             ->add('id')
-            ->add('date')
-            ->add('heureDebut')
-            ->add('heureFin')
+            ->add('debut')
+            ->add('fin')
             ->add('informations')
             ->add('_action', null, [
                 'actions' => [
@@ -46,9 +44,8 @@ final class CreneauAdmin extends AbstractAdmin
     {
         $formMapper
             ->add('creneauGenerique')
-            ->add('date')
-            ->add('heureDebut')
-            ->add('heureFin')
+            ->add('debut')
+            ->add('fin')
             ->add(
                 'piafs',
                 CollectionType::class,
@@ -68,9 +65,8 @@ final class CreneauAdmin extends AbstractAdmin
     {
         $showMapper
             ->add('id')
-            ->add('date')
-            ->add('heureDebut')
-            ->add('heureFin')
+            ->add('debut')
+            ->add('fin')
             ->add('informations')
             ;
     }

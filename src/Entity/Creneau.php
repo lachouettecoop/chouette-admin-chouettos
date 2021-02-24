@@ -33,21 +33,15 @@ class Creneau
 
     /**
      * @Groups({"read:creneauGenerique"})
-     * @ORM\Column(type="date", nullable=true)
+     * @ORM\Column(type="datetime", nullable=true)
      */
-    private $date;
+    private $debut;
 
     /**
      * @Groups({"read:creneauGenerique"})
-     * @ORM\Column(type="time", nullable=true)
+     * @ORM\Column(type="datetime", nullable=true)
      */
-    private $heureDebut;
-
-    /**
-     * @Groups({"read:creneauGenerique"})
-     * @ORM\Column(type="time", nullable=true)
-     */
-    private $heureFin;
+    private $fin;
 
     /**
      * @Groups({"read:creneauGenerique"})
@@ -80,42 +74,6 @@ class Creneau
     public function setCreneauGenerique(?CreneauGenerique $creneauGenerique): self
     {
         $this->creneauGenerique = $creneauGenerique;
-
-        return $this;
-    }
-
-    public function getDate(): ?\DateTimeInterface
-    {
-        return $this->date;
-    }
-
-    public function setDate(?\DateTimeInterface $date): self
-    {
-        $this->date = $date;
-
-        return $this;
-    }
-
-    public function getHeureDebut(): ?\DateTimeInterface
-    {
-        return $this->heureDebut;
-    }
-
-    public function setHeureDebut(?\DateTimeInterface $heureDebut): self
-    {
-        $this->heureDebut = $heureDebut;
-
-        return $this;
-    }
-
-    public function getHeureFin(): ?\DateTimeInterface
-    {
-        return $this->heureFin;
-    }
-
-    public function setHeureFin(?\DateTimeInterface $heureFin): self
-    {
-        $this->heureFin = $heureFin;
 
         return $this;
     }
@@ -175,6 +133,30 @@ class Creneau
     public function setTitre(?string $titre): self
     {
         $this->titre = $titre;
+
+        return $this;
+    }
+
+    public function getDebut(): ?\DateTimeInterface
+    {
+        return $this->debut;
+    }
+
+    public function setDebut(?\DateTimeInterface $debut): self
+    {
+        $this->debut = $debut;
+
+        return $this;
+    }
+
+    public function getFin(): ?\DateTimeInterface
+    {
+        return $this->fin;
+    }
+
+    public function setFin(?\DateTimeInterface $fin): self
+    {
+        $this->fin = $fin;
 
         return $this;
     }

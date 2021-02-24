@@ -25,15 +25,16 @@ class CreneauRepository extends ServiceEntityRepository
 
     public function findByCreneauGenerique($idCG, \DateTimeInterface $date, \DateTimeInterface $heureDebut)
     {
+        /** @var \DateTime $dateC */
+        $dateC = clone $date;
+        $dateC->setTime($heureDebut->format('H'),$heureDebut->format('i'),$heureDebut->format('s')  );
 
         return $this->createQueryBuilder('c')
             ->leftJoin('c.creneauGenerique', 'cg')
             ->andWhere('cg.id = :val')
-            ->andWhere('c.date = :date')
-            ->andWhere('c.heureDebut = :heure')
+            ->andWhere('c.debut = :date')
             ->setParameter('val', $idCG)
-            ->setParameter('date', $date->format('Y-m-d'))
-            ->setParameter('heure', $heureDebut->format('H:i:s'))
+            ->setParameter('date', $dateC)
             ->getQuery()
             ->getOneOrNullResult()
         ;

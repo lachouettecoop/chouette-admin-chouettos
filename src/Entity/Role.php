@@ -29,6 +29,12 @@ class Role
     private $libelle;
 
     /**
+     * @Groups({"read:creneauGenerique"})
+     * @ORM\Column(type="string", length=20)
+     */
+    private $role_unique_id;
+
+    /**
      * @ORM\OneToMany(targetEntity=Poste::class, mappedBy="role")
      */
     private $postes;
@@ -116,6 +122,18 @@ class Role
         if ($this->users->removeElement($user)) {
             $user->removeRolesChouette($this);
         }
+
+        return $this;
+    }
+
+    public function getRoleUniqueId(): ?string
+    {
+        return $this->role_unique_id;
+    }
+
+    public function setRoleUniqueId(string $role_unique_id): self
+    {
+        $this->role_unique_id = $role_unique_id;
 
         return $this;
     }

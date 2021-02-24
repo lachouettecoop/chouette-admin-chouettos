@@ -60,10 +60,10 @@ class PlanningController extends AbstractController
             }
         }*/
         //find date of the last creneau generated
-        $lastCreneau = $creneauxRepository->findOneBy([], ['date' => 'DESC']);
+        $lastCreneau = $creneauxRepository->findOneBy([], ['fin' => 'DESC']);
 
         /** @var \DateTime $startDate */
-        $startDate = $lastCreneau->getDate();
+        $startDate = $lastCreneau->getDebut();
         $endDate = clone $startDate;
         $endDate->modify("+".(self::nbMois*4)." week");
 
@@ -79,10 +79,14 @@ class PlanningController extends AbstractController
                 if($creneauxRepository->findByCreneauGenerique($creneauGenerique->getId(), $nextDate, $creneauGenerique->getHeureDebut()) == null){
 
                     $creneau = new Creneau();
-                    $creneau->setDate($nextDate);
+                    //$creneau->setDate($nextDate);
                     $creneau->setCreneauGenerique($creneauGenerique);
-                    $creneau->setHeureDebut($creneauGenerique->getHeureDebut());
-                    $creneau->setHeureFin($creneauGenerique->getHeureFin());
+
+                    $nextDateFin = clone $nextDate;
+                    $nextDate->setTime($creneauGenerique->getHeureDebut()->format('H'), $creneauGenerique->getHeureDebut()->format('i'), $creneauGenerique->getHeureDebut()->format('s'));
+                    $nextDateFin->setTime($creneauGenerique->getHeureFin()->format('H'), $creneauGenerique->getHeureFin()->format('i'), $creneauGenerique->getHeureFin()->format('s'));
+                    $creneau->setDebut($nextDate);
+                    $creneau->setFin($nextDateFin);
                     $creneau->setTitre($creneauGenerique->getTitre());
 
                     foreach ($creneauGenerique->getPostes() as $poste){
@@ -92,8 +96,10 @@ class PlanningController extends AbstractController
                         $creneau->addPiaf($piaf);
                     }
 
+
                     $em->persist($creneau);
                 }
+
             }
 
         }
