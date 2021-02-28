@@ -65,6 +65,11 @@ class Piaf
      */
     private $statut;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $informations;
+
     public function getRole(): ?Role
     {
         return $this->role;
@@ -138,6 +143,18 @@ class Piaf
     public function setStatut(?string $statut): self
     {
         $this->statut = $statut;
+
+        return $this;
+    }
+
+    public function getInformations(): ?string
+    {
+        return $this->informations;
+    }
+
+    public function setInformations(?string $informations): self
+    {
+        $this->informations = $informations;
 
         return $this;
     }
