@@ -16,7 +16,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ApiResource()
  * @ApiFilter(DateFilter::class, properties={"debut"})
- * @ApiFilter(SearchFilter::class, properties={"piafs": "exact"})
+ * @ApiFilter(SearchFilter::class, properties={"piafs.statut": "exact", "piafs.role.role_unique_id": "exact"})
  * @ORM\Entity(repositoryClass=CreneauRepository::class)
  */
 class Creneau
