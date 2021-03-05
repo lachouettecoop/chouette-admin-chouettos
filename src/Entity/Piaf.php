@@ -18,7 +18,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * )
  * @ApiFilter(SearchFilter::class, properties={"piaffeur": "exact"})
  * @ApiFilter(BooleanFilter::class, properties={"visible": "exact"})
- * @ApiFilter(SearchFilter::class, properties={"statut": "exact"})
+ * @ApiFilter(SearchFilter::class, properties={"piaffeur": "exact", "statut": "exact", "role.role_unique_id": "iexact"})
  * @ORM\Entity(repositoryClass=PIAFRepository::class)
  */
 class Piaf
