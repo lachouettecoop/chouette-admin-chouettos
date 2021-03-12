@@ -7,6 +7,8 @@ use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
+
 
 use App\Repository\PIAFRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -16,7 +18,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ApiResource(
  *     collectionOperations={"get"}
  * )
- * @ApiFilter(SearchFilter::class, properties={"piaffeur": "exact"})
+ * @ApiFilter(DateFilter::class, properties={"creneau.debut"})
  * @ApiFilter(BooleanFilter::class, properties={"visible": "exact"})
  * @ApiFilter(SearchFilter::class, properties={"piaffeur": "exact", "statut": "exact", "role.role_unique_id": "iexact"})
  * @ORM\Entity(repositoryClass=PIAFRepository::class)
