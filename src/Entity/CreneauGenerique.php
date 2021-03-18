@@ -16,8 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ApiResource(normalizationContext={"groups"={"read:creneauGenerique"}},)
  * @ApiFilter(NumericFilter::class, properties={"jour"})
- * @ApiFilter(SearchFilter::class, properties={"frequence": "exact"})
- * @ApiFilter(SearchFilter::class, properties={"postes": "exact"})
+ * @ApiFilter(SearchFilter::class, properties={"frequence": "exact", "postes": "exact"})
  * @ApiFilter(DateFilter::class, properties={"heureDebut"})
  * @ORM\Entity(repositoryClass=CreneauGeneriqueRepository::class)
  */
