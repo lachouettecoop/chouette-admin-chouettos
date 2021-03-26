@@ -83,6 +83,7 @@ class UserAdmin extends AbstractAdmin
             );
 
         }
+        $actions = array_merge($actions, parent::getBatchActions());
         return $actions;
     }
 
