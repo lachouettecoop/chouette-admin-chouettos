@@ -59,6 +59,7 @@ class Piaf
     private $visible = true;
 
     /**
+     * @Groups({"read:creneauGenerique"})
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $pourvu;
