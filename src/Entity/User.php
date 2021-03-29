@@ -1,9 +1,15 @@
 <?php
 
 namespace App\Entity;
-
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
+
 use App\Repository\UserRepository;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\Common\Annotations\Annotation\IgnoreAnnotation;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -11,7 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Serializer\Annotation\Groups;
+
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -21,6 +27,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     collectionOperations={"get"},
  *     itemOperations={"get"}
  * )
+ * @ApiFilter(SearchFilter::class, properties={"prenom": "exact", "nom": "exact", "codeBarre": "iexact", "email": "iexact", "rolesChouette.role_unique_id": "iexact"})
  */
 class User implements UserInterface
 {
@@ -101,6 +108,7 @@ class User implements UserInterface
     private $telephone;
 
     /**
+     * @Groups({"read:creneauGenerique"})
      * @var string
      *
      * @ORM\Column(name="codeBarre", type="string", length=255, nullable=true)
