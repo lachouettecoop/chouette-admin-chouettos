@@ -71,6 +71,7 @@ class Piaf
     private $statut;
 
     /**
+     * @Groups({"read:creneauGenerique"})
      * @ORM\Column(type="text", nullable=true)
      */
     private $informations;
