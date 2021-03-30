@@ -1,0 +1,15 @@
+{% extends "template_email.html.twig" %}
+
+{% block titre %}Créneaux à remplir dans les prochaines 48h{% endblock %}
+
+{% block introduction %}
+
+    <p style="margin: 0;font-size: 12px;line-height: 14px;text-align: center">
+        {% for piaf in piafs %}
+            {% include 'planning/miniPiaf.html.twig' with{'piaf': piaf} %}
+        {% endfor %}
+    </p>
+
+
+{% endblock %}
+

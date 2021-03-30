@@ -1,0 +1,15 @@
+<div style="display: flex;">
+    <div style="flex: 0;">
+    </div>
+    <div style="flex: 1;">
+        <h1>{{ piaf.creneau.debut | format_date('medium',  'dd MMM', locale='fr') }}, {{ piaf.creneau.debut |date('H:i') }} - {{ piaf.creneau.fin |date('H:i') }}</h1>
+        <h2>{{ piaf.role }} - {{ piaf.creneau.titre }}</h2>
+    </div>
+
+    <div>
+    <br />
+        <a href="#">Voir le planning</a>
+    </div>
+
+
+</div>

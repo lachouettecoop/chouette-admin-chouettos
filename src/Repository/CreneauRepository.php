@@ -40,6 +40,20 @@ class CreneauRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findCreneauByDate(\DateTimeInterface $dateDebut, \DateTimeInterface $dateFin)
+    {
+
+        return $this->createQueryBuilder('c')
+            ->leftJoin('c.creneauGenerique', 'cg')
+            ->andWhere('c.debut > :dateDebut')
+            ->andWhere('c.fin < :dateFin')
+            ->setParameter('dateDebut', $dateDebut)
+            ->setParameter('dateFin', $dateFin)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
 
     /*
     public function findOneBySomeField($value): ?Creneau

@@ -6,14 +6,52 @@ use App\Entity\Creneau;
 use App\Entity\CreneauGenerique;
 use App\Entity\Piaf;
 use App\Entity\Poste;
+use App\Entity\Reserve;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 
 class PlanningController extends AbstractController
 {
     const nbMois = 1;
+
+
+    /**
+     *
+     * @Route("/reserve", name="app_notification_reserve")
+     * @return Response
+     */
+    public function notificationReserve(EntityManagerInterface $em): Response
+    {
+        $dateDebut = (new \DateTime("now"));
+        $dateFin = (new \DateTime("now"))->modify("+2 days");
+        $crenaux = $em->getRepository('App:Creneau')->findCreneauByDate($dateDebut, $dateFin);
+
+        $users = [];
+        /** @var Creneau $crenau */
+        foreach ($crenaux as $crenau){
+            foreach ($crenau->getPiafs() as $piaf){
+                if($piaf->getPiaffeur() == null){
+                    foreach ($crenau->getCreneauGenerique()->getReserves() as $reserve){
+                        if($reserve->getUser()->getRolesChouette()->contains($piaf->getRole())){
+                            $users[$reserve->getUser()->getEmail()][] = $em->getRepository('App:Piaf')->find($piaf->getId());
+                        }
+                    }
+                }
+            }
+        }
+
+        foreach ($users as $email => $piafs){
+            $emailContent = $this->renderView('planning/notificationReserve.html.twig', ['piafs' => $piafs]);
+            $this->sendEmail('Réserve - La Chouette Coop', $email, $emailContent);
+        }
+
+        return new Response('OK');
+    }
 
     /**
      *
@@ -130,6 +168,18 @@ class PlanningController extends AbstractController
         $nextDate->modify('+'.$jour.' day');
 
         return $nextDate;
+    }
+
+    public function sendEmail($sujet, $email, $content, MailerInterface $mailer): Response
+    {
+        $message = (new Email())
+            ->subject($sujet)
+            ->from('bureau-des-membres@lachouettecoop.fr')
+            ->to($email)
+            ->html($content,'text/html')
+        ;
+
+        $mailer->send($message);
     }
 
 }

@@ -63,6 +63,11 @@ class Creneau
      */
     private $piafs;
 
+    public function __toString()
+    {
+        return (string)$this->debut->format('d/m/Y');
+    }
+
     public function __construct()
     {
         $this->piafs = new ArrayCollection();
