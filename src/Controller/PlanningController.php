@@ -130,7 +130,7 @@ class PlanningController extends AbstractController
      * @Route("/notif/4dzq564d6/reserve", name="app_notification_reserve")
      * @return Response
      */
-    public function notificationReserve(EntityManagerInterface $em): Response
+    public function notificationReserve(EntityManagerInterface $em, MailerInterface $mailer): Response
     {
         $dateDebut = (new \DateTime("now"));
         $dateFin = (new \DateTime("now"))->modify("+2 days");
@@ -152,7 +152,7 @@ class PlanningController extends AbstractController
 
         foreach ($users as $email => $piafs){
             $emailContent = $this->renderView('planning/notificationReserve.html.twig', ['piafs' => $piafs]);
-            $this->sendEmail('Réserve - La Chouette Coop', $email, $emailContent);
+            $this->sendEmail('Réserve - La Chouette Coop', $email, $emailContent, $mailer);
         }
 
         return $this->render('main/index.html.twig', []);
