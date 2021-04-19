@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use DoctrineExtensions\Query\Mysql\Date;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -34,6 +35,33 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $user->setPassword($newEncodedPassword);
         $this->_em->persist($user);
         $this->_em->flush();
+    }
+
+    /**
+     * @param \DateTime $date
+     * @return int|mixed|string
+     */
+    public function findByDateDebutPiaf($date)
+    {
+        /*$em = $this->getDoctrine()->getManager();
+
+        $emConfig = $em->getConfiguration();
+        $emConfig->addCustomDatetimeFunction('YEAR', 'DoctrineExtensions\Query\Mysql\Year');
+        $emConfig->addCustomDatetimeFunction('MONTH', 'DoctrineExtensions\Query\Mysql\Month');
+        $emConfig->addCustomDatetimeFunction('DAY', 'DoctrineExtensions\Query\Mysql\Day');*/
+
+        $day = $date->format("d");
+        $month = $date->format("m");
+
+        return $this->createQueryBuilder('u')
+            ->andWhere('DAY(u.dateDebutPiaf) = :day')
+            ->andWhere('MONTH(u.dateDebutPiaf) = :month')
+            ->setParameter('month', $month)
+            ->setParameter('day', $day)
+            ->getQuery()
+            ->getResult()
+            ;
+
     }
 
     // /**

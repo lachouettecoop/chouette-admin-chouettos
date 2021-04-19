@@ -57,6 +57,7 @@ class User implements UserInterface
     private $password;
 
     /**
+     * @Groups({"read:creneauGenerique"})
      * @var boolean
      * @ORM\Column(name="enabled", type="boolean" )
      */
@@ -241,6 +242,12 @@ class User implements UserInterface
     private $apiToken;
 
     /**
+     * @Groups({"read:creneauGenerique"})
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $statut = 'tres chouette';
+
+    /**
      * @ORM\OneToMany(targetEntity=Statut::class, mappedBy="user")
      */
     private $statuts;
@@ -249,6 +256,36 @@ class User implements UserInterface
      * @ORM\OneToOne(targetEntity=Reserve::class, mappedBy="user", cascade={"persist", "remove"})
      */
     private $reserve;
+
+    /**
+     * @Groups({"read:creneauGenerique"})
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $nbPiafEffectuees;
+
+    /**
+     * @Groups({"read:creneauGenerique"})
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $nbPiafAttendues;
+
+    /**
+     * @Groups({"read:creneauGenerique"})
+     * @ORM\Column(type="date", nullable=true)
+     */
+    private $dateDebutPiaf;
+
+    /**
+     * @Groups({"read:creneauGenerique"})
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $absenceLongueDureeSansCourses;
+
+    /**
+     * @Groups({"read:creneauGenerique"})
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $absenceLongueDureeCourses;
 
     public function __construct()
     {
@@ -967,6 +1004,78 @@ class User implements UserInterface
         if ($reserve->getUser() !== $newUser) {
             $reserve->setUser($newUser);
         }
+
+        return $this;
+    }
+
+    public function getNbPiafEffectuees(): ?int
+    {
+        return $this->nbPiafEffectuees;
+    }
+
+    public function setNbPiafEffectuees(?int $nbPiafEffectuees): self
+    {
+        $this->nbPiafEffectuees = $nbPiafEffectuees;
+
+        return $this;
+    }
+
+    public function getNbPiafAttendues(): ?int
+    {
+        return $this->nbPiafAttendues;
+    }
+
+    public function setNbPiafAttendues(?int $nbPiafAttendues): self
+    {
+        $this->nbPiafAttendues = $nbPiafAttendues;
+
+        return $this;
+    }
+
+    public function getDateDebutPiaf(): ?\DateTimeInterface
+    {
+        return $this->dateDebutPiaf;
+    }
+
+    public function setDateDebutPiaf(?\DateTimeInterface $dateDebutPiaf): self
+    {
+        $this->dateDebutPiaf = $dateDebutPiaf;
+
+        return $this;
+    }
+
+    public function getAbsenceLongueDureeSansCourses(): ?bool
+    {
+        return $this->absenceLongueDureeSansCourses;
+    }
+
+    public function setAbsenceLongueDureeSansCourses(?bool $absenceLongueDureeSansCourses): self
+    {
+        $this->absenceLongueDureeSansCourses = $absenceLongueDureeSansCourses;
+
+        return $this;
+    }
+
+    public function getAbsenceLongueDureeCourses(): ?bool
+    {
+        return $this->absenceLongueDureeCourses;
+    }
+
+    public function setAbsenceLongueDureeCourses(?bool $absenceLongueDureeCourses): self
+    {
+        $this->absenceLongueDureeCourses = $absenceLongueDureeCourses;
+
+        return $this;
+    }
+
+    public function getStatut(): ?string
+    {
+        return $this->statut;
+    }
+
+    public function setStatut(?string $statut): self
+    {
+        $this->statut = $statut;
 
         return $this;
     }

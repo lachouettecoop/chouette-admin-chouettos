@@ -16,6 +16,9 @@
             "src/Entity/.gitignore"
         ]
     },
+    "beberlei/doctrineextensions": {
+        "version": "v1.3.0"
+    },
     "behat/transliterator": {
         "version": "v1.3.0"
     },
@@ -48,6 +51,9 @@
     },
     "doctrine/dbal": {
         "version": "2.10.4"
+    },
+    "doctrine/deprecations": {
+        "version": "v0.5.3"
     },
     "doctrine/doctrine-bundle": {
         "version": "2.0",
@@ -107,6 +113,9 @@
     "fig/link-util": {
         "version": "1.1.1"
     },
+    "friendsofphp/proxy-manager-lts": {
+        "version": "v1.0.3"
+    },
     "gedmo/doctrine-extensions": {
         "version": "v3.0.0"
     },
@@ -121,6 +130,15 @@
     },
     "knplabs/knp-menu-bundle": {
         "version": "v3.0.0"
+    },
+    "laminas/laminas-code": {
+        "version": "4.2.0"
+    },
+    "laminas/laminas-eventmanager": {
+        "version": "3.3.1"
+    },
+    "laminas/laminas-zendframework-bridge": {
+        "version": "1.2.0"
     },
     "monolog/monolog": {
         "version": "1.26.0"
@@ -154,6 +172,9 @@
     },
     "phpdocumentor/type-resolver": {
         "version": "1.4.0"
+    },
+    "phpstan/phpdoc-parser": {
+        "version": "0.4.14"
     },
     "psr/cache": {
         "version": "1.0.1"
@@ -265,6 +286,9 @@
     },
     "symfony/dependency-injection": {
         "version": "v4.4.16"
+    },
+    "symfony/deprecation-contracts": {
+        "version": "v2.2.0"
     },
     "symfony/doctrine-bridge": {
         "version": "v4.4.16"

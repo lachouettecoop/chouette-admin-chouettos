@@ -4,9 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Creneau;
 use App\Entity\CreneauGenerique;
+use App\Entity\Paiement;
 use App\Entity\Piaf;
 use App\Entity\Poste;
 use App\Entity\Reserve;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,10 +21,113 @@ class PlanningController extends AbstractController
 {
     const nbMois = 1;
 
+    /**
+     * @Route("/mouli/4dzq564d6/piaf", name="app_cron_compteur_piaf")
+     * @return Response
+     */
+    public function compterPiafEffectuees(EntityManagerInterface $em): Response
+    {
+        $dateDebut = (new \DateTime("now"))->modify("midnight +1 hour");
+        $dateFin = (new \DateTime("now"));
+
+        $crenaux = $em->getRepository('App:Creneau')->findCreneauByDate($dateDebut, $dateFin);
+
+        /** @var Creneau $crenau */
+        foreach ($crenaux as $crenau) {
+            foreach ($crenau->getPiafs() as $piaf) {
+                /** @var User $piaffeur */
+                $piaffeur = $piaf->getPiaffeur();
+                if ($piaffeur != null and $piaf->getPourvu() and !$piaf->getComptabilise()) {
+                    $piaffeur->setNbPiafEffectuees($piaffeur->getNbPiafEffectuees() +1);
+                    $piaffeur->setStatut($this->calculStatus($piaffeur));
+                    $piaf->setComptabilise(true);
+                    $em->persist($piaffeur);
+                    $em->persist($piaf);
+                }
+            }
+        }
+        $em->flush();
+
+        return $this->render('main/index.html.twig', []);
+    }
+
+    /**
+     * @Route("/mouli/4dzq5848az/piafattendues", name="app_cron_compteur_piaf_attendues")
+     * @return Response
+     */
+    public function compterPiafAttendues(EntityManagerInterface $em): Response
+    {
+        //a lancer le soir à 23h
+        $dateDebut = (new \DateTime("now"));
+
+        $users = $em->getRepository('App:User')->findByDateDebutPiaf($dateDebut);
+        /** @var User $user */
+        foreach ($users as $user) {
+            if ($user->getAbsenceLongueDureeCourses()) {
+                $user->setNbPiafEffectuees($user->getNbPiafEffectuees() +1);
+            }
+            if(!$user->getAbsenceLongueDureeSansCourses()){
+                $user->setNbPiafAttendues($user->getNbPiafAttendues() +1);
+            }
+            $user->setStatut($this->calculStatus($user));
+            $em->persist($user);
+        }
+        $em->flush();
+
+        return $this->render('main/index.html.twig', []);
+    }
+
+    public function calculStatus(User $user){
+        $attendues = $user->getNbPiafAttendues();
+        $effectues = $user->getNbPiafEffectuees();
+
+        if ($effectues >= $attendues){
+            $status = 'tres chouette';
+        } elseif ($effectues >= ($attendues - 2)){
+            $status = 'chouette';
+        } elseif ($effectues < ($attendues - 2)){
+            $status = 'chouette en alerte';
+        }
+
+        return $status;
+    }
 
     /**
      *
-     * @Route("/reserve", name="app_notification_reserve")
+     * @Route("/mouli/4dzq564d6/init", name="app_plan_moil_init")
+     * @return Response
+     */
+    public function init(EntityManagerInterface $em): Response
+    {
+        $dateBascule = new \DateTime();
+        $dateBascule->setDate(2020, 10, 11);
+        $users = $em->getRepository('App:User')->findAll();
+
+        foreach ($users as $user){
+            /** @var Paiement $paiment */
+            $paiment = $user->getPaiements()->first();
+            if($paiment){
+                $user->setStatut('tres chouette');
+                if($paiment->getDateEcheance() > $dateBascule){
+                    $user->setDateDebutPiaf($paiment->getDateEcheance());
+                } else {
+                    $user->setDateDebutPiaf($dateBascule);
+                }
+            } else {
+                $user->setStatut('chouette en alerte');
+            }
+
+            $em->persist($user);
+        }
+        $em->flush();
+
+        return $this->render('main/index.html.twig', []);
+    }
+
+
+    /**
+     *
+     * @Route("/notif/4dzq564d6/reserve", name="app_notification_reserve")
      * @return Response
      */
     public function notificationReserve(EntityManagerInterface $em): Response
@@ -50,7 +155,7 @@ class PlanningController extends AbstractController
             $this->sendEmail('Réserve - La Chouette Coop', $email, $emailContent);
         }
 
-        return new Response('OK');
+        return $this->render('main/index.html.twig', []);
     }
 
     /**
@@ -170,7 +275,7 @@ class PlanningController extends AbstractController
         return $nextDate;
     }
 
-    public function sendEmail($sujet, $email, $content, MailerInterface $mailer): Response
+    public function sendEmail($sujet, $email, $content, MailerInterface $mailer)
     {
         $message = (new Email())
             ->subject($sujet)
@@ -180,6 +285,8 @@ class PlanningController extends AbstractController
         ;
 
         $mailer->send($message);
+
+        return true;
     }
 
 }

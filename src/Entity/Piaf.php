@@ -65,6 +65,11 @@ class Piaf
     private $pourvu;
 
     /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $comptabilise;
+
+    /**
      * @Groups({"read:creneauGenerique"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
@@ -161,6 +166,18 @@ class Piaf
     public function setInformations(?string $informations): self
     {
         $this->informations = $informations;
+
+        return $this;
+    }
+
+    public function getComptabilise(): ?bool
+    {
+        return $this->comptabilise;
+    }
+
+    public function setComptabilise(?bool $comptabilise): self
+    {
+        $this->comptabilise = $comptabilise;
 
         return $this;
     }

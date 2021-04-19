@@ -271,6 +271,31 @@ class UserAdmin extends AbstractAdmin
             ->add('notes')
             ->end()
 
+            ->with('Planning', array(
+                'class' => 'col-md-6'
+            ))
+            ->add('dateDebutPiaf', DatePickerType::class, array(
+                'label' => 'Date de début du compteur PIAF',
+                'required' => false,
+                'format' => 'dd/MM/yyyy',
+                'attr' => array(
+                    'data-date-format' => 'DD/MM/YYYY',
+                    'placeholder' => '31/01/1970'
+                )
+            ))
+            ->add('statut', ChoiceType::class, ['choices' =>
+                [
+                'tres chouette' => 'tres chouette',
+                'chouette' => 'chouette',
+                'chouette en alerte' => 'chouette en alerte'
+                ]
+            ])
+            /*->add('nbPiafAttendues')
+            ->add('nbPiafEffectuees')*/
+            ->add('absenceLongueDureeSansCourses')
+            ->add('absenceLongueDureeCourses')
+            ->end()
+
             ->with('Adresse', array(
                 'class' => 'col-md-12',
                 'description' => 'Localisation de la personne, pour lui transmettre des courriers et avoir une idée de répartition géographique des membres.'
@@ -403,6 +428,7 @@ class UserAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
+            ->addIdentifier('id')
             ->addIdentifier('nom')
             ->add('prenom', null, array('label' => 'Prénom'))
             ->addIdentifier('email')
