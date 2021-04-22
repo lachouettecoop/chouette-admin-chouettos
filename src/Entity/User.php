@@ -27,7 +27,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *     collectionOperations={"get"},
  *     itemOperations={"get"}
  * )
- * @ApiFilter(SearchFilter::class, properties={"prenom": "exact", "nom": "exact", "codeBarre": "iexact", "email": "iexact", "rolesChouette.role_unique_id": "iexact"})
+ * @ApiFilter(SearchFilter::class, properties={"prenom": "istart", "nom": "istart", "codeBarre": "iexact", "email": "iexact", "rolesChouette.role_unique_id": "iexact"})
  */
 class User implements UserInterface
 {
