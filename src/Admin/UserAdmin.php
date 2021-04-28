@@ -285,7 +285,7 @@ class UserAdmin extends AbstractAdmin
             ))
             ->add('statut', ChoiceType::class, ['choices' =>
                 [
-                'tres chouette' => 'tres chouette',
+                'très chouette' => 'très chouette',
                 'chouette' => 'chouette',
                 'chouette en alerte' => 'chouette en alerte'
                 ]

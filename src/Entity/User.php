@@ -245,7 +245,7 @@ class User implements UserInterface
      * @Groups({"read:creneauGenerique"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $statut = 'tres chouette';
+    private $statut = 'très chouette';
 
     /**
      * @ORM\OneToMany(targetEntity=Statut::class, mappedBy="user")

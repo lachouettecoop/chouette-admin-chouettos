@@ -82,7 +82,7 @@ class PlanningController extends AbstractController
         $effectues = $user->getNbPiafEffectuees();
 
         if ($effectues >= $attendues){
-            $status = 'tres chouette';
+            $status = 'très chouette';
         } elseif ($effectues >= ($attendues - 2)){
             $status = 'chouette';
         } elseif ($effectues < ($attendues - 2)){
@@ -107,7 +107,7 @@ class PlanningController extends AbstractController
             /** @var Paiement $paiment */
             $paiment = $user->getPaiements()->first();
             if($paiment){
-                $user->setStatut('tres chouette');
+                $user->setStatut('très chouette');
                 if($paiment->getDateEcheance() > $dateBascule){
                     $user->setDateDebutPiaf($paiment->getDateEcheance());
                 } else {
