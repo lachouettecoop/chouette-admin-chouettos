@@ -261,13 +261,13 @@ class User implements UserInterface
      * @Groups({"read:creneauGenerique"})
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $nbPiafEffectuees;
+    private $nbPiafEffectuees = 0;
 
     /**
      * @Groups({"read:creneauGenerique"})
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $nbPiafAttendues;
+    private $nbPiafAttendues = 0;
 
     /**
      * @Groups({"read:creneauGenerique"})

@@ -11,6 +11,8 @@ use App\Entity\Reserve;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\MailerInterface;
@@ -124,6 +126,52 @@ class PlanningController extends AbstractController
         return $this->render('main/index.html.twig', []);
     }
 
+    /**
+     *
+     * @Route("/notif/4dzq589az6/participation", name="app_notification_participation")
+     * @return Response
+     */
+    public function notificationParticipation(EntityManagerInterface $em, MailerInterface $mailer): Response
+    {
+        /*$dateDebut = (new \DateTime("now"))->modify("-4 days");
+        $dateFin = (new \DateTime("now"))->modify("-3 days");
+        $crenaux = $em->getRepository('App:Creneau')->findCreneauByDate($dateDebut, $dateFin);
+
+        $users = [];
+        /** @var Creneau $crenau
+        foreach ($crenaux as $crenau){
+            foreach ($crenau->getPiafs() as $piaf){
+                if($piaf->getPiaffeur() == null){
+                    $users = $piaf->getPiaffeur();
+                }
+            }
+        }
+
+        foreach ($users as $email => $piafs){
+            $emailContent = $this->renderView('planning/notificationReserve.html.twig', ['piafs' => $piafs]);
+            $this->sendEmail('Réserve - La Chouette Coop', $email, $emailContent, $mailer);
+        }
+
+        return $this->render('main/index.html.twig', []);*/
+    }
+
+    /**
+     * @Route("/dist_api/send_email", name="app_send_mail", methods={"POST"})
+     * @return Response
+     */
+    public function apiSendEmail(Request $request, MailerInterface $mailer): Response
+    {
+        $sujet = $request->get('sujet');
+        $email = $request->get('email');
+        $corps = $request->get('corps');
+
+        $emailContent = $this->renderView('planning/messageGenerique.html.twig', ['sujet' => $sujet, 'corps' => $corps]);
+        $this->sendEmail($sujet.'- La Chouette Coop', $email, $emailContent, $mailer);
+
+        $responsejson = new JsonResponse(['etat' => 'success']);
+        $responsejson->headers->set('Access-Control-Allow-Origin', '*');
+        return $responsejson;
+    }
 
     /**
      *

@@ -1,0 +1,10 @@
+{% extends "template_email.html.twig" %}
+
+{% block titre %} {{ sujet }}{% endblock %}
+
+{% block introduction %}
+
+    {{ corps | raw }}
+
+{% endblock %}
+
