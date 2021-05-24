@@ -20,7 +20,7 @@ use App\Resolver\PiafMutationResolver;
  *     collectionOperations={"get"}
  * )
  * @ApiFilter(DateFilter::class, properties={"creneau.debut"})
- * @ApiFilter(BooleanFilter::class, properties={"visible": "exact"})
+ * @ApiFilter(BooleanFilter::class, properties={"visible": "exact", "pourvu": "exact"})
  * @ApiFilter(SearchFilter::class, properties={"piaffeur": "exact", "statut": "exact", "role.role_unique_id": "iexact"})
  * @ORM\Entity(repositoryClass=PIAFRepository::class)
  */
