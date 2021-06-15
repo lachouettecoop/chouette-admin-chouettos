@@ -251,7 +251,7 @@ class UserAdmin extends AbstractAdmin
                 '
             ))
             ->add('actif', null, array('required' => false, 'label' => 'Actif·ve dans un groupe ?'))
-            ->add('gh', null, array('required' => false, 'label' => 'Grand Hibou ? (donne authorisation d\'ouvrir la porte du supermarché) '))
+            ->add('gh', null, array('required' => false, 'label' => 'Authorisation d\'ouvrir la porte du supermarché ? (Anciennement GH ?) '))
             ->add('carteImprimee', null, array('required' => false, 'label' => 'Carte imprimée ?'))
             ->end()
             ->with('Photo', array(

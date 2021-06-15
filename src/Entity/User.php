@@ -288,6 +288,18 @@ class User implements UserInterface
      */
     private $absenceLongueDureeCourses;
 
+    /**
+     * @Groups({"read:creneauGenerique"})
+     * @ORM\Column(type="integer")
+     */
+    private $nbPiafGH = 0;
+
+    /**
+     * @Groups({"read:creneauGenerique"})
+     * @ORM\Column(type="integer")
+     */
+    private $nbPiafCaisse = 0;
+
     public function __construct()
     {
         $this->adresses = new ArrayCollection();
@@ -1077,6 +1089,30 @@ class User implements UserInterface
     public function setStatut(?string $statut): self
     {
         $this->statut = $statut;
+
+        return $this;
+    }
+
+    public function getNbPiafGH(): ?int
+    {
+        return $this->nbPiafGH;
+    }
+
+    public function setNbPiafGH(int $nbPiafGH): self
+    {
+        $this->nbPiafGH = $nbPiafGH;
+
+        return $this;
+    }
+
+    public function getNbPiafCaisse(): ?int
+    {
+        return $this->nbPiafCaisse;
+    }
+
+    public function setNbPiafCaisse(int $nbPiafCaisse): self
+    {
+        $this->nbPiafCaisse = $nbPiafCaisse;
 
         return $this;
     }
