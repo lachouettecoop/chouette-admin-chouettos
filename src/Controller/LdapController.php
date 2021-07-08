@@ -90,7 +90,7 @@ class LdapController
         // Connexion avec une identité qui permet les modifications
         $r = ldap_bind($this->ds,$this->userDn($user),$password);
         if (!$r) {
-            throw new AccessDeniedException("Connexion LDAP échouée ou mauvais identifiants !");
+            return false;
         }
         return true;
     }
