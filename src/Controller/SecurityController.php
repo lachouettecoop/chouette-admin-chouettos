@@ -68,7 +68,7 @@ class SecurityController extends AbstractController
                 return $responsejson;
             }
         }
-        $responsejson = new JsonResponse(['etat' => 'failure']);
+        $responsejson = new JsonResponse(['etat' => 'failure'], Response::HTTP_UNAUTHORIZED);
         $responsejson->headers->set('Access-Control-Allow-Origin', '*');
         return $responsejson;
     }
