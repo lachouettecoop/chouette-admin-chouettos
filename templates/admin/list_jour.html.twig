@@ -1,0 +1,21 @@
+{% extends '@SonataAdmin/CRUD/base_list_field.html.twig' %}
+
+{% block field %}
+<div>
+    {% if object.jour == "0" %}
+        Lundi
+    {% elseif object.jour == "1" %}
+        Mardi
+    {% elseif object.jour == "2" %}
+        Mercredi
+    {% elseif object.jour == "3" %}
+        Jeudi
+    {% elseif object.jour == "4" %}
+        Vendredi
+    {% elseif object.jour == "5" %}
+        Samedi
+    {% elseif object.jour == "6" %}
+        Dimanche
+    {% endif %}
+</div>
+{% endblock %}

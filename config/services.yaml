@@ -103,33 +103,33 @@ services:
         class: App\Admin\CreneauGeneriqueAdmin
         arguments: [~, App\Entity\CreneauGenerique, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: CreneauGenerique, show_in_dashboard: true }
+            - { name: sonata.admin, manager_type: orm, group: "Planning", label: CreneauGenerique, show_in_dashboard: true }
         public: true
 
     admin.creneau:
         class: App\Admin\CreneauAdmin
         arguments: [~, App\Entity\Creneau, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Creneau, show_in_dashboard: true }
+            - { name: sonata.admin, manager_type: orm, group: "Planning", label: Creneau, show_in_dashboard: true }
         public: true
 
     admin.role:
         class: App\Admin\RoleAdmin
         arguments: [~, App\Entity\Role, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Role, show_in_dashboard: true }
+            - { name: sonata.admin, manager_type: orm, group: "Planning", label: Role, show_in_dashboard: true }
         public: true
 
     admin.piaf:
         class: App\Admin\PiafAdmin
         arguments: [~, App\Entity\Piaf, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Piaf, show_in_dashboard: true }
+            - { name: sonata.admin, manager_type: orm, group: "Planning", label: Piaf, show_in_dashboard: false }
         public: true
 
     admin.poste:
         class: App\Admin\PosteAdmin
         arguments: [~, App\Entity\Poste, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Poste, show_in_dashboard: true }
+            - { name: sonata.admin, manager_type: orm, group: "Planning", label: Poste, show_in_dashboard: false }
         public: true

@@ -14,36 +14,10 @@ use Sonata\Form\Type\CollectionType;
 final class CreneauAdmin extends AbstractAdmin
 {
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
-    {
-        $datagridMapper
-            ->add('id')
-            ->add('debut')
-            ->add('fin')
-            ->add('informations')
-            ;
-    }
-
-    protected function configureListFields(ListMapper $listMapper): void
-    {
-        $listMapper
-            ->add('id')
-            ->add('debut')
-            ->add('fin')
-            ->add('informations')
-            ->add('_action', null, [
-                'actions' => [
-                    'show' => [],
-                    'edit' => [],
-                    'delete' => [],
-                ],
-            ]);
-    }
-
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $formMapper
-            ->add('creneauGenerique')
+            //->add('creneauGenerique')
             ->add('debut')
             ->add('fin')
             ->add(
@@ -58,8 +32,30 @@ final class CreneauAdmin extends AbstractAdmin
                 )
             )
             ->add('informations')
+        ;
+    }
+
+    protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
+    {
+        $datagridMapper
+            ->add('id')
+            ->add('debut')
+            ->add('fin')
+            ->add('informations')
             ;
     }
+
+    protected function configureListFields(ListMapper $listMapper): void
+    {
+        $listMapper
+            ->addIdentifier('id')
+            ->addIdentifier('debut')
+            ->add('fin')
+            ->add('informations')
+           ;
+    }
+
+
 
     protected function configureShowFields(ShowMapper $showMapper): void
     {
@@ -70,4 +66,11 @@ final class CreneauAdmin extends AbstractAdmin
             ->add('informations')
             ;
     }
+
+    protected $datagridValues = array(
+        '_page' => 1,
+        '_sort_order' => 'DESC', // sort direction
+        '_sort_by' => 'id', // field name
+        '_per_page' => 100 // field name
+    );
 }
