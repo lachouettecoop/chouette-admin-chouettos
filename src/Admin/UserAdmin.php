@@ -110,6 +110,12 @@ class UserAdmin extends AbstractAdmin
     }
 
     /** @var User $user */
+    public function preRemove($user)
+    {
+        $this->ldapService->removeUserOnLDAP($user);
+    }
+
+    /** @var User $user */
     public function postUpdate($user)
     {
         if ($this->originalUserData['enabled'] == $user->getEnabled() && $user->getEnabled()) {
