@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\UserFirstType;
 use App\Security\LoginFormAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -81,6 +83,71 @@ class SecurityController extends AbstractController
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
 
+
+    /**
+     * @Route("/31enregistrement", name="app_premier_enregistrement")
+     */
+    public function premierEnregistrement(Request $request,
+                                          EntityManagerInterface $em,
+                                          UserPasswordEncoderInterface $passwordEncoder,
+                                          LdapController $ldapController): Response
+    {
+        $user = new User();
+        $form = $this->createForm(UserFirstType::class, $user);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            //check si l'email n'est pas en base
+            $oldUser = $em->getRepository("App:User")->findOneBy(['email' => $user->getEmail()]);
+            if($oldUser){
+                $this->addFlash('warning', "Cette adresse email existe déjà en base !");
+            } else {
+
+                //encodage mdp + génération codebarre
+                $user->setPassword($passwordEncoder->encodePassword($user, $user->getMotDePasse()));
+                $timestamp = time();
+                if (empty($user->getCodeBarre())) {
+                    $codeBarre = $this->generateEAN($timestamp);
+                    $user->setCodeBarre($codeBarre);
+                }
+
+                //enregistrement pour avoir l'ID de l'objet
+                $user->setEnabled(true);
+                $em->persist($user);
+                $em->flush();
+
+                //on ajoute au LDAP et on efface le mdp
+                $ldapController->addUserOnLDAP($user);
+                $user->setMotDePasse("");
+                $em->persist($user);
+                $em->flush();
+
+                return $this->render('security/premier_enregistrement_final.html.twig');
+            }
+        }
+
+        return $this->render('security/premier_enregistrement.html.twig', ['form' => $form->createView()] );
+
+    }
+
+    private function generateEAN($number)
+    {
+        $code = '24' . $number;
+        $weightflag = true;
+        $sum = 0;
+        // Weight for a digit in the checksum is 3, 1, 3.. starting from the last digit.
+        // loop backwards to make the loop length-agnostic. The same basic functionality
+        // will work for codes of different lengths.
+        for ($i = strlen($code) - 1; $i >= 0; $i--) {
+            $sum += (int)$code[$i] * ($weightflag ? 3 : 1);
+            $weightflag = !$weightflag;
+        }
+        $code .= (10 - ($sum % 10)) % 10;
+        return $code;
+    }
+
+
     /**
      * @Route("/resetting/request", name="fos_user_resetting_request")
      */
@@ -155,6 +222,9 @@ class SecurityController extends AbstractController
 
 
                 $user->setPassword($passwordEncoder->encodePassword($user, $request->request->get('password')));
+
+                $user->setMotDePasse("");
+                $entityManager->persist($user);
                 $entityManager->flush();
 
                 $this->addFlash('info', 'Mot de passe mis à jour, vous pouvez vous connecter !');

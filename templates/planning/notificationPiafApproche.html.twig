@@ -1,0 +1,29 @@
+{% extends "template_email.html.twig" %}
+
+{% block titre %}Rappel pour votre piaf du {{ piaf.creneau.debut | format_date('medium',  'dd MMM', locale='fr') }} {% endblock %}
+
+{% block introduction %}
+
+    <p style="margin: 0;font-size: 16px;line-height: 14px;">
+
+        Bonjour,<br /><br />
+        Pour rappel, vous vous êtes inscrit.e pour participer au fonctionnement du magasin  le {{ piaf.creneau.debut | format_date('medium',  'dd MMM', locale='fr') }}, de {{ piaf.creneau.debut |date('H:i') }}h à {{ piaf.creneau.fin |date('H:i') }}h <br /><br />
+
+        Auriez-vous la gentillesse de confirmer votre venue au GH concerné ? En cas d'impossibilité, pourriez-vous faire le nécessaire pour vous faire remplacer et prévenir le GH en charge du créneau ?<br />
+        <br/>
+        <br/>
+
+        <strong>Votre équipe</strong>
+        {% for piaf in piaf.creneau.piafs %}
+                {% include 'planning/miniPiafRappel.html.twig' with{'piaf': piaf} %}
+        {% endfor %}
+
+        A bientôt.<br /><br />
+
+        La Chouette Coop<br />
+
+    </p>
+
+
+{% endblock %}
+

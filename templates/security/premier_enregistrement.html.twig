@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau chouettos{% endblock %}
+
+{% block body %}
+
+    <div class="container mt-4">
+
+        <div class="col">
+
+            <br />
+            <br />
+            {% for type, messages in app.session.flashbag.all() %}
+                {% for message in messages %}
+                    <div class="row top-buffer">
+                        <div class="col-md-12">
+                            <div class="alert alert-{{ type }} alert-dismissable">
+                                {{ message }}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+            <br />
+            <h1> Ajout d'un nouveau chouettos</h1>
+
+
+
+
+            {{ form(form) }}
+        </div>
+    </div>
+{% endblock %}

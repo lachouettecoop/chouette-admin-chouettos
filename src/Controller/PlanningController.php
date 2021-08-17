@@ -146,26 +146,28 @@ class PlanningController extends AbstractController
      */
     public function notificationParticipation(EntityManagerInterface $em, MailerInterface $mailer): Response
     {
-        /*$dateDebut = (new \DateTime("now"))->modify("-4 days");
-        $dateFin = (new \DateTime("now"))->modify("-3 days");
+        $dateDebut = (new \DateTime("now"))->modify("+5 days");
+        $dateFin = (new \DateTime("now"))->modify("+6 days");
         $crenaux = $em->getRepository('App:Creneau')->findCreneauByDate($dateDebut, $dateFin);
 
-        $users = [];
-        /** @var Creneau $crenau
+        $piafs = [];
+        /** @var Creneau $crenau **/
         foreach ($crenaux as $crenau){
             foreach ($crenau->getPiafs() as $piaf){
-                if($piaf->getPiaffeur() == null){
-                    $users = $piaf->getPiaffeur();
+                if($piaf->getPiaffeur() != null){
+                    $piafs[] = $piaf;
                 }
             }
         }
 
-        foreach ($users as $email => $piafs){
-            $emailContent = $this->renderView('planning/notificationReserve.html.twig', ['piafs' => $piafs]);
-            $this->sendEmail('Réserve - La Chouette Coop', $email, $emailContent, $mailer);
+        foreach ($piafs as $piaf){
+            if(filter_var($piaf->getPiaffeur()->getEmail(), FILTER_VALIDATE_EMAIL)){
+                $emailContent = $this->renderView('planning/notificationPiafApproche.html.twig', ['piaf' => $piaf]);
+                $this->sendEmail('Votre PIAF approche - La Chouette Coop', $piaf->getPiaffeur()->getEmail(), $emailContent, $mailer);
+            }
         }
 
-        return $this->render('main/index.html.twig', []);*/
+        return $this->render('main/index.html.twig', []);
     }
 
     /**

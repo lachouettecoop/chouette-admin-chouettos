@@ -1,0 +1,21 @@
+<div style="display: flex;">
+    <div style="flex: 0;">
+    </div>
+    <div style="flex: 1;">
+        {% if piaf.piaffeur != null %}
+            <h3 style="color: #0B7FC7">{{ piaf.piaffeur }} - {{ piaf.role }}</h3>
+        {% else %}
+            <h3 >Place vacante - {{ piaf.role }}</h3>
+        {% endif %}
+        <h4>
+        {% if piaf.role == 'Grand Hibou' %}
+            {% if piaf.piaffeur != null %}
+            {{ piaf.piaffeur.email }} - {{ piaf.piaffeur.telephone }}
+                {% endif %}
+        {% endif %}
+        </h4>
+    </div>
+
+
+
+</div>
