@@ -101,7 +101,7 @@ services:
 
     admin.creneau_generique:
         class: App\Admin\CreneauGeneriqueAdmin
-        arguments: [~, App\Entity\CreneauGenerique, ~]
+        arguments: [~, App\Entity\CreneauGenerique, App\Admin\CustomAction]
         tags:
             - { name: sonata.admin, manager_type: orm, group: "Planning", label: CreneauGenerique, show_in_dashboard: true }
         public: true

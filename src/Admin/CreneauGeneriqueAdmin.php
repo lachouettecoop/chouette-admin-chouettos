@@ -8,6 +8,7 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\DateTimeRangeFilter;
@@ -20,6 +21,7 @@ final class CreneauGeneriqueAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $formMapper
+            ->add('titre')
             ->add('frequence', ChoiceType::class,
                 ['choices' =>
                     [
@@ -101,13 +103,25 @@ final class CreneauGeneriqueAdmin extends AbstractAdmin
     {
         $listMapper
             ->addIdentifier('id')
-            ->add('frequence', null, ['template' => 'admin/list_frequence.html.twig'])
             ->add('jour', null, ['template' => 'admin/list_jour.html.twig'])
             ->add('heureDebut')
             ->add('heureFin')
+            ->add('frequence', null, ['template' => 'admin/list_frequence.html.twig'])
+            ->add('titre')
+            ->add('_action', null, [
+                'actions' => [
+                    'clone' => [
+                        'template' => 'admin/list__action_clone.html.twig'
+                    ]
+                ]
+            ]);
             ;
     }
 
+    protected function configureRoutes(RouteCollection $collection)
+    {
+        $collection->add('clone', $this->getRouterIdParameter().'/clone');
+    }
 
 
     protected function configureShowFields(ShowMapper $showMapper): void

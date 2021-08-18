@@ -84,7 +84,7 @@ class CreneauGenerique
 
     public function __toString()
     {
-        return $this->getFrequence();
+        return $this->getTitre();
     }
 
 
