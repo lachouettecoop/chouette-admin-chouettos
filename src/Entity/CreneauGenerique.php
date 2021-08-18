@@ -84,7 +84,11 @@ class CreneauGenerique
 
     public function __toString()
     {
-        return $this->getTitre();
+        if($this->getTitre()){
+            return $this->getTitre();
+        } else {
+            return 'nouveau';
+        }
     }
 
 

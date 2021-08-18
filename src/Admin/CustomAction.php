@@ -22,6 +22,7 @@ class CustomAction extends CRUDController
         }
 
         $clonedObject = new CreneauGenerique();
+        $clonedObject->setTitre($object->getTitre());
         $clonedObject->setFrequence($object->getFrequence());
         $clonedObject->setJour($object->getJour());
         $clonedObject->setHeureFin($object->getHeureFin());
