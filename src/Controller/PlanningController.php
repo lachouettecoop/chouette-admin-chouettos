@@ -21,7 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class PlanningController extends AbstractController
 {
-    const nbMois = 1;
+    const nbMois = 6;
 
     /**
      * @Route("/mouli/4dzq564d6/piaf", name="app_cron_compteur_piaf")
@@ -268,14 +268,19 @@ class PlanningController extends AbstractController
         //find date of the last creneau generated
         $lastCreneau = $creneauxRepository->findOneBy([], ['fin' => 'DESC']);
 
+        if(!$lastCreneau){
+            $lastCreneau = new Creneau();
+            $lastCreneau->setDebut(new \DateTime());
+        }
         /** @var \DateTime $startDate */
         $startDate = $lastCreneau->getDebut();
-        $endDate = clone $startDate;
-        $endDate->modify("+".(self::nbMois*4)." week");
+
+        /*$endDate = clone $startDate;
+        $endDate->modify("+".(self::nbMois*4)." week");*/
 
         foreach ($creneauxGeneriques as $creneauGenerique){
 
-            for($i=0; $i < 13; $i++){
+            for($i=0; $i < self::nbMois; $i++){
                 //find date for next occurence
                 $startDateLocal = clone $startDate;
 
