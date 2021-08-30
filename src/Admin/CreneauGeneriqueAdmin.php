@@ -60,6 +60,7 @@ final class CreneauGeneriqueAdmin extends AbstractAdmin
                 )
             )
             ->add('actif')
+            ->add('horsMag')
         ;
     }
 
@@ -96,6 +97,7 @@ final class CreneauGeneriqueAdmin extends AbstractAdmin
                 'field_type' => ChoiceType::class,
                 'show_filter' => true
             ))
+            ->add('horsMag')
         ;
     }
 
@@ -108,6 +110,7 @@ final class CreneauGeneriqueAdmin extends AbstractAdmin
             ->add('heureFin')
             ->add('frequence', null, ['template' => 'admin/list_frequence.html.twig'])
             ->add('titre')
+            ->add('horsMag')
             ->add('_action', null, [
                 'actions' => [
                     'clone' => [

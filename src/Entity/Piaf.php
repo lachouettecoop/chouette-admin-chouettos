@@ -65,6 +65,12 @@ class Piaf
     private $pourvu = false;
 
     /**
+     * @Groups({"read:creneauGenerique"})
+     * @ORM\Column(type="boolean", nullable=false)
+     */
+    private $nonPourvu = false;
+
+    /**
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $comptabilise;
@@ -178,6 +184,18 @@ class Piaf
     public function setComptabilise(?bool $comptabilise): self
     {
         $this->comptabilise = $comptabilise;
+
+        return $this;
+    }
+
+    public function getNonPourvu(): ?bool
+    {
+        return $this->nonPourvu;
+    }
+
+    public function setNonPourvu(bool $nonPourvu): self
+    {
+        $this->nonPourvu = $nonPourvu;
 
         return $this;
     }

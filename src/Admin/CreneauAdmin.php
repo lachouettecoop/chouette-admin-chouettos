@@ -32,6 +32,7 @@ final class CreneauAdmin extends AbstractAdmin
                 )
             )
             ->add('informations')
+            ->add('horsMag')
         ;
     }
 
@@ -42,6 +43,7 @@ final class CreneauAdmin extends AbstractAdmin
             ->add('debut')
             ->add('fin')
             ->add('informations')
+            ->add('horsMag')
             ;
     }
 
@@ -52,6 +54,7 @@ final class CreneauAdmin extends AbstractAdmin
             ->addIdentifier('debut')
             ->add('fin')
             ->add('informations')
+            ->add('horsMag')
            ;
     }
 

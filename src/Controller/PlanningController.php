@@ -259,6 +259,7 @@ class PlanningController extends AbstractController
                     $creneau = new Creneau();
 
                     $creneau->setCreneauGenerique($creneauGenerique);
+                    $creneau->setHorsMag($creneauGenerique->getHorsMag());
 
                     $nextDateFin = clone $nextDate;
                     $nextDate->setTime($creneauGenerique->getHeureDebut()->format('H'), $creneauGenerique->getHeureDebut()->format('i'), $creneauGenerique->getHeureDebut()->format('s'));

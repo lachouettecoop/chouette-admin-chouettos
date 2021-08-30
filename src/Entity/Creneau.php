@@ -63,6 +63,12 @@ class Creneau
      */
     private $piafs;
 
+    /**
+     * @Groups({"read:creneauGenerique"})
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $horsMag = true;
+
     public function __toString()
     {
         return (string)$this->debut->format('d/m/Y');
@@ -164,6 +170,18 @@ class Creneau
     public function setFin(?\DateTimeInterface $fin): self
     {
         $this->fin = $fin;
+
+        return $this;
+    }
+
+    public function getHorsMag(): ?bool
+    {
+        return $this->horsMag;
+    }
+
+    public function setHorsMag(?bool $horsMag): self
+    {
+        $this->horsMag = $horsMag;
 
         return $this;
     }
