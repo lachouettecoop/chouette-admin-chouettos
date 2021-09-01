@@ -1,0 +1,7 @@
+data/
+logs/
+var/
+.dockerignore
+.gitignore
+docker-compose.yaml
+Dockerfile
