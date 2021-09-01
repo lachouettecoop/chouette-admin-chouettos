@@ -1,0 +1,32 @@
+version: '2'
+services:
+  db:
+    image: mariadb:10.3
+    ports:
+    - '3306:3306'
+    environment:
+    - MARIADB_ROOT_PASSWORD=adminchouettos
+    - MYSQL_DATABASE=adminchouettos
+    - MARIADB_USER=adminchouettos
+    - MARIADB_PASSWORD=adminchouettos
+    volumes:
+    - ./data/:/var/lib/mysql
+  php:
+    build: .
+    ports:
+    - '9002:9000'
+    volumes:
+    - ./logs/symfony:/var/www/symfony/var/logs:cached
+    links:
+    - db
+  nginx:
+    image: nginx:1.21-alpine
+    ports:
+    - '8888:80'
+    links:
+    - php
+    volumes_from:
+    - php
+    volumes:
+    - ./nginx/:/etc/nginx/conf.d
+    - ./logs/nginx/:/var/log/nginx:cached
