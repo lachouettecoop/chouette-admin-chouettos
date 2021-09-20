@@ -152,7 +152,7 @@ class UserAdmin extends AbstractAdmin
 
         $timestamp = time();
         if (empty($user->getCodeBarre())) {
-            $codeBarre = $this->generateEAN(z);
+            $codeBarre = $this->generateEAN($timestamp);
             $user->setCodeBarre($codeBarre);
         }
 
