@@ -31,6 +31,7 @@ final class CreneauAdmin extends AbstractAdmin
                     'inline' => 'table',
                 )
             )
+            ->add('titre')
             ->add('informations')
             ->add('horsMag')
         ;
@@ -42,6 +43,7 @@ final class CreneauAdmin extends AbstractAdmin
             ->add('id')
             ->add('debut')
             ->add('fin')
+            ->add('titre')
             ->add('informations')
             ->add('horsMag')
             ;
@@ -53,6 +55,7 @@ final class CreneauAdmin extends AbstractAdmin
             ->addIdentifier('id')
             ->addIdentifier('debut')
             ->add('fin')
+            ->add('titre')
             ->add('informations')
             ->add('horsMag')
            ;

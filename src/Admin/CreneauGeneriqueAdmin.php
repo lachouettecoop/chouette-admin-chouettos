@@ -97,6 +97,7 @@ final class CreneauGeneriqueAdmin extends AbstractAdmin
                 'field_type' => ChoiceType::class,
                 'show_filter' => true
             ))
+            ->add('titre', null, ['show_filter' => true])
             ->add('horsMag')
         ;
     }

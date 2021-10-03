@@ -296,8 +296,8 @@ class UserAdmin extends AbstractAdmin
                 'chouette en alerte' => 'chouette en alerte'
                 ]
             ])
-            /*->add('nbPiafAttendues')
-            ->add('nbPiafEffectuees')*/
+            ->add('nbPiafAttendues')
+            ->add('nbPiafEffectuees')
             ->add('absenceLongueDureeSansCourses')
             ->add('absenceLongueDureeCourses')
             ->end()

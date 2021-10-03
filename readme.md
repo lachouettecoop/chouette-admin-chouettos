@@ -2,6 +2,19 @@
 
 AdminChouettos c'est l'outil de gestion des membres et backend du planning de La Chouette Coop construit avec **Symfony** 
 
+Fonction
+------------
+Adminchouettos est une application symfony qui permet la gestion du LDAP. Les données rentrées dans adminchouettos sont toutes enregistrées dans une base de données.
+Une partie de ces données sont ensuite transférées dans le LDAP (sous openLDAP), c'est à dire le nom, le mot de passe et le codebarre de l'utilisateur.
+Le reste des données sont uniquement dans la base de données locale.
+Adminchouettos offre une methode api pour se connecter au ldap. C'est à dire qu'on envoi les données  
+
+## Partie gestion des membres
+------------
+
+## Partie planning
+------------
+
 
 Installation
 ------------
