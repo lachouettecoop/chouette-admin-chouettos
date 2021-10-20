@@ -223,48 +223,15 @@ class PlanningController extends AbstractController
 
     /**
      *
-     * @Route("/routine", name="app_generate_creneaux_routine")
+     * @Route("/notif/4dzad554d6/routine", name="app_generate_creneaux_routine")
      * @return Response
      */
     public function generateCreneaux(EntityManagerInterface $em): Response
     {
         $creneauxRepository = $em->getRepository('App:Creneau');
-
         //Get all Creneaux actifs
         $creneauxGeneriques = $em->getRepository('App:CreneauGenerique')->findBy(['actif' => true]);
 
-        /*for($i=1; $i < 5; $i++){
-            for($j=0; $j < 6; $j++){
-                $creneauGenerique = new CreneauGenerique();
-                $creneauGenerique->setTitre("Ouverture Mag");
-                $creneauGenerique->setJour($j);
-                $creneauGenerique->setFrequence($i);
-                $creneauGenerique->setHeureDebut(new \DateTime('1970-01-01 14:30:00'));
-                $creneauGenerique->setHeureFin(new \DateTime('1970-01-01 17:30:00'));
-
-                for($k=0; $k < 6; $k++){
-
-                    $poste = new Poste();
-                    $poste->setRole($em->getRepository('App:Role')->find(rand (1 ,3)));
-                    $poste->setReservationChouettos(null);
-                    $creneauGenerique->addPoste($poste);
-                }
-                $em->persist($creneauGenerique);
-                $creneauGenerique = new CreneauGenerique();
-                $creneauGenerique->setTitre("Fermeture Mag");
-                $creneauGenerique->setJour($j);
-                $creneauGenerique->setFrequence($i);
-                $creneauGenerique->setHeureDebut(new \DateTime('1970-01-01 17:00:00'));
-                $creneauGenerique->setHeureFin(new \DateTime('1970-01-01 20:00:00'));
-                for($k=0; $k < 6; $k++){
-                    $poste = new Poste();
-                    $poste->setRole($em->getRepository('App:Role')->find(rand (1 ,3)));
-                    $poste->setReservationChouettos(null);
-                    $creneauGenerique->addPoste($poste);
-                }
-                $em->persist($creneauGenerique);
-            }
-        }*/
         //find date of the last creneau generated
         $lastCreneau = $creneauxRepository->findOneBy([], ['fin' => 'DESC']);
 
@@ -285,13 +252,14 @@ class PlanningController extends AbstractController
                 $startDateLocal = clone $startDate;
 
                 $nextDate = $this->nextOccurence($startDateLocal->modify('+'.($i*4).' week'), $creneauGenerique->getFrequence(), $creneauGenerique->getJour());
-                //Check if another creneau is not already generated for the same time, same dau
 
+                //Check if another creneau is not already generated for the same time, same day
                 if($creneauxRepository->findByCreneauGenerique($creneauGenerique->getId(), $nextDate, $creneauGenerique->getHeureDebut()) == null){
 
                     $creneau = new Creneau();
-                    //$creneau->setDate($nextDate);
+
                     $creneau->setCreneauGenerique($creneauGenerique);
+                    $creneau->setHorsMag($creneauGenerique->getHorsMag());
 
                     $nextDateFin = clone $nextDate;
                     $nextDate->setTime($creneauGenerique->getHeureDebut()->format('H'), $creneauGenerique->getHeureDebut()->format('i'), $creneauGenerique->getHeureDebut()->format('s'));
@@ -307,12 +275,9 @@ class PlanningController extends AbstractController
                         $creneau->addPiaf($piaf);
                     }
 
-
                     $em->persist($creneau);
                 }
-
             }
-
         }
         $em->flush();
 

@@ -244,8 +244,8 @@ class UserAdmin extends AbstractAdmin
                 )
             ))
             ->add('codeBarre', null, array(
-                'disabled' => true,
-                'help' => 'Le code barre est généré automatiquement à la création du Chouettos. Il n\'est pas possible de le modifier ici afin d\'éviter les mauvaises manipulations.'
+                'disabled' => false,
+                'help' => "Le code barre est généré automatiquement à la création du Chouettos. '24'+ 10 digit du timestamp + 'x' ou x est le checksum. Attention aux mauvaises manipulations."
             ))
             ->add('enabled', null, array(
                 'required' => false,
@@ -296,8 +296,8 @@ class UserAdmin extends AbstractAdmin
                 'chouette en alerte' => 'chouette en alerte'
                 ]
             ])
-            /*->add('nbPiafAttendues')
-            ->add('nbPiafEffectuees')*/
+            ->add('nbPiafAttendues')
+            ->add('nbPiafEffectuees')
             ->add('absenceLongueDureeSansCourses')
             ->add('absenceLongueDureeCourses')
             ->end()

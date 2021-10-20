@@ -13,6 +13,17 @@ services:
     - MARIADB_PASSWORD=adminchouettos
     volumes:
     - ./data/:/var/lib/mysql
+    # To init :
+    # mysql -p
+    # To grant access from php
+    # CREATE USER 'adminchouettos'@'php' IDENTIFIED BY 'adminchouettos';
+    # GRANT ALL ON adminchouettos.* TO 'adminchouettos'@'php';
+    # To grant access from symfony
+    # CREATE USER 'adminchouettos'@'symfony' IDENTIFIED BY 'adminchouettos';
+    # GRANT ALL ON adminchouettos.* TO 'adminchouettos'@'symfony';
+    # To be able to run `mysql -u adminchouettos -p adminchouettos` in database
+    # CREATE USER 'adminchouettos'@'localhost' IDENTIFIED BY 'adminchouettos';
+    # GRANT ALL ON adminchouettos.* TO 'adminchouettos'@'localhost';
   php:
     build: .
     ports:

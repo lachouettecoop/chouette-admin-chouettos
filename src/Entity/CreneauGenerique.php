@@ -82,6 +82,14 @@ class CreneauGenerique
      */
     private $actif = true;
 
+    /**
+     * @Groups({"read:creneauGenerique"})
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $horsMag = true;
+
+
+
     public function __toString()
     {
         if($this->getTitre()){
@@ -260,6 +268,18 @@ class CreneauGenerique
     public function setActif(?bool $actif): self
     {
         $this->actif = $actif;
+
+        return $this;
+    }
+
+    public function getHorsMag(): ?bool
+    {
+        return $this->horsMag;
+    }
+
+    public function setHorsMag(?bool $horsMag): self
+    {
+        $this->horsMag = $horsMag;
 
         return $this;
     }
