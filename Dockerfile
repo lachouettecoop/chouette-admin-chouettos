@@ -1,5 +1,5 @@
 FROM bitnami/symfony:1
 
 WORKDIR /app
-COPY . .
-RUN composer install
+COPY . ./adminchouettos
+RUN cd ./adminchouettos && composer install

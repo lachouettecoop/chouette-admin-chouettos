@@ -28,8 +28,6 @@ services:
     build: .
     ports:
       - '8000:8000'
-    volumes:
-      - '.:/app/adminchouettos'
     environment:
       - SYMFONY_PROJECT_NAME=adminchouettos
       - MARIADB_HOST=database
