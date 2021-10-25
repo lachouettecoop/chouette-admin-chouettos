@@ -33,8 +33,8 @@ services:
       traefik.docker.network: "inverseproxy_shared"
       traefik.enable: "true"
       traefik.frontend.passHostHeader: "true"
-      traefik.port: "80"
-      traefik.www.frontend.rule: "Host:adminchouettos2.lachouettecoop.fr"
+      traefik.port: "8000"
+      traefik.www.frontend.rule: "Host:adminchouettos.lachouettecoop.fr"
 
 networks:
     default:

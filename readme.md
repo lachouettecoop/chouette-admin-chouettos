@@ -41,7 +41,29 @@ Documentation
 
 **toute les nuits** : `exportGHCodeBarreAction()` `notificationReserve()` `notificationParticipation()` `compterPiafAttendues()` `compterPiafEffectuees()` `generateCreneaux()`
 
-
+### Docker
+Pour la 1ere exécution, il faut configurer la database :
+```shell
+docker-compose up -d database
+docker-compose exec database bash
+# Puis dans le docker `database` :
+mysql -p  # Enter the $MARIADB_ROOT_PASSWORD
+CREATE USER 'adminchouettos'@'symfony' IDENTIFIED BY '<The MARIADB_PASSWORD>';
+GRANT ALL ON adminchouettos.* TO 'adminchouettos'@'symfony';
+# Vous pouvez quitter le docker
+```
+Pour restaurer un dump :
+```shell
+# put the backup.sql file in ./data
+mysql -p adminchouettos < /var/lib/mysql/backup.sql
+```
+Une fois que la database est confgurée :
+```shell
+cp .env .env.local
+* Modifier le fichier .env.local avec les paramètres du LDAP, du mailer et de la BDD
+docker-compose build
+docker-compose up -d
+```
 
 [1]: https://symfony.com/doc/current/reference/requirements.html
 [2]: https://symfony.com/doc/current/setup.html#setting-up-an-existing-symfony-project
