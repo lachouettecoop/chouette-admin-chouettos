@@ -1,0 +1,46 @@
+version: '2.1'
+
+services:
+  database:
+    image: mariadb:10.3
+    restart: unless-stopped
+    environment:
+    - MYSQL_DATABASE=adminchouettos
+    - MARIADB_USER=adminchouettos
+    env_file:
+      - database.env
+    volumes:
+    - ./data/:/var/lib/mysql
+    networks:
+      default:
+
+  symfony:
+    build: .
+    restart: unless-stopped
+    environment:
+      - SYMFONY_PROJECT_NAME=adminchouettos
+      - MARIADB_HOST=database
+      - MARIADB_PORT_NUMBER=3306
+      - MARIADB_USER=adminchouettos
+      - MARIADB_DATABASE=adminchouettos
+    env_file:
+      - database.env
+    links:
+      - database:database
+    networks:
+      default:
+      inverseproxy_shared:
+    labels:
+      traefik.docker.network: "inverseproxy_shared"
+      traefik.enable: "true"
+      traefik.frontend.passHostHeader: "true"
+      traefik.port: "8000"
+      traefik.www.frontend.rule: "Host:adminchouettos.lachouettecoop.fr"
+
+networks:
+    default:
+      internal: true
+      driver_opts:
+        encrypted: 1
+    inverseproxy_shared:
+      external: true
