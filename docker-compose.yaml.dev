@@ -7,10 +7,10 @@ services:
     ports:
     - '3306:3306'
     environment:
-    - MARIADB_ROOT_PASSWORD=adminchouettos
     - MYSQL_DATABASE=adminchouettos
     - MARIADB_USER=adminchouettos
-    - MARIADB_PASSWORD=adminchouettos
+    env_file:
+      - database.env
     volumes:
     - ./data/:/var/lib/mysql
   symfony:
@@ -22,7 +22,8 @@ services:
       - MARIADB_HOST=database
       - MARIADB_PORT_NUMBER=3306
       - MARIADB_USER=adminchouettos
-      - MARIADB_PASSWORD=adminchouettos
       - MARIADB_DATABASE=adminchouettos
+    env_file:
+      - database.env
     depends_on:
       - database

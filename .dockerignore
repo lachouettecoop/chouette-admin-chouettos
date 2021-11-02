@@ -3,5 +3,6 @@ logs/
 var/
 .dockerignore
 .gitignore
-docker-compose.yaml
+database.env
+docker-compose.yaml*
 Dockerfile

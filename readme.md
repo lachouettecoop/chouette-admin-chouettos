@@ -44,11 +44,14 @@ Documentation
 ### Docker
 Pour la 1ere exécution, il faut configurer la database :
 ```shell
+cp docker-compose.yaml.dev docker-compose.yaml  # Ou docker-compose.yaml.prod
+echo "MARIADB_ROOT_PASSWORD=... > database.env"  # Generer un mot de passe pour chaque ...
+echo "MARIADB_PASSWORD=... >> database.env"
 docker-compose up -d database
 docker-compose exec database bash
 # Puis dans le docker `database` :
 mysql -p  # Enter the $MARIADB_ROOT_PASSWORD
-CREATE USER 'adminchouettos'@'symfony' IDENTIFIED BY '<The MARIADB_PASSWORD>';
+CREATE USER 'adminchouettos'@'symfony' IDENTIFIED BY '...';
 GRANT ALL ON adminchouettos.* TO 'adminchouettos'@'symfony';
 # Vous pouvez quitter le docker
 ```
