@@ -12,7 +12,13 @@ services:
     volumes:
     - ./data/:/var/lib/mysql
     networks:
+      metabase_shared:
       default:
+
+  cron:
+    build: ./cron/
+    depends_on:
+      - symfony
 
   symfony:
     build: .
@@ -42,5 +48,7 @@ networks:
       internal: true
       driver_opts:
         encrypted: 1
+    metabase_shared:
+      external: true
     inverseproxy_shared:
       external: true
