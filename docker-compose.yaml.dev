@@ -27,3 +27,7 @@ services:
       - database.env
     depends_on:
       - database
+  cron:
+    build: ./cron/
+    depends_on:
+      - symfony
