@@ -1,0 +1,10 @@
+<div style="display: flex;">
+    <div style="flex: 0;">
+    </div>
+    <div style="flex: 1;">
+	<h2>Récapitulatif du créneau du {{ creneau.debut | format_date('medium', 'dd/MM HH:mm', locale='fr') }} au {{ creneau.fin | format_date('medium', 'dd/MM HH:mm', locale='fr')}}</h2>
+        {% for piaf in creneau.piafs %}
+                {% include 'planning/miniPiafCreneau.html.twig' with{'piaf': piaf} %}
+        {% endfor %}
+    </div>
+</div>
