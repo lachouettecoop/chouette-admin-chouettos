@@ -3,5 +3,5 @@ twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
     exception_controller: null
-    #form_themes:
-    #    - '@SonataCore/Form/datepicker.html.twig'
+    form_themes:
+        - '@SonataForm/Form/datepicker.html.twig'
