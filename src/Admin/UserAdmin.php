@@ -62,7 +62,7 @@ class UserAdmin extends AbstractAdmin
 
     public function getExportFields()
     {
-        return array('id', 'civilite', 'nom', 'prenom', 'codebarre', 'email', 'exportDateNaissance', 'telephone', 'enabled', 'domaineCompetence', 'exportAdresse1', 'exportAdresse2', 'exportAdresse4', 'exportAdresse5', 'exportAdresse6', 'adhesions', 'exportdAhesionAnnee', 'exportAdhesionDate', 'exportAdhesionMontant', 'exportSouscriptionDate');
+        return array('id', 'civilite', 'nom', 'prenom', 'codebarre', 'email', 'exportDateNaissance', 'telephone', 'enabled', 'domaineCompetence', 'exportAdresse1', 'exportAdresse2', 'exportAdresse4', 'exportAdresse5', 'exportAdresse6', 'adhesions', 'exportdAhesionAnnee', 'exportAdhesionDate', 'exportAdhesionMontant', 'exportSouscriptionDate', 'exportNomPersonneRattachee', 'exportPrenomPersonneRattachee','exportMailPersonneRattachee');
     }
 
     public function getDataSourceIterator()

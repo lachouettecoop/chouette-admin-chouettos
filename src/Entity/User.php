@@ -893,6 +893,38 @@ class User implements UserInterface
         return $output;
     }
 
+    public function exportNomPersonneRattachee()
+    {
+        $output = '';
+        if (!$this->personneRattachee->isEmpty()) {
+            // Une seule personne rattachée autorisée
+            $output .= $this->personneRattachee[0]->getNom();
+        }
+
+        return $output;
+    }
+
+    public function exportPrenomPersonneRattachee()
+    {
+        $output = '';
+        if (!$this->personneRattachee->isEmpty()) {
+            // Une seule personne rattachée autorisée
+            $output .= $this->personneRattachee[0]->getPrenom();
+        }
+
+        return $output;
+    }
+
+    public function exportMailPersonneRattachee()
+    {
+        $output = '';
+        if (!$this->personneRattachee->isEmpty()) {
+            // Une seule personne rattachée autorisée
+            $output .= $this->personneRattachee[0]->getEmail();
+        }
+
+        return $output;
+    }
 
     public function getPoste(): ?Poste
     {
