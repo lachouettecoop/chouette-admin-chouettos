@@ -43,53 +43,12 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
      */
     public function findByDateDebutPiaf($date)
     {
-        /*$em = $this->getDoctrine()->getManager();
-
-        $emConfig = $em->getConfiguration();
-        $emConfig->addCustomDatetimeFunction('YEAR', 'DoctrineExtensions\Query\Mysql\Year');
-        $emConfig->addCustomDatetimeFunction('MONTH', 'DoctrineExtensions\Query\Mysql\Month');
-        $emConfig->addCustomDatetimeFunction('DAY', 'DoctrineExtensions\Query\Mysql\Day');*/
-
-        $day = $date->format("d");
-        $month = $date->format("m");
-
         return $this->createQueryBuilder('u')
-            ->andWhere('DAY(u.dateDebutPiaf) = :day')
-            ->andWhere('MONTH(u.dateDebutPiaf) = :month')
-            ->setParameter('month', $month)
-            ->setParameter('day', $day)
+            ->andWhere('DATE_DIFF(:date, u.dateDebutPiaf) != 0')
+            ->andWhere('MOD(DATE_DIFF(:date, u.dateDebutPiaf), 28) = 0')
+            ->setParameter('date', $date)
             ->getQuery()
             ->getResult()
             ;
-
     }
-
-    // /**
-    //  * @return User[] Returns an array of User objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('u.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?User
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

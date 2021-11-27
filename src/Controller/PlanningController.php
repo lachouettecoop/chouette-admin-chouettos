@@ -115,7 +115,7 @@ class PlanningController extends AbstractController
     public function init(EntityManagerInterface $em): Response
     {
         $dateBascule = new \DateTime();
-        $dateBascule->setDate(2020, 10, 11);
+        $dateBascule->setDate(2021, 11, 29);
         $users = $em->getRepository('App:User')->findAll();
 
         foreach ($users as $user){
