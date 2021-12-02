@@ -29,6 +29,11 @@ class Role
     private $libelle;
 
     /**
+     * @ORM\Column(type="boolean", nullable=false)
+     */
+    private $formation_requise;
+
+    /**
      * @Groups({"read:creneauGenerique"})
      * @ORM\Column(type="string", length=20)
      */
@@ -71,6 +76,19 @@ class Role
 
         return $this;
     }
+
+    public function getFormationRequise(): ?bool
+    {
+        return $this->formation_requise;
+    }
+
+    public function setFormationRequise(bool $formation_requise): self
+    {
+        $this->formation_requise = $formation_requiset;
+
+        return $this;
+    }
+
 
     /**
      * @return Collection|Poste[]

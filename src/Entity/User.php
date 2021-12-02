@@ -203,6 +203,12 @@ class User implements UserInterface
      */
     private $gh = false;
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", nullable=false, options={"default" : 0})
+     */
+    private $affichageDonneesPersonnelles = false;
 
     /**
      * DnPregMatch("/ou=([a-zA-Z0-9\.]+)/")
@@ -668,6 +674,19 @@ class User implements UserInterface
 
         return $this;
     }
+
+    public function getAffichageDonneesPersonnelles(): ?bool
+    {
+        return $this->affichageDonneesPersonnelles;
+    }
+
+    public function setAffichageDonneesPersonnelles(?bool $donneesPerso): self
+    {
+        $this->affichageDonneesPersonnelles = $donneesPerso;
+
+        return $this;
+    }
+
 
     /**
      * @return Collection|Adresse[]

@@ -71,6 +71,11 @@ class Piaf
     private $nonPourvu = false;
 
     /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $description;
+
+    /**
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $comptabilise;
@@ -199,6 +204,19 @@ class Piaf
 
         return $this;
     }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
 
 
 
