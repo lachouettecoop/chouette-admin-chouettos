@@ -46,6 +46,10 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/notif, roles: IS_AUTHENTICATED_ANONYMOUSLY, ips: [172.16.0.0/12] }
+        - { path: ^/notif, roles: ROLE_NO_ACCESS }
+        - { path: ^/mouli, roles: IS_AUTHENTICATED_ANONYMOUSLY, ips: [172.16.0.0/12] }
+        - { path: ^/mouli, roles: ROLE_NO_ACCESS }
         - { path: ^/docs, roles: ROLE_USER }
         - { path: ^/api, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         #- { path: ^/profile, roles: ROLE_USER }
