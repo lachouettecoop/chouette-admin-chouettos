@@ -3,4 +3,5 @@
 40 23 * * * wget -O/dev/null http://symfony:8000/api/export/gh
 45 23 * * * wget -O/dev/null http://symfony:8000/notif/4dzq564d6/reserve
 50 23 * * * wget -O/dev/null http://symfony:8000/notif/4dzq589az6/participation
+55 23 * * * wget -O/dev/null http://symfony:8000/notif/4dzadui4d6/recap
 

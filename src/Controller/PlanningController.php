@@ -285,6 +285,28 @@ class PlanningController extends AbstractController
     }
 
     /**
+     * Send mail to Équipe planning for a recapitulative
+     *
+     * @Route("/notif/4dzadui4d6/recap", name="app_send_recap")
+     * @return Response
+     *
+     */
+    public function sendCreneauRecap(EntityManagerInterface $em, MailerInterface $mailer): Response
+    {
+        $dateDebut = (new \DateTime("now"));
+        $dateFin = (new \DateTime("now"))->modify("+7 days");
+        $creneaux = $em->getRepository('App:Creneau')->findCreneauByDate($dateDebut, $dateFin);
+        usort($creneaux, function($a, $b) {
+            return ($a->getDebut() < $b->getDebut()) ? -1 : 1;
+        });
+
+        $emailContent = $this->renderView('planning/recapCreneaux.html.twig', ['creneaux' => $creneaux, 'dateDebut' => $dateDebut, 'dateFin' => $dateFin]);
+        $this->sendEmail('Récapitulatif des créneaux pour les 7 jours à venir', 'bureau-des-membres@lachouettecoop.fr', $emailContent, $mailer);
+
+        return $this->render('main/index.html.twig', []);
+    }
+
+    /**
      * Determine the next occurence of a creneau given its frequency and day of the week
      *
      * @param \DateTimeInterface $date
@@ -314,7 +336,7 @@ class PlanningController extends AbstractController
             ->subject($sujet)
             ->from('bureau-des-membres@lachouettecoop.fr')
             ->to($email)
-            ->html($content,'text/html')
+            ->html($content,'utf-8')
         ;
 
         $mailer->send($message);

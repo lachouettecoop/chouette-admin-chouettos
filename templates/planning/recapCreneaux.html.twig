@@ -1,0 +1,11 @@
+{% extends "template_email.html.twig" %}
+
+{% block titre %}Récapitulatif des créneaux pour les 7 jours à venir{% endblock %}
+
+{% block introduction %}
+	{% for creneau in creneaux %}
+		{% include 'planning/miniRecapCreneau.html.twig' with{'creneau': creneau} %}
+		<hr>
+	{% endfor %}
+{% endblock %}
+
