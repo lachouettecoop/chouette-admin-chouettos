@@ -209,7 +209,12 @@ class User implements UserInterface
      */
     private $entities = array("accounts");
 
-
+    /**
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", nullable=false, options={"default" : 0})
+     */
+    private $affichageDonneesPersonnelles = false;
 
     /**
      * Unmapped property to handle file uploads
@@ -1077,6 +1082,18 @@ class User implements UserInterface
     public function setAbsenceLongueDureeCourses(?bool $absenceLongueDureeCourses): self
     {
         $this->absenceLongueDureeCourses = $absenceLongueDureeCourses;
+
+        return $this;
+    }
+
+    public function getAffichageDonneesPersonnelles(): ?bool
+    {
+        return $this->affichageDonneesPersonnelles;
+    }
+
+    public function setAffichageDonneesPersonnelles(?bool $donneesPerso): self
+    {
+        $this->affichageDonneesPersonnelles = $donneesPerso;
 
         return $this;
     }
