@@ -5,26 +5,25 @@ services:
   database:
     image: mariadb:10.3
     ports:
-    - '3306:3306'
+      - '3306:3306'
     environment:
-    - MYSQL_DATABASE=adminchouettos
-    - MARIADB_USER=adminchouettos
+      - MARIADB_USER=adminchouettos
+      - MARIADB_DATABASE=adminchouettos
     env_file:
       - database.env
     volumes:
-    - ./data/:/var/lib/mysql
+      - ./data/:/var/lib/mysql
   symfony:
     build: .
     ports:
       - '8000:8000'
     environment:
-      - SYMFONY_PROJECT_NAME=adminchouettos
-      - MARIADB_HOST=database
-      - MARIADB_PORT_NUMBER=3306
-      - MARIADB_USER=adminchouettos
-      - MARIADB_DATABASE=adminchouettos
+      - SYMFONY_DATABASE_HOST=database
+      - SYMFONY_DATABASE_PORT_NUMBER=3306
+      - SYMFONY_DATABASE_NAME=adminchouettos
+      - SYMFONY_DATABASE_USER=adminchouettos
     env_file:
-      - database.env
+      - symfony.env
     depends_on:
       - database
   cron:

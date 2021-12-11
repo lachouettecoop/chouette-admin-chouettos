@@ -1,5 +1,5 @@
-FROM bitnami/symfony:1
+FROM bitnami/symfony:4.4
 
-WORKDIR /app/adminchouettos
+WORKDIR /app/
 COPY . .
 RUN composer install
