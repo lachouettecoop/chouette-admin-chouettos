@@ -12,5 +12,6 @@
 .idea
 ###< symfony/framework-bundle ###
 /public/uploads/
-database.env
 docker-compose.yaml
+database.env
+symfony.env
