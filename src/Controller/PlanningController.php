@@ -21,8 +21,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class PlanningController extends AbstractController
 {
-    const nbMois = 6;
-
     /**
      * @Route("/mouli/4dzq564d6/piaf", name="app_cron_compteur_piaf")
      * @return Response
@@ -228,44 +226,40 @@ class PlanningController extends AbstractController
      */
     public function generateCreneaux(EntityManagerInterface $em): Response
     {
-        $creneauxRepository = $em->getRepository('App:Creneau');
-        //Get all Creneaux actifs
-        $creneauxGeneriques = $em->getRepository('App:CreneauGenerique')->findBy(['actif' => true]);
+        $numberMonths = 1;
 
-        //find date of the last creneau generated
+        $creneauxRepository = $em->getRepository('App:Creneau');
+        $creneauxGeneriques = $em->getRepository('App:CreneauGenerique')->findBy(['actif' => true]);
         $lastCreneau = $creneauxRepository->findOneBy([], ['fin' => 'DESC']);
 
         if(!$lastCreneau){
             $lastCreneau = new Creneau();
             $lastCreneau->setDebut(new \DateTime());
         }
-        /** @var \DateTime $startDate */
-        $startDate = $lastCreneau->getDebut();
 
-        /*$endDate = clone $startDate;
-        $endDate->modify("+".(self::nbMois*4)." week");*/
+        /** @var \DateTime $startDate */
+        $startingDate = $lastCreneau->getDebut();
+        $endingDate = clone $startingDate;
+        $endingDate->modify("+". $numberMonths*4 . " week");
 
         foreach ($creneauxGeneriques as $creneauGenerique){
 
-            for($i=0; $i < self::nbMois; $i++){
-                //find date for next occurence
-                $startDateLocal = clone $startDate;
+            $startingDateCreneauGenerique = clone $startingDate;
 
-                $nextDate = $this->nextOccurence($startDateLocal->modify('+'.($i*4).' week'), $creneauGenerique->getFrequence(), $creneauGenerique->getJour());
-
-                //Check if another creneau is not already generated for the same time, same day
-                if($creneauxRepository->findByCreneauGenerique($creneauGenerique->getId(), $nextDate, $creneauGenerique->getHeureDebut()) == null){
+            $nextDateCreneau = $this->nextOccurence($startingDateCreneauGenerique, $creneauGenerique->getFrequence(), $creneauGenerique->getJour());
+            while ($nextDateCreneau <= $endingDate) {
+                if($creneauxRepository->findByCreneauGenerique($creneauGenerique->getId(), $nextDateCreneau, $creneauGenerique->getHeureDebut()) == null){
 
                     $creneau = new Creneau();
-
                     $creneau->setCreneauGenerique($creneauGenerique);
                     $creneau->setHorsMag($creneauGenerique->getHorsMag());
 
-                    $nextDateFin = clone $nextDate;
-                    $nextDate->setTime($creneauGenerique->getHeureDebut()->format('H'), $creneauGenerique->getHeureDebut()->format('i'), $creneauGenerique->getHeureDebut()->format('s'));
-                    $nextDateFin->setTime($creneauGenerique->getHeureFin()->format('H'), $creneauGenerique->getHeureFin()->format('i'), $creneauGenerique->getHeureFin()->format('s'));
-                    $creneau->setDebut($nextDate);
-                    $creneau->setFin($nextDateFin);
+                    $nextDateDebutCreneau = clone $nextDateCreneau;
+                    $nextDateFinCreneau = clone $nextDateCreneau;
+                    $nextDateDebutCreneau->setTime($creneauGenerique->getHeureDebut()->format('H'), $creneauGenerique->getHeureDebut()->format('i'), $creneauGenerique->getHeureDebut()->format('s'));
+                    $nextDateFinCreneau->setTime($creneauGenerique->getHeureFin()->format('H'), $creneauGenerique->getHeureFin()->format('i'), $creneauGenerique->getHeureFin()->format('s'));
+                    $creneau->setDebut($nextDateDebutCreneau);
+                    $creneau->setFin($nextDateFinCreneau);
                     $creneau->setTitre($creneauGenerique->getTitre());
 
                     foreach ($creneauGenerique->getPostes() as $poste){
@@ -277,6 +271,7 @@ class PlanningController extends AbstractController
 
                     $em->persist($creneau);
                 }
+                $nextDateCreneau = $this->nextOccurence($nextDateCreneau->modify("+4 week"), $creneauGenerique->getFrequence(), $creneauGenerique->getJour());
             }
         }
         $em->flush();
@@ -310,22 +305,32 @@ class PlanningController extends AbstractController
      * Determine the next occurence of a creneau given its frequency and day of the week
      *
      * @param \DateTimeInterface $date
-     * @param $frequence
-     * @param $jour
+     * @param $frequency_creneau
+     * @param $day_creneau
      *
      * @return \DateTime|\DateTimeInterface
      */
-    public function nextOccurence(\DateTimeInterface $date, $frequence, $jour){
-        //Determine the week number
-        $week = $date->format("W");
+    public function nextOccurence(\DateTimeInterface $date, $frequency_creneau, $day_creneau){
+        $week = (int)date_format($date, "W");
+        // $day_creneau commence à zéro et format N à 1
+        $day_week = (int)date_format($date, "N")-1;
 
-        $modulo = (int)$week % 4;
-        $ecart = (4 - $modulo) + $frequence;
+        $frequency_week = (int)$week % 4;
+        if ($frequency_week == 0) {
+            $frequency_week = 4;
+        }
+        $ecart = 0;
+        if ($frequency_week > $frequency_creneau) {
+            $ecart = 4 - $frequency_week + $frequency_creneau;
+        }
+        elseif ($frequency_week < $frequency_creneau) {
+            $ecart = $frequency_creneau - $frequency_week;
+        }
+
         $nextDate = clone $date;
         /** @var \DateTime $nextDate */
         $nextDate->modify('+'.$ecart.' week');
-        $nextDate->modify('monday -1 week');
-        $nextDate->modify('+'.$jour.' day');
+        $nextDate->modify('+'.$day_creneau-$day_week.' day');
 
         return $nextDate;
     }
