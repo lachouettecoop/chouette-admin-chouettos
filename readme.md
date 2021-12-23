@@ -45,8 +45,7 @@ Documentation
 Pour la 1ere exécution, il faut configurer la database :
 ```shell
 cp docker-compose.yaml.dev docker-compose.yaml  # Ou docker-compose.yaml.prod
-echo "MARIADB_ROOT_PASSWORD=... > database.env"  # Generer un mot de passe pour chaque ...
-echo "MARIADB_PASSWORD=... >> database.env"
+# Pour la production, mettre à jour les variables MARIADB_ROOT_PASSWORD, MARIADB_PASSWORD et SYMFONY_DATABASE_PASSWORD
 docker-compose up -d database
 docker-compose exec database bash
 # Puis dans le docker `database` :
