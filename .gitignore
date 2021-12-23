@@ -13,5 +13,3 @@
 ###< symfony/framework-bundle ###
 /public/uploads/
 docker-compose.yaml
-database.env
-symfony.env

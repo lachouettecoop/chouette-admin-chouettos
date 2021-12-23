@@ -4,10 +4,10 @@ services:
   database:
     image: mariadb:10.3
     restart: unless-stopped
+      - MARIADB_ROOT_PASSWORD=...
       - MARIADB_USER=adminchouettos
+      - MARIADB_PASSWORD=...
       - MARIADB_DATABASE=adminchouettos
-    env_file:
-      - database.env
     volumes:
       - ./data/:/var/lib/mysql
     networks:
@@ -27,8 +27,7 @@ services:
       - SYMFONY_DATABASE_PORT_NUMBER=3306
       - SYMFONY_DATABASE_NAME=adminchouettos
       - SYMFONY_DATABASE_USER=adminchouettos
-    env_file:
-      - symfony.env
+      - SYMFONY_DATABASE_PASSWORD=...
     links:
       - database:database
     networks:
