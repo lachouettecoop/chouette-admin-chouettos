@@ -27,9 +27,6 @@ class PlanningController extends AbstractController
      */
     public function compterPiafEffectuees(EntityManagerInterface $em): Response
     {
-        $dateDebut = (new \DateTime("now"))->modify("midnight +1 hour");
-        $dateFin = (new \DateTime("now"));
-
         $piafs = $em->getRepository('App:Piaf')->findPIAFaComptabiliser();
 
         foreach ($piafs as $piaf) {
