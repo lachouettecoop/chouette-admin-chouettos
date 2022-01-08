@@ -24,7 +24,7 @@ class PIAFRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('p')
             ->andWhere('p.comptabilise is null')
             ->andWhere('p.pourvu = 1')
-            ->andWhere('p.non_pourvu = 0')
+            ->andWhere('p.nonPourvu = 0')
             ->getQuery()
             ->getResult()
         ;
