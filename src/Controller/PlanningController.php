@@ -30,33 +30,30 @@ class PlanningController extends AbstractController
         $dateDebut = (new \DateTime("now"))->modify("midnight +1 hour");
         $dateFin = (new \DateTime("now"));
 
-        $crenaux = $em->getRepository('App:Creneau')->findCreneauByDate($dateDebut, $dateFin);
+        $piafs = $em->getRepository('App:Piaf')->findPIAFaComptabiliser();
 
-        /** @var Creneau $crenau */
-        foreach ($crenaux as $crenau) {
-            foreach ($crenau->getPiafs() as $piaf) {
-                /** @var User $piaffeur */
-                $piaffeur = $piaf->getPiaffeur();
-                if ($piaffeur != null and $piaf->getPourvu() and !$piaf->getComptabilise()) {
-                    $piaffeur->setNbPiafEffectuees($piaffeur->getNbPiafEffectuees() +1);
-                    $piaffeur->setStatut($this->calculStatus($piaffeur));
-                    $piaf->setComptabilise(true);
+        foreach ($piafs as $piaf) {
+            /** @var User $piaffeur */
+            $piaffeur = $piaf->getPiaffeur();
+            if ($piaffeur != null and $piaf->getPourvu() and !$piaf->getComptabilise()) {
+                $piaffeur->setNbPiafEffectuees($piaffeur->getNbPiafEffectuees() +1);
+                $piaffeur->setStatut($this->calculStatus($piaffeur));
+                $piaf->setComptabilise(true);
 
-                    //compta nbPiafGH
-                    if($piaf->getRole()->getId() == 1){
-                        $piaffeur->setNbPiafGH($piaffeur->getNbPiafGH() +1);
-                        if($piaffeur->getNbPiafGH() == 10){
-                            $piaffeur->addRolesChouette($em->getRepository('App:Role')->find(8));
-                        }
-                    } elseif($piaf->getRole()->getId() == 3){
-                        $piaffeur->setNbPiafCaisse($piaffeur->getNbPiafCaisse() +1);
-                        if($piaffeur->getNbPiafCaisse() == 10){
-                            $piaffeur->addRolesChouette($em->getRepository('App:Role')->find(7));
-                        }
+                //compta nbPiafGH
+                if($piaf->getRole()->getId() == 1){
+                    $piaffeur->setNbPiafGH($piaffeur->getNbPiafGH() +1);
+                    if($piaffeur->getNbPiafGH() == 10){
+                        $piaffeur->addRolesChouette($em->getRepository('App:Role')->find(8));
                     }
-                    $em->persist($piaffeur);
-                    $em->persist($piaf);
+                } elseif($piaf->getRole()->getId() == 3){
+                    $piaffeur->setNbPiafCaisse($piaffeur->getNbPiafCaisse() +1);
+                    if($piaffeur->getNbPiafCaisse() == 10){
+                        $piaffeur->addRolesChouette($em->getRepository('App:Role')->find(7));
+                    }
                 }
+                $em->persist($piaffeur);
+                $em->persist($piaf);
             }
         }
         $em->flush();

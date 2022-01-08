@@ -19,6 +19,17 @@ class PIAFRepository extends ServiceEntityRepository
         parent::__construct($registry, PIAF::class);
     }
 
+    public function findPIAFaComptabiliser()
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.comptabilise is null')
+            ->andWhere('p.pourvu = 1')
+            ->andWhere('p.non_pourvu = 0')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     // /**
     //  * @return PIAF[] Returns an array of PIAF objects
     //  */
