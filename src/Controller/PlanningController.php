@@ -126,8 +126,8 @@ class PlanningController extends AbstractController
      */
     public function notificationParticipation(EntityManagerInterface $em, MailerInterface $mailer): Response
     {
-        $dateDebut = (new \DateTime("now"))->modify("+5 days");
-        $dateFin = (new \DateTime("now"))->modify("+6 days");
+        $dateDebut = (new \DateTime("now"))->modify("+3 days");
+        $dateFin = (new \DateTime("now"))->modify("+4 days");
         $crenaux = $em->getRepository('App:Creneau')->findCreneauByDate($dateDebut, $dateFin);
 
         $piafs = [];
