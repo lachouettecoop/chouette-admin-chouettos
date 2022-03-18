@@ -217,6 +217,13 @@ class User implements UserInterface
     private $affichageDonneesPersonnelles = false;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", nullable=false, options={"default" : 0})
+     */
+    private $attenteCommissionParticipation = false;
+
+    /**
      * Unmapped property to handle file uploads
      */
     private $file;
@@ -1126,6 +1133,18 @@ class User implements UserInterface
     public function setAffichageDonneesPersonnelles(?bool $donneesPerso): self
     {
         $this->affichageDonneesPersonnelles = $donneesPerso;
+
+        return $this;
+    }
+
+    public function getAttenteCommissionParticipation(): ?bool
+    {
+        return $this->attenteCommissionParticipation;
+    }
+
+    public function setAttenteCommissionParticipation(?bool $attenteParticipation): self
+    {
+        $this->attenteCommissionParticipation = $attenteParticipation;
 
         return $this;
     }
