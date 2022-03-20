@@ -261,6 +261,10 @@ class PlanningController extends AbstractController
         return $this->render('main/index.html.twig', []);
     }
 
+    public function generateCreneauGenerique(EntityManagerInterface $em): Response
+    {
+    }
+ 
     /**
      * Send mail to Équipe planning for a recapitulative
      *
