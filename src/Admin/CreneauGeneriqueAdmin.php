@@ -117,6 +117,9 @@ final class CreneauGeneriqueAdmin extends AbstractAdmin
                 'actions' => [
                     'clone' => [
                         'template' => 'admin/list__action_clone.html.twig'
+                    ],
+                    'generate' => [
+                        'template' => 'admin/form__action_generer.html.twig'
                     ]
                 ]
             ]);
@@ -126,6 +129,7 @@ final class CreneauGeneriqueAdmin extends AbstractAdmin
     protected function configureRoutes(RouteCollection $collection)
     {
         $collection->add('clone', $this->getRouterIdParameter().'/clone');
+        $collection->add('generate', $this->getRouterIdParameter().'/generate');
     }
 
 
