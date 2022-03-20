@@ -53,6 +53,7 @@ final class CreneauGeneriqueAdmin extends AbstractAdmin
                 CollectionType::class,
                 array(
                     'required' => false,
+                    'by_reference' => false,
                 ),
                 array(
                     'edit' => 'inline',
