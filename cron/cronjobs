@@ -1,6 +1,8 @@
 25 23 28 * * wget -O/dev/null http://symfony:8000/notif/4dzad554d6/routine
 30 23 * * * wget -O/dev/null http://symfony:8000/mouli/4dzq564d6/piaf
 35 23 * * * wget -O/dev/null http://symfony:8000/mouli/4dzq5848az/piafattendues
+# Important : mise à jour des statuts à la fin des cron mouli
+38 23 * * * wget -O/dev/null http://symfony:8000/mouli/status
 40 23 * * * wget -O/dev/null http://symfony:8000/api/export/gh
 45 23 * * * wget -O/dev/null http://symfony:8000/notif/4dzq564d6/reserve
 50 23 * * * wget -O/dev/null http://symfony:8000/notif/4dzq589az6/participation

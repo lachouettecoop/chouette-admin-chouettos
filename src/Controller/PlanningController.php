@@ -34,7 +34,6 @@ class PlanningController extends AbstractController
             $piaffeur = $piaf->getPiaffeur();
             if ($piaffeur != null and $piaf->getPourvu() and !$piaf->getComptabilise()) {
                 $piaffeur->setNbPiafEffectuees($piaffeur->getNbPiafEffectuees() +1);
-                $piaffeur->setStatut($this->calculStatus($piaffeur));
                 $piaf->setComptabilise(true);
 
                 $em->persist($piaffeur);
@@ -64,7 +63,6 @@ class PlanningController extends AbstractController
             if(!$user->getAbsenceLongueDureeSansCourses()){
                 $user->setNbPiafAttendues($user->getNbPiafAttendues() +1);
             }
-            $user->setStatut($this->calculStatus($user));
             $em->persist($user);
         }
         $em->flush();
@@ -72,19 +70,33 @@ class PlanningController extends AbstractController
         return $this->render('main/index.html.twig', []);
     }
 
-    public function calculStatus(User $user){
-        $attendues = $user->getNbPiafAttendues();
-        $effectues = $user->getNbPiafEffectuees();
+    /**
+     *
+     * @Route("/mouli/status", name="app_cron_update_status")
+     * @return Response
+     */
+    public function updateStatus(EntityManagerInterface $em): Response
+    {
+        $users = $em->getRepository('App:User')->findAll();
+        foreach ($users as $user) {
+            $attendues = $user->getNbPiafAttendues();
+            $effectues = $user->getNbPiafEffectuees();
 
-        if ($effectues >= $attendues){
-            $status = 'très chouette';
-        } elseif ($effectues >= ($attendues - 2)){
-            $status = 'chouette';
-        } elseif ($effectues < ($attendues - 2)){
-            $status = 'chouette en alerte';
+            if ($effectues >= $attendues) {
+                $status = 'très chouette';
+            } elseif ($effectues >= ($attendues - 2)) {
+                $status = 'chouette';
+            } elseif ($effectues < ($attendues - 2)) {
+                $status = 'chouette en alerte';
+            }
+
+            $user->setStatut($status);
+            $em->persist($user);
         }
 
-        return $status;
+        $em->flush();
+
+        return $this->render('main/index.html.twig', []);
     }
 
     /**
