@@ -23,6 +23,12 @@ class Poste
     private $id;
 
     /**
+     * @Groups({"read:Poste"})
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $description;
+
+    /**
      * @Groups({"read:creneauGenerique"})
      * @ORM\ManyToOne(targetEntity=Role::class, inversedBy="postes")
      */
@@ -44,6 +50,17 @@ class Poste
         return $this->id;
     }
 
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
 
     public function getReservationChouettos(): ?User
     {

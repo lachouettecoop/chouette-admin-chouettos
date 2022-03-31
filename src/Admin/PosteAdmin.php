@@ -17,6 +17,7 @@ final class PosteAdmin extends AbstractAdmin
     {
         $formMapper
             ->add('role')
+            ->add('description')
             ->add('reservationChouettos', null, ['label' => "Réservation automatique"])
         ;
     }
@@ -33,6 +34,7 @@ final class PosteAdmin extends AbstractAdmin
         $listMapper
             ->add('id')
             ->add('role')
+            ->add('description')
             ->add('creneauGenerique')
             ->add('_action', null, [
                 'actions' => [
