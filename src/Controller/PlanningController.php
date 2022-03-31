@@ -260,6 +260,7 @@ class PlanningController extends AbstractController
                         $piaf = new Piaf();
                         $piaf->setPiaffeur($poste->getReservationChouettos());
                         $piaf->setRole($poste->getRole());
+                        $piaf->setDescription($poste->getDescription());
                         $creneau->addPiaf($piaf);
                     }
 
