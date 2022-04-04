@@ -17,6 +17,7 @@ final class PiafAdmin extends AbstractAdmin
     {
         $formMapper
             ->add('role')
+            ->add('description')
             ->add('statut')
             ->add('piaffeur')
             ->add('pourvu')

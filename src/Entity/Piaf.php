@@ -76,6 +76,11 @@ class Piaf
     private $comptabilise;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $description;
+
+    /**
      * @Groups({"read:creneauGenerique"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
@@ -184,6 +189,18 @@ class Piaf
     public function setComptabilise(?bool $comptabilise): self
     {
         $this->comptabilise = $comptabilise;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
 
         return $this;
     }
