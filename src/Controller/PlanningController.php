@@ -36,6 +36,12 @@ class PlanningController extends AbstractController
                 $piaffeur->setNbPiafEffectuees($piaffeur->getNbPiafEffectuees() +1);
                 $piaf->setComptabilise(true);
 
+                //compta nbPiafGH
+                if($piaf->getRole()->getId() == 1){
+                    $piaffeur->setNbPiafGH($piaffeur->getNbPiafGH() +1);
+                } elseif($piaf->getRole()->getId() == 3){
+                    $piaffeur->setNbPiafCaisse($piaffeur->getNbPiafCaisse() +1);
+                }
                 $em->persist($piaffeur);
                 $em->persist($piaf);
             }
