@@ -152,7 +152,7 @@ class PlanningController extends AbstractController
         /** @var Creneau $crenau **/
         foreach ($crenaux as $crenau){
             foreach ($crenau->getPiafs() as $piaf){
-                if($piaf->getPiaffeur() != null){
+                if($piaf->getPiaffeur() != null and $piaf->getStatus() != "remplacement"){
                     $piafs[] = $piaf;
                 }
             }
