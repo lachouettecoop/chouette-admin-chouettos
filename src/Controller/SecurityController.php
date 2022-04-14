@@ -130,6 +130,10 @@ class SecurityController extends AbstractController
                 $sql = "INSERT INTO user_role (user_id, role_id) VALUES (:lastId, 2);";
                 $stmt = $connection->prepare($sql);
                 $stmt->executeQuery(["lastId" => $lastId]);
+                // Ajout du rôle Chouettos
+                $sql1 = "INSERT INTO user_role (user_id, role_id) VALUES (:lastId, 11);";
+                $stmt1 = $connection->prepare($sql1);
+                $stmt1->executeQuery(["lastId" => $lastId]);
 
                 return $this->render('security/premier_enregistrement_final.html.twig');
             }
