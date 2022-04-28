@@ -92,6 +92,11 @@ class Piaf
      */
     private $informations;
 
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     */
+    private $dateReservation;
+
     public function getRole(): ?Role
     {
         return $this->role;
@@ -213,6 +218,18 @@ class Piaf
     public function setNonPourvu(bool $nonPourvu): self
     {
         $this->nonPourvu = $nonPourvu;
+
+        return $this;
+    }
+
+    public function getDateReservation(): ?\DateTimeInterface
+    {
+        return $this->dateReservation;
+    }
+
+    public function setDateReservation(?\DateTimeInterface $dateReservation): self
+    {
+        $this->dateReservation = $dateReservation;
 
         return $this;
     }
