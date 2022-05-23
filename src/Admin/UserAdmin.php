@@ -300,6 +300,7 @@ class UserAdmin extends AbstractAdmin
             ->add('nbPiafEffectuees')
             ->add('absenceLongueDureeSansCourses')
             ->add('absenceLongueDureeCourses')
+            ->add('attenteCommissionParticipation')
             ->end()
 
             ->with('Adresse', array(

@@ -27,7 +27,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *     collectionOperations={"get"},
  *     itemOperations={"get"}
  * )
- * @ApiFilter(BooleanFilter::class, properties={"enabled": "exact", "absenceLongueDureeSansCourses":"exact", "absenceLongueDureeCourses":"exact"})
+ * @ApiFilter(BooleanFilter::class, properties={"enabled": "exact", "absenceLongueDureeSansCourses":"exact", "absenceLongueDureeCourses":"exact", "attenteCommissionParticipation":"exact"})
  * @ApiFilter(SearchFilter::class, properties={"prenom": "istart", "nom": "istart", "codeBarre": "iexact", "email": "iexact", "statut": "iexact", "rolesChouette.role_unique_id": "iexact" })
  */
 class User implements UserInterface
