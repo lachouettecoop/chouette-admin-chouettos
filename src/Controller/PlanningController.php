@@ -245,35 +245,13 @@ class PlanningController extends AbstractController
         foreach ($creneauxGeneriques as $creneauGenerique){
 
             $startingDateCreneauGenerique = clone $startingDate;
-
-            $nextDateCreneau = $this->nextOccurence($startingDateCreneauGenerique, $creneauGenerique->getFrequence(), $creneauGenerique->getJour());
-            while ($nextDateCreneau <= $endingDate) {
-                if($creneauxRepository->findByCreneauGenerique($creneauGenerique->getId(), $nextDateCreneau, $creneauGenerique->getHeureDebut()) == null){
-
-                    $creneau = new Creneau();
-                    $creneau->setCreneauGenerique($creneauGenerique);
-                    $creneau->setHorsMag($creneauGenerique->getHorsMag());
-
-                    $nextDateDebutCreneau = clone $nextDateCreneau;
-                    $nextDateFinCreneau = clone $nextDateCreneau;
-                    $nextDateDebutCreneau->setTime($creneauGenerique->getHeureDebut()->format('H'), $creneauGenerique->getHeureDebut()->format('i'), $creneauGenerique->getHeureDebut()->format('s'));
-                    $nextDateFinCreneau->setTime($creneauGenerique->getHeureFin()->format('H'), $creneauGenerique->getHeureFin()->format('i'), $creneauGenerique->getHeureFin()->format('s'));
-                    $creneau->setDebut($nextDateDebutCreneau);
-                    $creneau->setFin($nextDateFinCreneau);
-                    $creneau->setTitre($creneauGenerique->getTitre());
-
-                    foreach ($creneauGenerique->getPostes() as $poste){
-                        $piaf = new Piaf();
-                        $piaf->setPiaffeur($poste->getReservationChouettos());
-                        $piaf->setRole($poste->getRole());
-                        $piaf->setDescription($poste->getDescription());
-                        $creneau->addPiaf($piaf);
-                    }
-
-                    $em->persist($creneau);
-                }
-                $nextDateCreneau = $this->nextOccurence($nextDateCreneau->modify("+4 week"), $creneauGenerique->getFrequence(), $creneauGenerique->getJour());
-            }
+            PlanningController::createCreneauxFromCreneauGenerique(
+                $creneauGenerique,
+                $creneauxRepository,
+                $em,
+                $startingDate,
+                $endingDate
+            );
         }
         $em->flush();
 
@@ -315,7 +293,7 @@ class PlanningController extends AbstractController
      *
      * @return \DateTime|\DateTimeInterface
      */
-    public function nextOccurence(\DateTimeInterface $date, $frequency_creneau, $day_creneau){
+    public static function nextOccurence(\DateTimeInterface $date, $frequency_creneau, $day_creneau){
         $week = (int)date_format($date, "W");
         // $day_creneau commence à zéro et format N à 1
         $day_week = (int)date_format($date, "N")-1;
@@ -354,4 +332,34 @@ class PlanningController extends AbstractController
         return true;
     }
 
+    public static function createCreneauxFromCreneauGenerique($creneauGenerique, $repository, $entityManager, $startingDate, $endingDate) {
+            $nextDateCreneau = PlanningController::nextOccurence($startingDate, $creneauGenerique->getFrequence(), $creneauGenerique->getJour());
+            while ($nextDateCreneau <= $endingDate) {
+                if($repository->findByCreneauGenerique($creneauGenerique->getId(), $nextDateCreneau, $creneauGenerique->getHeureDebut()) == null){
+
+                    $creneau = new Creneau();
+                    $creneau->setCreneauGenerique($creneauGenerique);
+                    $creneau->setHorsMag($creneauGenerique->getHorsMag());
+
+                    $nextDateDebutCreneau = clone $nextDateCreneau;
+                    $nextDateFinCreneau = clone $nextDateCreneau;
+                    $nextDateDebutCreneau->setTime($creneauGenerique->getHeureDebut()->format('H'), $creneauGenerique->getHeureDebut()->format('i'), $creneauGenerique->getHeureDebut()->format('s'));
+                    $nextDateFinCreneau->setTime($creneauGenerique->getHeureFin()->format('H'), $creneauGenerique->getHeureFin()->format('i'), $creneauGenerique->getHeureFin()->format('s'));
+                    $creneau->setDebut($nextDateDebutCreneau);
+                    $creneau->setFin($nextDateFinCreneau);
+                    $creneau->setTitre($creneauGenerique->getTitre());
+
+                    foreach ($creneauGenerique->getPostes() as $poste){
+                        $piaf = new Piaf();
+                        $piaf->setPiaffeur($poste->getReservationChouettos());
+                        $piaf->setRole($poste->getRole());
+                        $piaf->setDescription($poste->getDescription());
+                        $creneau->addPiaf($piaf);
+                    }
+
+                    $entityManager->persist($creneau);
+                }
+                $nextDateCreneau = PlanningController::nextOccurence($nextDateCreneau->modify("+4 week"), $creneauGenerique->getFrequence(), $creneauGenerique->getJour());
+            }
+    }
 }

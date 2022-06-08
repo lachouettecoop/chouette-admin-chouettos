@@ -5,10 +5,12 @@ use App\Entity\CreneauGenerique;
 use App\Entity\Poste;
 use App\Entity\Piaf;
 use App\Entity\Creneau;
+use App\Controller\PlanningController;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Core\Exception;
 
 class CustomAction extends CRUDController
 {
@@ -61,35 +63,23 @@ class CustomAction extends CRUDController
         }
 
         $now = new \DateTime("now");
-        $endingDate = (new \DateTime("now"))->modify("+6 month");
-        $nextDateCreneau = $this->nextOccurence($now, $creneauGenerique->getFrequence(), $creneauGenerique->getJour());
-        while ($nextDateCreneau <= $endingDate) {
-                if($creneauxRepository->findByCreneauGenerique($creneauGenerique->getId(), $nextDateCreneau, $creneauGenerique->getHeureDebut()) == null){
-                    $creneau = new Creneau();
-                    $creneau->setCreneauGenerique($creneauGenerique);
-                    $creneau->setHorsMag($creneauGenerique->getHorsMag());
+        $endingDate = (new \DateTime("now"))->modify("+1 year");
 
-                    $nextDateDebutCreneau = clone $nextDateCreneau;
-                    $nextDateFinCreneau = clone $nextDateCreneau;
-                    $nextDateDebutCreneau->setTime($creneauGenerique->getHeureDebut()->format('H'), $creneauGenerique->getHeureDebut()->format('i'), $creneauGenerique->getHeureDebut()->format('s'));
-                    $nextDateFinCreneau->setTime($creneauGenerique->getHeureFin()->format('H'), $creneauGenerique->getHeureFin()->format('i'), $creneauGenerique->getHeureFin()->format('s'));
-                    $creneau->setDebut($nextDateDebutCreneau);
-                    $creneau->setFin($nextDateFinCreneau);
-                    $creneau->setTitre($creneauGenerique->getTitre());
+        try {
+            PlanningController::createCreneauxFromCreneauGenerique(
+                $creneauGenerique,
+                $creneauxRepository,
+                $em,
+                $now,
+                $endingDate);
 
-                    foreach ($creneauGenerique->getPostes() as $poste){
-                        $piaf = new Piaf();
-                        $piaf->setPiaffeur($poste->getReservationChouettos());
-                        $piaf->setRole($poste->getRole());
-                        $creneau->addPiaf($piaf);
-                    }
-                    $em->persist($creneau);
-                }
-                $nextDateCreneau = $this->nextOccurence($nextDateCreneau->modify("+4 week"), $creneauGenerique->getFrequence(), $creneauGenerique->getJour());
+            $em->flush();
+            $this->addFlash('sonata_flash_success', 'Le créneau a correctement été généré.');
+
+        } catch (\Exception $e) {
+            $this->addFlash('sonata_flash_error', 'La génération du créneau a rencontré une erreur.');
         }
 
-        $em->flush();
-        $this->addFlash('sonata_flash_success', 'Le créneau a correctement été généré.');
         return new RedirectResponse($this->admin->generateUrl('list'));
     }
 
