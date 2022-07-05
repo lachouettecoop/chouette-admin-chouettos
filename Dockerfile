@@ -1,4 +1,4 @@
-FROM bitnami/symfony:4.4
+FROM bitnami/symfony:4.4.34
 
 WORKDIR /app/
 COPY . .
