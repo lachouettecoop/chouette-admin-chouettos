@@ -51,4 +51,17 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getResult()
             ;
     }
+
+    public function findForWarningMail()
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere("u.statut = 'chouette en alerte'")
+            ->andWhere("u.absenceLongueDureeCourses != 1")
+            ->andWhere("u.absenceLongueDureeSansCourses != 1")
+            ->andWhere("u.attenteCommissionParticipation != 1")
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
 }
