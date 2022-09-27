@@ -312,6 +312,11 @@ class User implements UserInterface
      */
     private $nbPiafCaisse = 0;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=false, options={"default" : 0})
+     */
+    private $dispenseDefinitive;
+
     public function __construct()
     {
         $this->adresses = new ArrayCollection();
@@ -1181,6 +1186,18 @@ class User implements UserInterface
     public function setNbPiafCaisse(int $nbPiafCaisse): self
     {
         $this->nbPiafCaisse = $nbPiafCaisse;
+
+        return $this;
+    }
+
+    public function getDispenseDefinitive(): ?bool
+    {
+        return $this->dispenseDefinitive;
+    }
+
+    public function setDispenseDefinitive(bool $dispenseDefinitive): self
+    {
+        $this->dispenseDefinitive = $dispenseDefinitive;
 
         return $this;
     }

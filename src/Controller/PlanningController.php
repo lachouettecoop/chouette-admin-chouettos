@@ -97,6 +97,25 @@ class PlanningController extends AbstractController
 
     /**
      *
+     * @Route("/notif/reminderAbsenceLongueDuree", name="app_cron_notif_warning")
+     * @return Response
+     */
+    public function reminderAbsenceLongueDuree(EntityManagerInterface $em): Response
+    {
+        $users = $em->getRepository('App:User')->findForAbsenceLongueDureeCourses();
+
+        foreach ($users as $user) {
+            if(filter_var($user->getEmail(), FILTER_VALIDATE_EMAIL)){
+                $emailContent = $this->renderView('planning/notificationAbsenceLongueDuree.html.twig', []);
+                $this->sendEmail("Rappel concernant l'absence longue durée", $user->getEmail(), $emailContent, $mailer);
+            }
+        }
+
+        return $this->render('main/index.html.twig', []);
+    }
+
+    /**
+     *
      * @Route("/mouli/status", name="app_cron_update_status")
      * @return Response
      */
