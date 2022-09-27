@@ -45,7 +45,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     {
         return $this->createQueryBuilder('u')
             ->andWhere('DATE_DIFF(:date, u.dateDebutPiaf) != 0')
-            ->andWhere('MOD(DATE_DIFF(:date, u.dateDebutPiaf), 28) = 0')
+            ->andWhere('MOD(DATE_DIFF(:date, u.dateDebutPiaf), 28) = 0')
             ->setParameter('date', $date)
             ->getQuery()
             ->getResult()
@@ -63,5 +63,16 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getResult()
             ;
     }
+
+    public function findForAbsenceLongueDureeCourses()
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere("u.absenceLongueDureeCourses = 1")
+            ->andWhere("u.dispenseDefinitive != 1")
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
 
 }

@@ -301,6 +301,7 @@ class UserAdmin extends AbstractAdmin
             ->add('absenceLongueDureeSansCourses')
             ->add('absenceLongueDureeCourses')
             ->add('attenteCommissionParticipation')
+            ->add('dispenseDefinitive')
             ->end()
 
             ->with('Adresse', array(
