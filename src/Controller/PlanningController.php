@@ -63,7 +63,7 @@ class PlanningController extends AbstractController
         $users = $em->getRepository('App:User')->findByDateDebutPiaf($dateDebut);
         /** @var User $user */
         foreach ($users as $user) {
-            if ($user->getAbsenceLongueDureeCourses()) {
+            if ($user->getAbsenceLongueDureeCourses() or $user->getDispenseDefinitive()) {
                 $user->setNbPiafEffectuees($user->getNbPiafEffectuees() +1);
             }
             if(!$user->getAbsenceLongueDureeSansCourses()){
