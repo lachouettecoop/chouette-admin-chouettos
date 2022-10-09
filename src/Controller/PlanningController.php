@@ -97,7 +97,7 @@ class PlanningController extends AbstractController
 
     /**
      *
-     * @Route("/notif/reminderAbsenceLongueDuree", name="app_cron_notif_warning")
+     * @Route("/notif/reminderAbsenceLongueDuree", name="app_cron_notif_reminder_absence")
      * @return Response
      */
     public function reminderAbsenceLongueDuree(EntityManagerInterface $em): Response

@@ -313,7 +313,7 @@ class User implements UserInterface
     private $nbPiafCaisse = 0;
 
     /**
-     * @ORM\Column(type="boolean", nullable=false, options={"default" : 0})
+     * @ORM\Column(type="boolean", nullable=true, options={"default" : 0})
      */
     private $dispenseDefinitive;
 
