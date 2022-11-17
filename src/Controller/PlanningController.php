@@ -145,6 +145,31 @@ class PlanningController extends AbstractController
 
     /**
      *
+     * @Route("/mouli/essai", name="app_cron_update_periode_essai")
+     * @return Response
+     */
+    public function updatePeridoeEssai(EntityManagerInterface $em): Response
+    {
+        $users = $em->getRepository('App:User')->findAll();
+        $date = date_create();
+
+
+        foreach ($users as $user) {
+            $essai = $user->getPeriodeEssai();
+            
+            if ($essai && $date > $essai) {
+                $user->setEnabled(false);
+                $em->persist($user);
+            }
+        }
+
+        $em->flush();
+
+        return $this->render('main/index.html.twig', []);
+    }
+
+    /**
+     *
      * @Route("/mouli/4dzq564d6/init", name="app_plan_moil_init")
      * @return Response
      */

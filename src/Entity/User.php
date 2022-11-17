@@ -317,6 +317,11 @@ class User implements UserInterface
      */
     private $dispenseDefinitive;
 
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     */
+    private $periodeEssai;
+
     public function __construct()
     {
         $this->adresses = new ArrayCollection();
@@ -1198,6 +1203,18 @@ class User implements UserInterface
     public function setDispenseDefinitive(bool $dispenseDefinitive): self
     {
         $this->dispenseDefinitive = $dispenseDefinitive;
+
+        return $this;
+    }
+
+    public function getPeriodeEssai(): ?\DateTimeInterface
+    {
+        return $this->periodeEssai;
+    }
+
+    public function setPeriodeEssai(?\DateTimeInterface $periodeEssai): self
+    {
+        $this->periodeEssai = $periodeEssai;
 
         return $this;
     }
