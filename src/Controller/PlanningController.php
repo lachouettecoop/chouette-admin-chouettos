@@ -153,7 +153,6 @@ class PlanningController extends AbstractController
         $users = $em->getRepository('App:User')->findAll();
         $date = date_create();
         $nextWeekDate = date("Y-m-d", strtotime("7 days"));
-
         
         foreach ($users as $user) {
             $essai = $user->getPeriodeEssai();
@@ -389,14 +388,17 @@ class PlanningController extends AbstractController
         return $nextDate;
     }
 
-    public function sendEmail($sujet, $email, $content, MailerInterface $mailer)
+    public function sendEmail($sujet, $email, $content, MailerInterface $mailer, $cc)
     {
         $message = (new Email())
             ->subject($sujet)
             ->from('bureau-des-membres@lachouettecoop.fr')
             ->to($email)
-            ->html($content,'utf-8')
-        ;
+            ->html($content,'utf-8');
+
+        if ($cc) {
+            $message->cc($cc);
+        }
 
         $mailer->send($message);
 
