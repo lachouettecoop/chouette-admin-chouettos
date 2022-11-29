@@ -148,19 +148,27 @@ class PlanningController extends AbstractController
      * @Route("/mouli/essai", name="app_cron_update_periode_essai")
      * @return Response
      */
-    public function updatePeridoeEssai(EntityManagerInterface $em): Response
+    public function updatePeridoeEssai(EntityManagerInterface $em, MailerInterface $mailer): Response
     {
         $users = $em->getRepository('App:User')->findAll();
         $date = date_create();
+        $nextWeekDate = date("Y-m-d", strtotime("7 days"));
 
-
+        
         foreach ($users as $user) {
             $essai = $user->getPeriodeEssai();
-            
-            if ($essai && $date > $essai) {
-                $user->setEnabled(false);
-                $em->persist($user);
+            if ($essai) {
+                if ( date_format($essai,"Y-m-d") == $nextWeekDate) {
+                    $emailContent = $this->renderView('planning/notificationEssai.html.twig', []);
+                    $this->sendEmail("Chouettos en fin de période d'essai", $user->getEmail(), $emailContent, $mailer);
+                }
+                
+                if ($date > $essai) {
+                    $user->setEnabled(false);
+                    $em->persist($user);
+                }
             }
+
         }
 
         $em->flush();
