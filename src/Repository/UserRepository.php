@@ -74,5 +74,14 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ;
     }
 
+    public function findForPeriodeEssai()
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere("u.periodeEssai is not null")
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
 
 }

@@ -148,26 +148,31 @@ class PlanningController extends AbstractController
      * @Route("/mouli/essai", name="app_cron_update_periode_essai")
      * @return Response
      */
-    public function updatePeridoeEssai(EntityManagerInterface $em, MailerInterface $mailer): Response
+    public function updatePeriodeEssai(EntityManagerInterface $em, MailerInterface $mailer): Response
     {
-        $users = $em->getRepository('App:User')->findAll();
+        $users = $em->getRepository('App:User')->findForPeriodeEssai();
         $date = date_create();
         $nextWeekDate = date("Y-m-d", strtotime("7 days"));
+        $next3WeeksDate = date("Y-m-d", strtotime("21 days"));
         
         foreach ($users as $user) {
             $essai = $user->getPeriodeEssai();
-            if ($essai) {
-                if ( date_format($essai,"Y-m-d") == $nextWeekDate) {
-                    $emailContent = $this->renderView('planning/notificationEssai.html.twig', []);
-                    $this->sendEmail("Chouettos en fin de période d'essai", $user->getEmail(), $emailContent, $mailer);
-                }
-                
-                if ($date > $essai) {
-                    $user->setEnabled(false);
-                    $em->persist($user);
-                }
+            
+            if ( date_format($essai,"Y-m-d") == $next3WeeksDate) {
+                $emailContent = $this->renderView('planning/notificationEssaiFirstReminder.html.twig', []);
+                $this->sendEmail("Informations relative à votre période d'éssai", $user->getEmail(), $emailContent, $mailer);
+            }
+            if ( date_format($essai,"Y-m-d") == $nextWeekDate) {
+                $emailContent = $this->renderView('planning/notificationEssaiSecondReminder.html.twig', []);
+                $this->sendEmail("Rappel suite de votre période d'éssai", $user->getEmail(), $emailContent, $mailer);
             }
 
+            if ($date > $essai) {
+                $user->setEnabled(false);
+                $em->persist($user);
+                $emailContent = $this->renderView('planning/notificationEssaiNotInterested.html.twig', []);
+                $this->sendEmail("Informations de votre fin de période d'essai", $user->getEmail(), $emailContent, $mailer);
+            }
         }
 
         $em->flush();
@@ -388,7 +393,7 @@ class PlanningController extends AbstractController
         return $nextDate;
     }
 
-    public function sendEmail($sujet, $email, $content, MailerInterface $mailer, $cc)
+    public function sendEmail($sujet, $email, $content, MailerInterface $mailer, $cc = "")
     {
         $message = (new Email())
             ->subject($sujet)
