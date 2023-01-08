@@ -89,6 +89,7 @@ class SecurityController extends AbstractController
      */
     public function premierEnregistrement(Request $request,
                                           EntityManagerInterface $em,
+                                          MailerInterface $mailer,
                                           UserPasswordEncoderInterface $passwordEncoder,
                                           LdapController $ldapController): Response
     {
@@ -134,6 +135,18 @@ class SecurityController extends AbstractController
                 $sql1 = "INSERT INTO user_role (user_id, role_id) VALUES (:lastId, 11);";
                 $stmt1 = $connection->prepare($sql1);
                 $stmt1->executeQuery(["lastId" => $lastId]);
+
+                if ($user->getPeriodeEssai()) {
+                    $message = (new Email())
+                    ->subject('Bienvenu à la Chouette Coop - La Chouette Coop')
+                    ->from('contact@mintset.io')
+                    ->to($user->getEmail())
+                    ->html(
+                        $this->renderView('planning/notificationEssai.html.twig', []),
+                        'text/html'
+                    );
+                    $mailer->send($message);
+                }
 
                 return $this->render('security/premier_enregistrement_final.html.twig');
             }
