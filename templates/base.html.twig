@@ -1,17 +1,53 @@
+{% set _skin = sonata_admin.adminPool.getOption('skin') %}
+{% set _use_select2 = sonata_admin.adminPool.getOption('use_select2') %}
+{% set _use_icheck = sonata_admin.adminPool.getOption('use_icheck') %}
+
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8">
+         <meta data-sonata-admin='{{ {
+        config: {
+            SKIN: _skin,
+            CONFIRM_EXIT: sonata_admin.adminPool.getOption('confirm_exit'),
+            USE_SELECT2: _use_select2,
+            USE_ICHECK: _use_icheck,
+            USE_STICKYFORMS: sonata_admin.adminPool.getOption('use_stickyforms'),
+            DEBUG: sonata_admin.adminPool.getOption('js_debug'),
+        },
+        translations: {
+            CONFIRM_EXIT: 'confirm_exit'|trans({}, 'SonataAdminBundle'),
+        },
+    }|json_encode()|raw }}'
+    >
         <title>{% block title %}Bonjour !{% endblock %}</title>
         <!-- CSS only -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha2/css/bootstrap.min.css" integrity="sha384-DhY6onE6f3zzKbjUPRc2hOzGAdEf4/Dz+WJwBvEYL/lkkIsI3ihufq9hk9K4lVoK" crossorigin="anonymous">
-        {% block stylesheets %}{% endblock %}
+    {% block stylesheets %}
+        {% for stylesheet in sonata_admin.adminPool.getOption('stylesheets', []) %}
+            <link rel="stylesheet" href="{{ asset(stylesheet) }}">
+        {% endfor %}
+    {% endblock %}
+
+    {% block javascripts %}
+        
+    {% block sonata_javascript_pool %}
+        {% for javascript in sonata_admin.adminPool.getOption('javascripts', []) %}
+        <script src="{{ asset(javascript) }}"></script>
+        {% endfor %}
+    {% endblock %}
+
+    {% endblock %}
+    <style>
+        .input-group  {
+        display: flex;
+    }
+    </style>
     </head>
     <body style="background-color: #f8f9fa !important;">
         {% block body %}{% endblock %}
 
         <!-- Option 1: Bootstrap Bundle with Popper.js -->
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha2/js/bootstrap.bundle.min.js" integrity="sha384-BOsAfwzjNJHrJ8cZidOg56tcQWfp6y72vEJ8xQ9w6Quywb24iOsW913URv1IS4GD" crossorigin="anonymous"></script>
-        {% block javascripts %}{% endblock %}
     </body>
 </html>

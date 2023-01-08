@@ -10,6 +10,8 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Sonata\Form\Type\DatePickerType;
+
 
 class UserFirstType extends AbstractType
 {
@@ -18,6 +20,16 @@ class UserFirstType extends AbstractType
         $builder
             ->add('nom', null, array('label' => 'Nom', 'attr' => array( 'class' => 'form-control' ), 'required' => true))
             ->add('prenom', null, array('label' => 'Prénom', 'attr' => array( 'class' => 'form-control' ), 'required' => true))
+            ->add('periodeEssai', DatePickerType::class, array(
+                'label' => "Période d'essai ?",
+                'required' => false,
+                'format' => 'dd/MM/yyyy',
+                'attr' => array(
+                    'data-date-format' => 'DD/MM/YYYY',
+                    'placeholder' => '31/01/1970'
+                ),
+                'help' => "Renseignez la date de la fin de la période d'essai à laquelle le chouettos devra sourscrire ou non."
+            ))
             ->add('email', RepeatedType::class, array(
                 'type' => EmailType::class,
                 'options' => array('translation_domain' => 'FOSUserBundle', 'attr' => array( 'class' => 'form-control' )),
