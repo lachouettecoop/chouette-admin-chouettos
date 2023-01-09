@@ -405,6 +405,12 @@ class UserAdmin extends AbstractAdmin
             ->add('gh')
             ->add('carteImprimee', null, ['label' => 'Carte imprimée ?'])
             ->add('enabled', null, ['label' => 'Actif ?'])
+            ->add('periodeEssai', 'doctrine_orm_callback', [
+                'label' => 'En PE ?',
+                'show_filter' => true,
+                'callback' => [$this, 'getPEFilter'],
+                'field_type' => BooleanType::class
+            ])
         ;
     }
 
@@ -431,12 +437,33 @@ class UserAdmin extends AbstractAdmin
         return true;
     }
 
+    public function getPEFilter($queryBuilder, $alias, $field, $value)
+    {
+
+        if ($value['value'] == BooleanType::TYPE_YES) {
+            $queryBuilder->andWhere($queryBuilder->expr()->orX(
+                $queryBuilder->expr()->neq($alias.'.periodeEssai', $queryBuilder->expr()->literal('NULL'))
+            ));    
+        } else {
+            $queryBuilder->andWhere($queryBuilder->expr()->orX(
+                $queryBuilder->expr()->isNull($alias.'.periodeEssai')
+            ));
+    
+        }
+
+        return true;
+    }
+
     public function getFilterParameters()
     {
         $this->datagridValues = array_merge([
             'enabled' => [
                 'type'  => EqualOperatorType::TYPE_EQUAL,
                 'value' => BooleanType::TYPE_YES
+            ],
+            'periodeEssai' => [
+                'type'  => EqualOperatorType::TYPE_EQUAL,
+                'value' => BooleanType::TYPE_NO
             ]
         ], $this->datagridValues);
 
