@@ -406,7 +406,7 @@ class UserAdmin extends AbstractAdmin
             ->add('carteImprimee', null, ['label' => 'Carte imprimée ?'])
             ->add('enabled', null, ['label' => 'Actif ?'])
             ->add('periodeEssai', 'doctrine_orm_callback', [
-                'label' => 'En PE ?',
+                'label' => 'En période d\'essai ?',
                 'show_filter' => true,
                 'callback' => [$this, 'getPEFilter'],
                 'field_type' => BooleanType::class

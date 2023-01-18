@@ -136,13 +136,15 @@ class SecurityController extends AbstractController
                 $stmt1 = $connection->prepare($sql1);
                 $stmt1->executeQuery(["lastId" => $lastId]);
 
-                if ($user->getPeriodeEssai()) {
+                $essai = $user->getPeriodeEssai();
+
+                if ($essai) {
                     $message = (new Email())
                     ->subject('Bienvenu à la Chouette Coop - La Chouette Coop')
                     ->from('contact@mintset.io')
                     ->to($user->getEmail())
                     ->html(
-                        $this->renderView('planning/notificationEssai.html.twig', []),
+                        $this->renderView('planning/notificationEssai.html.twig', ['essai' => $essai]),
                         'text/html'
                     );
                     $mailer->send($message);
