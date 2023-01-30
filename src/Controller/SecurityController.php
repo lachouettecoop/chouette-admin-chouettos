@@ -140,8 +140,8 @@ class SecurityController extends AbstractController
 
                 if ($essai) {
                     $message = (new Email())
-                    ->subject('Bienvenu à la Chouette Coop - La Chouette Coop')
-                    ->from('contact@mintset.io')
+                    ->subject('Bienvenue à la Chouette Coop - La Chouette Coop')
+                    ->from('bureau-des-membres@lachouettecoop.fr')
                     ->to($user->getEmail())
                     ->html(
                         $this->renderView('planning/notificationEssai.html.twig', ['essai' => $essai]),

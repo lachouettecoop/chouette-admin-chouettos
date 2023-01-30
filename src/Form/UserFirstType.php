@@ -20,16 +20,6 @@ class UserFirstType extends AbstractType
         $builder
             ->add('nom', null, array('label' => 'Nom', 'attr' => array( 'class' => 'form-control' ), 'required' => true))
             ->add('prenom', null, array('label' => 'Prénom', 'attr' => array( 'class' => 'form-control' ), 'required' => true))
-            ->add('periodeEssai', DatePickerType::class, array(
-                'label' => "Période d'essai ?",
-                'required' => false,
-                'format' => 'dd/MM/yyyy',
-                'attr' => array(
-                    'data-date-format' => 'DD/MM/YYYY',
-                    'placeholder' => '31/01/1970'
-                ),
-                'help' => "Renseignez la date de la fin de la période d'essai à laquelle le chouettos devra sourscrire ou non."
-            ))
             ->add('email', RepeatedType::class, array(
                 'type' => EmailType::class,
                 'options' => array('translation_domain' => 'FOSUserBundle', 'attr' => array( 'class' => 'form-control' )),
@@ -43,6 +33,16 @@ class UserFirstType extends AbstractType
                 'first_options' => array('label' => 'Mot de passe'),
                 'second_options' => array('label' => 'Confirmer le mot de passe :'),
                 'invalid_message' => 'Les mots de passe ne sont pas identique',
+            ))
+            ->add('periodeEssai', DatePickerType::class, array(
+                'label' => "Période d'essai",
+                'required' => false,
+                'format' => 'dd/MM/yyyy',
+                'attr' => array(
+                    'data-date-format' => 'DD/MM/YYYY',
+                    'placeholder' => '31/01/1970'
+                ),
+                'help' => "Si l'inscription du nouveau chouettos comporte une période d'essai, renseigner une date de fin pour cette période."
             ))
             ->add('submit', SubmitType::class, array('attr' => array( 'class' => 'btn btn-primary' ), 'label' => 'Enregistrer'))
         ;

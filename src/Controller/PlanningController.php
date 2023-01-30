@@ -160,14 +160,14 @@ class PlanningController extends AbstractController
             
             if ( date_format($essai,"Y-m-d") == $next3WeeksDate) {
                 $emailContent = $this->renderView('planning/notificationEssaiFirstReminder.html.twig', []);
-                $this->sendEmail("Informations relative à votre période d'éssai", $user->getEmail(), $emailContent, $mailer);
+                $this->sendEmail("Informations relative à votre période d'essai", $user->getEmail(), $emailContent, $mailer);
             }
             if ( date_format($essai,"Y-m-d") == $nextWeekDate) {
                 $emailContent = $this->renderView('planning/notificationEssaiSecondReminder.html.twig', []);
-                $this->sendEmail("Rappel suite de votre période d'éssai", $user->getEmail(), $emailContent, $mailer);
+                $this->sendEmail("Rappel suite de votre période d'essai", $user->getEmail(), $emailContent, $mailer);
             }
 
-            if ($date > $essai) {
+            if ($date > $essai && $user->getEnabled()) {
                 $user->setEnabled(false);
                 $em->persist($user);
                 $emailContent = $this->renderView('planning/notificationEssaiNotInterested.html.twig', []);
