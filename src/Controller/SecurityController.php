@@ -76,6 +76,42 @@ class SecurityController extends AbstractController
     }
 
     /**
+     * @Route("/login_admin_api", name="app_login_admin_api")
+     */
+    public function loginAdminAPI(LdapController $ldapController,
+                             Request $request,
+                             EntityManagerInterface $em,
+                             GuardAuthenticatorHandler $guardHandler,
+                             LoginFormAuthenticator $formAuthenticator): Response
+    {
+        $email = $request->get('username');
+        $password = $request->get('password');
+
+        $response = $ldapController->connectToLdapAsUser($email, $password);
+        if($response){
+            $user = $em->getRepository('App:User')->findOneByEmail($email);
+            if($user && $user->getRoles() == 'ROLE_ADMIN'){
+                $user->setApiToken(rtrim(strtr(base64_encode(random_bytes(32)), '+/', '-_'), '='));
+                $em->persist($user);
+                $em->flush();
+
+                $guardHandler->authenticateUserAndHandleSuccess(
+                    $user,
+                    $request,
+                    $formAuthenticator,
+                    'main'
+                );
+                $responsejson = new JsonResponse(['etat' => 'success', 'userId' => $user->getId(), 'token' => $user->getApiToken()]);
+                $responsejson->headers->set('Access-Control-Allow-Origin', '*');
+                return $responsejson;
+            }
+        }
+        $responsejson = new JsonResponse(['etat' => 'failure'], Response::HTTP_UNAUTHORIZED);
+        $responsejson->headers->set('Access-Control-Allow-Origin', '*');
+        return $responsejson;
+    }
+
+    /**
      * @Route("/logout", name="app_logout")
      */
     public function logout()
