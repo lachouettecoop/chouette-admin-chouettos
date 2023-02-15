@@ -42,7 +42,7 @@ class UserFirstType extends AbstractType
                     'data-date-format' => 'DD/MM/YYYY',
                     'placeholder' => '31/01/1970'
                 ),
-                'help' => "Si l'inscription du nouveau chouettos comporte une période d'essai, renseigner une date de fin pour cette période."
+                'help' => "Si l'inscription du nouveau chouettos comporte une période d'essai, renseigner une date de fin pour cette période (de 2 mois par défaut)."
             ))
             ->add('submit', SubmitType::class, array('attr' => array( 'class' => 'btn btn-primary' ), 'label' => 'Enregistrer'))
         ;
