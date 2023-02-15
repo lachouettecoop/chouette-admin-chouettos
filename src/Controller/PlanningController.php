@@ -145,6 +145,43 @@ class PlanningController extends AbstractController
 
     /**
      *
+     * @Route("/mouli/essai", name="app_cron_update_periode_essai")
+     * @return Response
+     */
+    public function updatePeriodeEssai(EntityManagerInterface $em, MailerInterface $mailer): Response
+    {
+        $users = $em->getRepository('App:User')->findForPeriodeEssai();
+        $date = date_create();
+        $nextWeekDate = date("Y-m-d", strtotime("7 days"));
+        $next3WeeksDate = date("Y-m-d", strtotime("21 days"));
+        
+        foreach ($users as $user) {
+            $essai = $user->getPeriodeEssai();
+            
+            if ( date_format($essai,"Y-m-d") == $next3WeeksDate) {
+                $emailContent = $this->renderView('planning/notificationEssaiFirstReminder.html.twig', []);
+                $this->sendEmail("Informations relative à votre période d'essai", $user->getEmail(), $emailContent, $mailer);
+            }
+            if ( date_format($essai,"Y-m-d") == $nextWeekDate) {
+                $emailContent = $this->renderView('planning/notificationEssaiSecondReminder.html.twig', []);
+                $this->sendEmail("Rappel suite de votre période d'essai", $user->getEmail(), $emailContent, $mailer);
+            }
+
+            if ($date > $essai && $user->getEnabled()) {
+                $user->setEnabled(false);
+                $em->persist($user);
+                $emailContent = $this->renderView('planning/notificationEssaiNotInterested.html.twig', []);
+                $this->sendEmail("Informations de votre fin de période d'essai", $user->getEmail(), $emailContent, $mailer);
+            }
+        }
+
+        $em->flush();
+
+        return $this->render('main/index.html.twig', []);
+    }
+
+    /**
+     *
      * @Route("/mouli/4dzq564d6/init", name="app_plan_moil_init")
      * @return Response
      */
@@ -356,14 +393,17 @@ class PlanningController extends AbstractController
         return $nextDate;
     }
 
-    public function sendEmail($sujet, $email, $content, MailerInterface $mailer)
+    public function sendEmail($sujet, $email, $content, MailerInterface $mailer, $cc = "")
     {
         $message = (new Email())
             ->subject($sujet)
             ->from('bureau-des-membres@lachouettecoop.fr')
             ->to($email)
-            ->html($content,'utf-8')
-        ;
+            ->html($content,'utf-8');
+
+        if ($cc) {
+            $message->cc($cc);
+        }
 
         $mailer->send($message);
 

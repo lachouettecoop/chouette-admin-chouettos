@@ -1,0 +1,15 @@
+{% extends "template_email.html.twig" %}
+
+{% block titre %}Informations relative à ta période d'essai{% endblock %}
+
+{% block introduction %}
+
+    <p style="margin: 0;font-size: 16px;line-height: 14px;">
+
+<b>Bonjour, </b><br/><br/>
+        Dans une semaine ta période d'essai va expirer et tu ne pourras plus faire tes courses au magasin.<br/>
+
+{% include "planning/templateNotificationEssaiReminder.html.twig" %}
+
+{% endblock %}
+

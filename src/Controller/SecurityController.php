@@ -89,6 +89,7 @@ class SecurityController extends AbstractController
      */
     public function premierEnregistrement(Request $request,
                                           EntityManagerInterface $em,
+                                          MailerInterface $mailer,
                                           UserPasswordEncoderInterface $passwordEncoder,
                                           LdapController $ldapController): Response
     {
@@ -134,6 +135,20 @@ class SecurityController extends AbstractController
                 $sql1 = "INSERT INTO user_role (user_id, role_id) VALUES (:lastId, 11);";
                 $stmt1 = $connection->prepare($sql1);
                 $stmt1->executeQuery(["lastId" => $lastId]);
+
+                $essai = $user->getPeriodeEssai();
+
+                if ($essai) {
+                    $message = (new Email())
+                    ->subject('Bienvenue à la Chouette Coop - La Chouette Coop')
+                    ->from('bureau-des-membres@lachouettecoop.fr')
+                    ->to($user->getEmail())
+                    ->html(
+                        $this->renderView('planning/notificationEssai.html.twig', ['essai' => $essai]),
+                        'text/html'
+                    );
+                    $mailer->send($message);
+                }
 
                 return $this->render('security/premier_enregistrement_final.html.twig');
             }

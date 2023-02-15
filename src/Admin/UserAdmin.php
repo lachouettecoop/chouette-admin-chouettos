@@ -256,6 +256,16 @@ class UserAdmin extends AbstractAdmin
                     <br><em>Il faut compter environ 1 journée afin que la modification se propage au sein des différents outils.</em>
                 '
             ))
+            ->add('periodeEssai', DatePickerType::class, array(
+                'label' => "Période d'essai ?",
+                'required' => false,
+                'format' => 'dd/MM/yyyy',
+                'attr' => array(
+                    'data-date-format' => 'DD/MM/YYYY',
+                    'placeholder' => '31/01/1970'
+                ),
+                'help' => "Renseignez la date de la fin de la période d'essai à laquelle le chouettos devra sourscrire ou non."
+            ))
             ->add('actif', null, array('required' => false, 'label' => 'Actif·ve dans un groupe ?'))
             ->add('gh', null, array('required' => false, 'label' => 'Authorisation d\'ouvrir la porte du supermarché ? (Anciennement GH ?) '))
             ->add('carteImprimee', null, array('required' => false, 'label' => 'Carte imprimée ?'))
@@ -395,6 +405,12 @@ class UserAdmin extends AbstractAdmin
             ->add('gh')
             ->add('carteImprimee', null, ['label' => 'Carte imprimée ?'])
             ->add('enabled', null, ['label' => 'Actif ?'])
+            ->add('periodeEssai', 'doctrine_orm_callback', [
+                'label' => 'En période d\'essai ?',
+                'show_filter' => true,
+                'callback' => [$this, 'getPEFilter'],
+                'field_type' => BooleanType::class
+            ])
         ;
     }
 
@@ -421,12 +437,33 @@ class UserAdmin extends AbstractAdmin
         return true;
     }
 
+    public function getPEFilter($queryBuilder, $alias, $field, $value)
+    {
+
+        if ($value['value'] == BooleanType::TYPE_YES) {
+            $queryBuilder->andWhere($queryBuilder->expr()->orX(
+                $queryBuilder->expr()->neq($alias.'.periodeEssai', $queryBuilder->expr()->literal('NULL'))
+            ));    
+        } else {
+            $queryBuilder->andWhere($queryBuilder->expr()->orX(
+                $queryBuilder->expr()->isNull($alias.'.periodeEssai')
+            ));
+    
+        }
+
+        return true;
+    }
+
     public function getFilterParameters()
     {
         $this->datagridValues = array_merge([
             'enabled' => [
                 'type'  => EqualOperatorType::TYPE_EQUAL,
                 'value' => BooleanType::TYPE_YES
+            ],
+            'periodeEssai' => [
+                'type'  => EqualOperatorType::TYPE_EQUAL,
+                'value' => BooleanType::TYPE_NO
             ]
         ], $this->datagridValues);
 

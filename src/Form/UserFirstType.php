@@ -10,6 +10,8 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Sonata\Form\Type\DatePickerType;
+
 
 class UserFirstType extends AbstractType
 {
@@ -31,6 +33,16 @@ class UserFirstType extends AbstractType
                 'first_options' => array('label' => 'Mot de passe'),
                 'second_options' => array('label' => 'Confirmer le mot de passe :'),
                 'invalid_message' => 'Les mots de passe ne sont pas identique',
+            ))
+            ->add('periodeEssai', DatePickerType::class, array(
+                'label' => "Période d'essai",
+                'required' => false,
+                'format' => 'dd/MM/yyyy',
+                'attr' => array(
+                    'data-date-format' => 'DD/MM/YYYY',
+                    'placeholder' => '31/01/1970'
+                ),
+                'help' => "Si l'inscription du nouveau chouettos comporte une période d'essai, renseigner une date de fin pour cette période (de 2 mois par défaut)."
             ))
             ->add('submit', SubmitType::class, array('attr' => array( 'class' => 'btn btn-primary' ), 'label' => 'Enregistrer'))
         ;
