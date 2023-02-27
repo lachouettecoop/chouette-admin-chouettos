@@ -252,8 +252,14 @@ class PlanningController extends AbstractController
         $sujet = $request->get('sujet');
         $email = $request->get('email');
         $corps = $request->get('corps');
+        $isRaw = $request->get('isRaw');
 
-        $emailContent = $this->renderView('planning/messageGenerique.html.twig', ['sujet' => $sujet, 'corps' => $corps]);
+        if (filter_var($isRaw, \FILTER_VALIDATE_BOOLEAN)) {
+        $emailContent = $this->renderView('template_email_raw.html.twig', ['corps' => $corps]);
+        } else {
+            $emailContent = $this->renderView('planning/messageGenerique.html.twig', ['sujet' => $sujet, 'corps' => $corps]);
+        }
+
         $this->sendEmail($sujet.'- La Chouette Coop', $email, $emailContent, $mailer);
 
         $responsejson = new JsonResponse(['etat' => 'success']);
