@@ -322,6 +322,11 @@ class User implements UserInterface
      */
     private $periodeEssai;
 
+        /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $wasInPeriodeEssai = false;
+
     public function __construct()
     {
         $this->adresses = new ArrayCollection();
@@ -1215,6 +1220,18 @@ class User implements UserInterface
     public function setPeriodeEssai(?\DateTimeInterface $periodeEssai): self
     {
         $this->periodeEssai = $periodeEssai;
+
+        return $this;
+    }
+
+    public function getWasInPeriodeEssai(): ?bool
+    {
+        return $this->wasInPeriodeEssai;
+    }
+
+    public function setWasInPeriodeEssai(?bool $wasInPeriodeEssai): self
+    {
+        $this->wasInPeriodeEssai = $wasInPeriodeEssai;
 
         return $this;
     }

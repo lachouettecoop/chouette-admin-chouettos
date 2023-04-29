@@ -116,6 +116,11 @@ class SecurityController extends AbstractController
                 //enregistrement pour avoir l'ID de l'objet
                 $user->setEnabled(true);
                 $em->persist($user);
+
+                if ($user->getPeriodeEssai()) {
+                    $user->setwasInPeriodeEssai(true);
+                }
+
                 $em->flush();
 
                 //on ajoute au LDAP et on efface le mdp
