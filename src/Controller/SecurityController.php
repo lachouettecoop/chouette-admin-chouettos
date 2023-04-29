@@ -113,8 +113,12 @@ class SecurityController extends AbstractController
                     $user->setCodeBarre($codeBarre);
                 }
 
+
+                $dateDebut = (new \DateTime("now"));
+
                 //enregistrement pour avoir l'ID de l'objet
                 $user->setEnabled(true);
+                $user->setDateDebutPiaf($dateDebut);
                 $em->persist($user);
                 $em->flush();
 
