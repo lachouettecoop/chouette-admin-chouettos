@@ -113,18 +113,12 @@ class SecurityController extends AbstractController
                     $user->setCodeBarre($codeBarre);
                 }
 
+
                 $dateDebut = (new \DateTime("now"));
 
                 //enregistrement pour avoir l'ID de l'objet
                 $user->setEnabled(true);
                 $user->setDateDebutPiaf($dateDebut);
-
-                $roleChouettos = $em->getRepository("App:Role")->findOneBy(['id' => 2]);
-                $roleChouettosCartonCagette = $em->getRepository("App:Role")->findOneBy(['id' => 11]);
-
-                $user->addRolesChouette($roleChouettos);
-                $user->addRolesChouette($roleChouettosCartonCagette);
-
                 $em->persist($user);
                 $em->flush();
 
