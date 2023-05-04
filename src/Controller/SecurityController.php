@@ -120,6 +120,11 @@ class SecurityController extends AbstractController
                 $user->setEnabled(true);
                 $user->setDateDebutPiaf($dateDebut);
                 $em->persist($user);
+
+                if ($user->getPeriodeEssai()) {
+                    $user->setwasInPeriodeEssai(true);
+                }
+
                 $em->flush();
 
                 //on ajoute au LDAP et on efface le mdp
