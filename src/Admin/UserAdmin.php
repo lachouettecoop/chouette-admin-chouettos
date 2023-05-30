@@ -81,7 +81,10 @@ class UserAdmin extends AbstractAdmin
                 'label' => 'Carte imprimée',
                 'ask_confirmation' => true
             );
-
+            $actions['anonymiser'] = array(
+                'label' => 'Anonymiser',
+                'ask_confirmation' => true
+            );
         }
         $actions = array_merge($actions, parent::getBatchActions());
         return $actions;
