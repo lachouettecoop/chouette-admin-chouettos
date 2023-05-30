@@ -170,6 +170,8 @@ class PlanningController extends AbstractController
             if ($date > $essai && $user->getEnabled()) {
                 $user->setEnabled(false);
                 $em->persist($user);
+                $this->ldapService->removeUserOnLDAP($user);
+
                 $emailContent = $this->renderView('planning/notificationEssaiNotInterested.html.twig', []);
                 $this->sendEmail("Informations de votre fin de période d'essai", $user->getEmail(), $emailContent, $mailer);
             }
