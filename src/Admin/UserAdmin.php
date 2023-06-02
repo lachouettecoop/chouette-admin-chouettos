@@ -126,9 +126,10 @@ class UserAdmin extends AbstractAdmin
         } elseif (!$user->getEnabled() && $this->originalUserData['enabled'] == true) {
             $this->ldapService->removeUserOnLDAP($user);
         } elseif (!$user->getEnabled()) {
-
         } else {
-            $this->ldapService->addUserOnLDAP($user);
+            if (!$this->originalUserData['periodeEssai']) {
+                $this->ldapService->addUserOnLDAP($user);
+            }
         }
     }
 
