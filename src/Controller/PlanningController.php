@@ -32,7 +32,22 @@ class PlanningController extends AbstractController
         foreach ($piafs as $piaf) {
             /** @var User $piaffeur */
             $piaffeur = $piaf->getPiaffeur();
-            if ($piaffeur != null and $piaf->getPourvu() and !$piaf->getComptabilise()) {
+            $creneau = $piaf->getCreneau();
+            $isDemiPiaf = $creneau->getDemiPiaf();
+            $isDemiPiafFull = false;
+
+            if ($isDemiPiaf) {
+                $nbDemiPiaf = $piaffeur->getNbDemiPiaf();
+                if ($nbDemiPiaf == 0) {
+                    $piaffeur->setNbDemiPiaf(1);
+                    $piaf->setComptabilise(true);
+                }
+                if ($nbDemiPiaf == 1) {
+                    $piaffeur->setNbDemiPiaf(0);
+                    $isDemiPiafFull = true;
+                }
+            }
+            if ((!$isDemiPiaf or $isDemiPiafFull) and $piaffeur != null and $piaf->getPourvu() and !$piaf->getComptabilise()) {
                 $piaffeur->setNbPiafEffectuees($piaffeur->getNbPiafEffectuees() +1);
                 $piaf->setComptabilise(true);
 
@@ -433,6 +448,7 @@ class PlanningController extends AbstractController
                     $creneau->setDebut($nextDateDebutCreneau);
                     $creneau->setFin($nextDateFinCreneau);
                     $creneau->setTitre($creneauGenerique->getTitre());
+                    $creneau->setDemiPiaf($creneauGenerique->getDemiPiaf());
 
                     foreach ($creneauGenerique->getPostes() as $poste){
                         $piaf = new Piaf();

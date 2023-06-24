@@ -276,6 +276,12 @@ class User implements UserInterface
      */
     private $nbPiafEffectuees = 0;
 
+     /**
+     * @Groups({"read:creneauGenerique"})
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $nbDemiPiaf = 0;
+
     /**
      * @Groups({"read:creneauGenerique"})
      * @ORM\Column(type="integer", nullable=true)
@@ -1088,6 +1094,18 @@ class User implements UserInterface
     public function setNbPiafEffectuees(?int $nbPiafEffectuees): self
     {
         $this->nbPiafEffectuees = $nbPiafEffectuees;
+
+        return $this;
+    }
+
+    public function getNbDemiPiaf(): ?int
+    {
+        return $this->nbDemiPiaf;
+    }
+
+    public function setNbDemiPiaf(?int $nbDemiPiaf): self
+    {
+        $this->nbDemiPiaf = $nbDemiPiaf;
 
         return $this;
     }

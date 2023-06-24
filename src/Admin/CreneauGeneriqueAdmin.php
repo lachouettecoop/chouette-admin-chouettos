@@ -62,6 +62,7 @@ final class CreneauGeneriqueAdmin extends AbstractAdmin
             )
             ->add('actif')
             ->add('horsMag')
+            ->add('demiPiaf')
         ;
     }
 

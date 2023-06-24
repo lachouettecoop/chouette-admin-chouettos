@@ -69,6 +69,12 @@ class Creneau
      */
     private $horsMag = true;
 
+    /**
+     * @Groups({"read:creneauGenerique"})
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $demiPiaf = false;
+
     public function __toString()
     {
         return (string)$this->debut->format('d/m/Y');
@@ -182,6 +188,18 @@ class Creneau
     public function setHorsMag(?bool $horsMag): self
     {
         $this->horsMag = $horsMag;
+
+        return $this;
+    }
+    
+    public function getDemiPiaf(): ?bool
+    {
+        return $this->demiPiaf;
+    }
+
+    public function setDemiPiaf(?bool $demiPiaf): self
+    {
+        $this->demiPiaf = $demiPiaf;
 
         return $this;
     }
