@@ -212,7 +212,9 @@ class UserAdmin extends AbstractAdmin
                 'label' => 'Civilité',
                 'choices' => array(
                     'Madame' => 'mme',
-                    'Monsieur' => 'mr'
+                    'Monsieur' => 'mr',
+                    'Non binaire' => 'nb',
+                    'Non spécifié' => 'ns'
                 )
             ))
             ->add('nom', null, array(
