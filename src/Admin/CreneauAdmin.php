@@ -34,6 +34,7 @@ final class CreneauAdmin extends AbstractAdmin
             ->add('titre')
             ->add('informations')
             ->add('horsMag')
+            ->add('demiPiaf')
         ;
     }
 
