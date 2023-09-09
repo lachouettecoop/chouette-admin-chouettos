@@ -45,12 +45,11 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: ^/31enregistrement, roles: ROLE_USER }
         - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/notif, roles: IS_AUTHENTICATED_ANONYMOUSLY, host: symfony }
-        - { path: ^/notif, roles: ROLE_NO_ACCESS }
-        - { path: ^/mouli, roles: IS_AUTHENTICATED_ANONYMOUSLY, host: symfony }
-        - { path: ^/mouli, roles: ROLE_NO_ACCESS }
+        # - { path: ^/notif, roles: IS_AUTHENTICATED_ANONYMOUSLY, host: symfony }
+        - { path: ^/notif, roles: ROLE_ADMIN }
+        # - { path: ^/mouli, roles: IS_AUTHENTICATED_ANONYMOUSLY, host: symfony }
+        - { path: ^/mouli, roles: ROLE_ADMIN }
         - { path: ^/docs, roles: ROLE_USER }
         - { path: ^/api, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         #- { path: ^/profile, roles: ROLE_USER }
