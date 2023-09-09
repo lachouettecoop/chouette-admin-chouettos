@@ -312,8 +312,9 @@ class UserAdmin extends AbstractAdmin
                 'chouette en alerte' => 'chouette en alerte'
                 ]
             ])
-            ->add('nbPiafAttendues')
-            ->add('nbPiafEffectuees')
+            ->add('nbPiafAttendues', null, array('required' => false, 'label' => 'Nombre de piafs attendues'))
+            ->add('nbPiafEffectuees', null, array('required' => false, 'label' => 'Nombre de piafs effectuées'))
+            ->add('nbDemiPiaf',  null, array('required' => false, 'label' => 'Nombre de demi-piafs effectuées (ne peut contenir que 0, 1 ou 2 - correspond à 0, 0.5 et 1)'))
             ->add('absenceLongueDureeSansCourses')
             ->add('absenceLongueDureeCourses')
             ->add('attenteCommissionParticipation')
