@@ -4,132 +4,196 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    domain_name: '%env(resolve:LDAP_DOM)%'
-    username: '%env(resolve:LDAP_USER)%'
-    password: '%env(resolve:LDAP_PASS)%'
-    base_dn: '%env(resolve:LDAP_DN)%'
+  domain_name: "%env(resolve:LDAP_DOM)%"
+  username: "%env(resolve:LDAP_USER)%"
+  password: "%env(resolve:LDAP_PASS)%"
+  base_dn: "%env(resolve:LDAP_DN)%"
 
 services:
-    # default configuration for services in *this* file
-    _defaults:
-        autowire: true      # Automatically injects dependencies in your services.
-        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-        bind:
-            $ldapDomain: '%domain_name%'
-            $ldapUsername: '%username%'
-            $ldapPassword: '%password%'
-            $ldapBaseDn: '%base_dn%'
+  # default configuration for services in *this* file
+  _defaults:
+    autowire: true # Automatically injects dependencies in your services.
+    autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+    bind:
+      $ldapDomain: "%domain_name%"
+      $ldapUsername: "%username%"
+      $ldapPassword: "%password%"
+      $ldapBaseDn: "%base_dn%"
 
-    # makes classes in src/ available to be used as services
-    # this creates a service per class whose id is the fully-qualified class name
-    App\:
-        resource: '../src/'
-        exclude:
-            - '../src/DependencyInjection/'
-            - '../src/Entity/'
-            - '../src/Kernel.php'
-            - '../src/Tests/'
+  # makes classes in src/ available to be used as services
+  # this creates a service per class whose id is the fully-qualified class name
+  App\:
+    resource: "../src/"
+    exclude:
+      - "../src/DependencyInjection/"
+      - "../src/Entity/"
+      - "../src/Kernel.php"
+      - "../src/Tests/"
 
-    # controllers are imported separately to make sure services can be injected
-    # as action arguments even if you don't extend any base controller class
-    App\Controller\:
-        resource: '../src/Controller/'
-        tags: ['controller.service_arguments']
+  # controllers are imported separately to make sure services can be injected
+  # as action arguments even if you don't extend any base controller class
+  App\Controller\:
+    resource: "../src/Controller/"
+    tags: ["controller.service_arguments"]
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+  # add more service definitions when explicit configuration is needed
+  # please note that last definitions always *replace* previous ones
 
-    admin.adresse:
-        class: App\Admin\AdresseAdmin
-        arguments: [~, App\Entity\Adresse, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Adresse, show_in_dashboard: false }
-        public: true
+  admin.adresse:
+    class: App\Admin\AdresseAdmin
+    arguments: [~, App\Entity\Adresse, ~]
+    tags:
+      - {
+          name: sonata.admin,
+          manager_type: orm,
+          group: admin,
+          label: Adresse,
+          show_in_dashboard: false,
+        }
+    public: true
 
-    sonata.admin.utilisateur:
-        class: App\Admin\UserAdmin
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: "Gestion des membres", label: "Chouettos" }
-        arguments:
-            - ~
-            - App\Entity\User
-            - App\Controller\UserAdminController
-        calls:
-            - [ setTranslationDomain, [ GlukoseAdminContactBundle ] ]
-            - [ setLdapService, [ '@App\Controller\LdapController' ] ]
-            - [setUserPasswordEncoder, ['@security.password_encoder']]
+  sonata.admin.utilisateur:
+    class: App\Admin\UserAdmin
+    tags:
+      - {
+          name: sonata.admin,
+          manager_type: orm,
+          group: "Gestion des membres",
+          label: "Chouettos",
+        }
+    arguments:
+      - ~
+      - App\Entity\User
+      - App\Controller\UserAdminController
+    calls:
+      - [setTranslationDomain, [GlukoseAdminContactBundle]]
+      - [setLdapService, ['@App\Controller\LdapController']]
+      - [setUserPasswordEncoder, ["@security.password_encoder"]]
 
-    sonata.admin.adhesion:
-        class: App\Admin\AdhesionAdmin
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: "Gestion des membres", label: "Adhesions", show_in_dashboard: false }
-        arguments:
-            - ~
-            - App\Entity\Adhesion
-            - ~
-        calls:
-            - [ setTranslationDomain, [ GlukoseAdminContactBundle ] ]
+  sonata.admin.adhesion:
+    class: App\Admin\AdhesionAdmin
+    tags:
+      - {
+          name: sonata.admin,
+          manager_type: orm,
+          group: "Gestion des membres",
+          label: "Adhesions",
+          show_in_dashboard: false,
+        }
+    arguments:
+      - ~
+      - App\Entity\Adhesion
+      - ~
+    calls:
+      - [setTranslationDomain, [GlukoseAdminContactBundle]]
 
-    sonata.admin.paiement:
-        class: App\Admin\PaiementAdmin
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: "Gestion des membres", label: "Paiements", show_in_dashboard: false }
-        arguments:
-            - ~
-            - App\Entity\Paiement
-            - ~
-        calls:
-            - [ setTranslationDomain, [ GlukoseAdminContactBundle ] ]
+  sonata.admin.paiement:
+    class: App\Admin\PaiementAdmin
+    tags:
+      - {
+          name: sonata.admin,
+          manager_type: orm,
+          group: "Gestion des membres",
+          label: "Paiements",
+          show_in_dashboard: false,
+        }
+    arguments:
+      - ~
+      - App\Entity\Paiement
+      - ~
+    calls:
+      - [setTranslationDomain, [GlukoseAdminContactBundle]]
 
-    sonata.admin.personne:
-        class: App\Admin\PersonneAdmin
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: "Gestion des membres", label: "Personnes intéréssées" }
-        arguments:
-            - ~
-            - App\Entity\Personne
-            - ~
-        calls:
-            - [ setTranslationDomain, [ GlukoseAdminContactBundle ] ]
+  sonata.admin.personne:
+    class: App\Admin\PersonneAdmin
+    tags:
+      - {
+          name: sonata.admin,
+          manager_type: orm,
+          group: "Gestion des membres",
+          label: "Personnes intéréssées",
+        }
+    arguments:
+      - ~
+      - App\Entity\Personne
+      - ~
+    calls:
+      - [setTranslationDomain, [GlukoseAdminContactBundle]]
 
-    admin.personne_rattachee:
-        class: App\Admin\PersonneRattacheeAdmin
-        arguments: [~, App\Entity\PersonneRattachee, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: PersonneRattachee, show_in_dashboard: false }
-        public: true
+  admin.personne_rattachee:
+    class: App\Admin\PersonneRattacheeAdmin
+    arguments: [~, App\Entity\PersonneRattachee, ~]
+    tags:
+      - {
+          name: sonata.admin,
+          manager_type: orm,
+          group: admin,
+          label: PersonneRattachee,
+          show_in_dashboard: false,
+        }
+    public: true
 
-    admin.creneau_generique:
-        class: App\Admin\CreneauGeneriqueAdmin
-        arguments: [~, App\Entity\CreneauGenerique, App\Admin\CustomAction]
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: "Planning", label: CreneauGenerique, show_in_dashboard: true }
-        public: true
+  admin.creneau_generique:
+    class: App\Admin\CreneauGeneriqueAdmin
+    arguments: [~, App\Entity\CreneauGenerique, App\Admin\CustomAction]
+    tags:
+      - {
+          name: sonata.admin,
+          manager_type: orm,
+          group: "Planning",
+          label: CreneauGenerique,
+          show_in_dashboard: true,
+        }
+    public: true
 
-    admin.creneau:
-        class: App\Admin\CreneauAdmin
-        arguments: [~, App\Entity\Creneau, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: "Planning", label: Creneau, show_in_dashboard: true }
-        public: true
+  admin.creneau:
+    class: App\Admin\CreneauAdmin
+    arguments: [~, App\Entity\Creneau, ~]
+    tags:
+      - {
+          name: sonata.admin,
+          manager_type: orm,
+          group: "Planning",
+          label: Creneau,
+          show_in_dashboard: true,
+        }
+    public: true
 
-    admin.role:
-        class: App\Admin\RoleAdmin
-        arguments: [~, App\Entity\Role, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: "Planning", label: Role, show_in_dashboard: true }
-        public: true
+  admin.role:
+    class: App\Admin\RoleAdmin
+    arguments: [~, App\Entity\Role, ~]
+    tags:
+      - {
+          name: sonata.admin,
+          manager_type: orm,
+          group: "Planning",
+          label: Role,
+          show_in_dashboard: true,
+        }
+    public: true
 
-    admin.piaf:
-        class: App\Admin\PiafAdmin
-        arguments: [~, App\Entity\Piaf, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: "Planning", label: Piaf, show_in_dashboard: false }
-        public: true
+  admin.piaf:
+    class: App\Admin\PiafAdmin
+    arguments: [~, App\Entity\Piaf, ~]
+    tags:
+      - {
+          name: sonata.admin,
+          manager_type: orm,
+          group: "Planning",
+          label: Piaf,
+          show_in_dashboard: false,
+        }
+    public: true
 
-    admin.poste:
-        class: App\Admin\PosteAdmin
-        arguments: [~, App\Entity\Poste, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: "Planning", label: Poste, show_in_dashboard: false }
-        public: true
+  admin.poste:
+    class: App\Admin\PosteAdmin
+    arguments: [~, App\Entity\Poste, ~]
+    tags:
+      - {
+          name: sonata.admin,
+          manager_type: orm,
+          group: "Planning",
+          label: Poste,
+          show_in_dashboard: false,
+        }
+    public: true

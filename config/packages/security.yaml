@@ -1,58 +1,58 @@
 security:
-    encoders:
-        App\Entity\User:
-            algorithm: auto
-            #algorithm: auto
+  encoders:
+    App\Entity\User:
+      algorithm: auto
+      #algorithm: auto
 
-    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
-    providers:
-        # used to reload user from session & other features (e.g. switch_user)
-        app_user_provider:
-            entity:
-                class: App\Entity\User
-                property: email
-        app_user_provider_api:
-            entity:
-                class: App\Entity\User
-                property: apiToken
-    firewalls:
-        dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
-            security: false
-        api:
-            pattern: /dist_api/
-            provider: app_user_provider_api
-            guard:
-                authenticators:
-                    - App\Security\ApiTokenAuthenticator
-        main:
-            anonymous: lazy
-            provider: app_user_provider
-            guard:
-                authenticators:
-                    - App\Security\LoginFormAuthenticator
-            logout:
-                path: app_logout
-                # where to redirect after logout
-                # target: app_any_route
+  # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+  providers:
+    # used to reload user from session & other features (e.g. switch_user)
+    app_user_provider:
+      entity:
+        class: App\Entity\User
+        property: email
+    app_user_provider_api:
+      entity:
+        class: App\Entity\User
+        property: apiToken
+  firewalls:
+    dev:
+      pattern: ^/(_(profiler|wdt)|css|images|js)/
+      security: false
+    api:
+      pattern: /dist_api/
+      provider: app_user_provider_api
+      guard:
+        authenticators:
+          - App\Security\ApiTokenAuthenticator
+    main:
+      anonymous: lazy
+      provider: app_user_provider
+      guard:
+        authenticators:
+          - App\Security\LoginFormAuthenticator
+      logout:
+        path: app_logout
+        # where to redirect after logout
+        # target: app_any_route
 
-            # activate different ways to authenticate
-            # https://symfony.com/doc/current/security.html#firewalls-authentication
+      # activate different ways to authenticate
+      # https://symfony.com/doc/current/security.html#firewalls-authentication
 
-            # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
+      # https://symfony.com/doc/current/security/impersonating_user.html
+      # switch_user: true
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: ^/31generercreneaux, roles: ROLE_ADMIN }
-        - { path: ^/31enregistrement, roles: ROLE_USER }
-        - { path: ^/32assoadhesion, roles: ROLE_ADMIN }
-        - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/notif, roles: IS_AUTHENTICATED_ANONYMOUSLY, host: symfony }
-        - { path: ^/notif, roles: ROLE_NO_ACCESS }
-        - { path: ^/mouli, roles: IS_AUTHENTICATED_ANONYMOUSLY, host: symfony }
-        - { path: ^/mouli, roles: ROLE_NO_ACCESS }
-        - { path: ^/docs, roles: ROLE_USER }
-        - { path: ^/api, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        #- { path: ^/profile, roles: ROLE_USER }
+      - { path: ^/31generercreneaux, roles: ROLE_ADMIN }
+      - { path: ^/31enregistrement, roles: ROLE_USER }
+      - { path: ^/32assoadhesion, roles: ROLE_ADMIN }
+      - { path: ^/admin, roles: ROLE_ADMIN }
+      # - { path: ^/notif, roles: IS_AUTHENTICATED_ANONYMOUSLY, host: symfony }
+      - { path: ^/notif, roles: ROLE_ADMIN }
+      # - { path: ^/mouli, roles: IS_AUTHENTICATED_ANONYMOUSLY, host: symfony }
+      - { path: ^/mouli, roles: ROLE_ADMIN }
+      - { path: ^/docs, roles: ROLE_USER }
+      - { path: ^/api, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+      #- { path: ^/profile, roles: ROLE_USER }
