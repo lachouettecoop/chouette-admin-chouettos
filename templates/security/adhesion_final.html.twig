@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Succes{% endblock %}
+
+{% block body %}
+
+    <div class="container mt-4 text-center">
+
+        <div class="col">
+
+            <br />
+            <br />
+            <br />
+            <h1>Adhésions enregistrées</h1>
+
+            <p> L'enregistrement du fichier csv s'est déroulé avec succès.</p>
+
+
+            <br />
+
+            <a href="{{ path('user_adhesion') }}" class="btn btn-primary"> Retour </a>
+        </div>
+    </div>
+{% endblock %}

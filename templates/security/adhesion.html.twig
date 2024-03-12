@@ -1,0 +1,102 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajout des adhésions{% endblock %}
+
+{% block body %}
+
+    <div class="container mt-4">
+
+        <div class="col">
+
+            <br />
+            <br />
+            {% for type, messages in app.session.flashbag.all() %}
+                {% for message in messages %}
+                    <div class="row top-buffer">
+                        <div class="col-md-12">
+                            <div class="alert alert-{{ type }} alert-dismissable">
+                                {{ message }}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+            <br />
+            <h1> Ajout des adhésions</h1>
+
+
+
+
+            {{ form(form) }}
+        </div>
+        <div>
+            <br />
+            <br />
+            <div>
+                Pour rappel, le fichier <span class="font-weight-bold text-decoration-underline">CSV</span> doit avoir cette nommenclature :  
+            </div>
+            <br />
+           <table>
+           <tr>
+           <td>
+            Email,Date Adhesion,Année,Montant,Mode Paiement
+            </td>
+            </tr>
+            <tr>
+            <td>
+nom.exemple@gmail.com,28/02/2024,2024,20.00,helloAsso  
+            </td>
+            </tr>
+            <tr>
+            <td>
+nom2.exemple2@gmail.com,20/02/2024,2024,20.00,cheque  
+            </td>
+            </tr>
+            <tr>
+            <td>
+...            </td>
+            </tr>
+            </table>
+            <br /> 
+
+            <div>
+            La date doit être au format jj/mm/aaaa
+            </div>
+            <div>
+            La mode de paiement doit prendre une de ces valeurs :  'helloAsso', 'cheque', 'especes', 'cb', 'virement', 'solViolette', 'autre'
+            </div>
+            <div>
+            <span class="font-weight-bold text-decoration-underline">Attention :</span> solViolette est en un seul mot (avec une majuscule)
+            </div>            
+            <div>
+L'email doit exister
+            </div>            
+
+            <div>
+            <h4>Exporter un fichier excel au format CSV</h4>
+            <ul>
+<li>
+Allez dans le menu Fichier et sélectionnez Enregistrer sous.
+</li>
+<li>
+Dans la fenêtre "Enregistrer sous", choisissez le dossier où vous souhaitez sauvegarder le fichier.
+</li>
+<li>
+Dans le menu déroulant Type de fichier, sélectionnez CSV (séparateur de champ: virgule) (*.csv).
+</li>
+<li>
+Nommez votre fichier si nécessaire.
+</li>
+<li>
+Cliquez sur Enregistrer.
+</li>
+</ul>
+        </div>
+        <div>
+        <br/>
+        <br/>
+        Enfin, et peut-être le plus important : Si vous importez 2 fois le fichier TOUTES les données seront importées en double.
+        </div>
+        </div>
+    </div>
+{% endblock %}

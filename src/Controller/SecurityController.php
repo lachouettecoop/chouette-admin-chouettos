@@ -3,9 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Adhesion;
 use App\Form\UserFirstType;
+use App\Form\UserAdhesion;
 use App\Security\LoginFormAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -19,6 +22,12 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use App\Controller\LdapController;
+
+
+use DateTime;
 
 class SecurityController extends AbstractController
 {
@@ -119,6 +128,94 @@ class SecurityController extends AbstractController
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
 
+     /**
+     * @Route("/32asso-adhesion", name="user_adhesion")
+     */
+    public function assoAdhesionForm(LdapController $ldapController,
+    Request $request,
+    EntityManagerInterface $em,
+    GuardAuthenticatorHandler $guardHandler,
+    LoginFormAuthenticator $formAuthenticator): Response
+    {
+        $form = $this->createForm(UserAdhesion::class);
+        $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+            $file = $form->get('csvFile')->getData();
+
+            if ($file) {
+                // Handle CSV processing
+                if (($handle = fopen($file->getRealPath(), "r")) !== FALSE) {
+                    // Skip the header row if your CSV has headers
+                    fgetcsv($handle);
+                    
+                    while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                        $email = $data[0];
+                        $dateAdhesion = $data[1];
+                        $annee = $data[2];
+                        $montant = $data[3];
+                        $modePaiement = $data[4];
+                        
+                        $dateObject = \DateTime::createFromFormat('d/m/Y', $dateAdhesion);
+
+                        if (!$dateObject) {
+                            return new Response('wrong date format : '.$dateAdhesion.' for email : '.$email, 500);
+                        }
+
+                        if ($dateObject && $dateObject->format('d/m/Y') !== $dateAdhesion) {
+                            return new Response('wrong date format : '.$dateAdhesion.' for email : '.$email, 500);
+                        }
+
+                        $allowedValues = ['helloAsso', 'cheque', 'especes', 'cb', 'virement', 'solViolette', 'autre'];
+
+                        if (!in_array($modePaiement, $allowedValues)) {
+                            return new Response('Failed to find mode de paiement with key : '.$modePaiement.' for email : '.$email, 500);
+                        }
+                        
+                        // Find the user by email
+                        $user = $em->getRepository(User::class)->findOneBy(['email' => $email]);
+
+                        foreach ($user->getAdhesions() as $adhesion) {
+                            if ($adhesion->getAnnee() == $annee) {
+                            return new Response('An adhesion already exists for annee : '.$annee.' for email : '.$email, 500);
+                            }
+                        }
+
+                        if ($user) {
+                            // Create a new Adhesion entity and set its properties
+                            $adhesion = new Adhesion();
+                            $adhesion->setUser($user);
+                            $adhesion->setMontant($montant);
+                            $adhesion->setModePaiement($modePaiement);
+                            $adhesion->setAnnee($annee);
+                            $adhesion->setDateAdhesion($dateObject);
+                            
+                            // Persist the new Adhesion entity
+                            $em->persist($adhesion);
+                        } else {
+                            return new Response('Failed to find user with email : '.$email, 500);
+                        }
+                    }
+                    fclose($handle);
+                    
+                    // Flush once after processing all rows to save everything at once
+                    $em->flush();
+                    
+                    // Optional: Add a success message or redirect
+
+                    return $this->render('security/adhesion_final.html.twig');
+                } else {
+                    // Handle file open error
+                    return new Response('Failed to open the uploaded CSV file.', 500);
+                }
+            }
+           
+        }
+
+        return $this->render('security/adhesion.html.twig', ['form' => $form->createView()] );
+
+    }
+    
 
     /**
      * @Route("/31enregistrement", name="app_premier_enregistrement")
