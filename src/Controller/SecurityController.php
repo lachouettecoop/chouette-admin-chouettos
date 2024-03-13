@@ -129,7 +129,7 @@ class SecurityController extends AbstractController
     }
 
      /**
-     * @Route("/32asso-adhesion", name="user_adhesion")
+     * @Route("/32assoadhesion", name="user_adhesion")
      */
     public function assoAdhesionForm(LdapController $ldapController,
     Request $request,

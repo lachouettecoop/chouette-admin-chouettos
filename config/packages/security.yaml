@@ -46,7 +46,7 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/31enregistrement, roles: ROLE_USER }
-        - { path: ^/32asso-adhesion, roles: ROLE_ADMIN }
+        - { path: ^/32assoadhesion, roles: ROLE_ADMIN }
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/notif, roles: IS_AUTHENTICATED_ANONYMOUSLY, host: symfony }
         - { path: ^/notif, roles: ROLE_NO_ACCESS }
