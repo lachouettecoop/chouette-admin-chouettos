@@ -51,7 +51,7 @@ class LdapController
         $info["userPassword"] = '{MD5}' . base64_encode(pack('H*', md5($user->getMotDePasse())));
 
         // Ajoute le nouvel user dans LDAP
-        $r = ldap_add($this->ds, $this->userDn($user->getEmail()), $info);
+        // $r = ldap_add($this->ds, $this->userDn($user->getEmail()), $info);
 
         if (!$r) {
             throw new \RuntimeException("Echec de l'ajout dans LDAP ...");
@@ -71,10 +71,10 @@ class LdapController
         }
 
         // Connexion avec une identité qui permet les modifications
-        $r = ldap_bind($this->ds, $this->ldapUser, $this->ldapMdp);
-        if (!$r) {
-            throw new \RuntimeException("Connexion LDAP échouée...");
-        }
+        // $r = ldap_bind($this->ds, $this->ldapUser, $this->ldapMdp);
+        // if (!$r) {
+        //     throw new \RuntimeException("Connexion LDAP échouée...");
+        // }
 
         return true;
     }
@@ -126,11 +126,11 @@ class LdapController
         }
 
         // Supprime l'user dans LDAP
-        $r = @ldap_delete($this->ds, $this->userDn($user->getEmail()));
+        // $r = @ldap_delete($this->ds, $this->userDn($user->getEmail()));
 
-        if (!$r) {
-            throw new \RuntimeException("Echec de la suppression dans LDAP ...");
-        }
+        // if (!$r) {
+        //     throw new \RuntimeException("Echec de la suppression dans LDAP ...");
+        // }
 
         ldap_close($this->ds);
 
