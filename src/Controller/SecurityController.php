@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\Adhesion;
 use App\Form\UserFirstType;
+use App\Form\CreneauxType;
 use App\Form\UserAdhesion;
 use App\Security\LoginFormAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
@@ -216,6 +217,45 @@ class SecurityController extends AbstractController
 
     }
     
+    /**
+     * @Route("/31generercreneaux", name="app_generer_creneaux")
+     */
+    public function genererCreneaux(
+        Request $request,
+        EntityManagerInterface $em
+    ): Response {
+        $form = $this->createForm(CreneauxType::class);
+
+        // Handle form submission
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $startDate = $data['startDate'];
+            $endDate = $data['endDate'];
+            $pattern = $data['pattern'];
+
+            $creneauxRepository = $em->getRepository('App:Creneau');
+            $creneauxGeneriques = $em->getRepository('App:CreneauGenerique')->findBy(['actif' => true, 'frequence' => $pattern]);
+            $increment = ($pattern === 3) ? 28 : 1;
+
+            foreach ($creneauxGeneriques as $creneauGenerique){
+                PlanningController::createCreneauxFromCreneauGenerique(
+                    $creneauGenerique,
+                    $creneauxRepository,
+                    $em,
+                    $startDate,
+                    $endDate,
+                    $increment
+                );
+            }
+            $em->flush();
+            return $this->render('security/generer_creneaux_final.html.twig');
+        }
+
+        return $this->render('security/generer_creneaux.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
 
     /**
      * @Route("/31enregistrement", name="app_premier_enregistrement")

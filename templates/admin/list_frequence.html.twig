@@ -3,13 +3,11 @@
 {% block field %}
 <div>
     {% if object.frequence == "1" %}
-    <span class="label label-primary"> A </span>
+    <span class="label label-primary"> Modèle principal (A) </span>
     {% elseif object.frequence == "2" %}
-        <span class="label label-info"> B </span>
+        <span class="label label-info"> Modèle vacances (B) </span>
     {% elseif object.frequence == "3" %}
-        <span class="label label-warning"> C </span>
-    {% elseif object.frequence == "4" %}
-        <span class="label label-success"> D </span>
+        <span class="label label-warning"> 1 semaine sur 4 (C) </span>
     {% endif %}
 </div>
 {% endblock %}

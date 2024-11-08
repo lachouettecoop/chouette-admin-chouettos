@@ -62,8 +62,14 @@ class CustomAction extends CRUDController
             throw new NotFoundHttpException(sprintf('unable to find the object with id: %s', $id));
         }
 
+        if ($creneauGenerique->getFrequence() == 3) {
+            $increment = 28;
+        } else {
+            $increment = 1;
+        }
+
         $now = new \DateTime("now");
-        $endingDate = (new \DateTime("now"))->modify("+1 year");
+        $endingDate = (new \DateTime("now"))->modify("+3 month");
 
         try {
             PlanningController::createCreneauxFromCreneauGenerique(
@@ -71,7 +77,8 @@ class CustomAction extends CRUDController
                 $creneauxRepository,
                 $em,
                 $now,
-                $endingDate);
+                $endingDate,
+                $increment);
 
             $em->flush();
             $this->addFlash('sonata_flash_success', 'Le créneau a correctement été généré.');
@@ -81,30 +88,5 @@ class CustomAction extends CRUDController
         }
 
         return new RedirectResponse($this->admin->generateUrl('list'));
-    }
-
-    public function nextOccurence(\DateTimeInterface $date, $frequency_creneau, $day_creneau){
-        $week = (int)date_format($date, "W");
-        // $day_creneau commence à zéro et format N à 1
-        $day_week = (int)date_format($date, "N")-1;
-
-        $frequency_week = (int)$week % 4;
-        if ($frequency_week == 0) {
-            $frequency_week = 4;
-        }
-        $ecart = 0;
-        if ($frequency_week > $frequency_creneau) {
-            $ecart = 4 - $frequency_week + $frequency_creneau;
-        }
-        elseif ($frequency_week < $frequency_creneau) {
-            $ecart = $frequency_creneau - $frequency_week;
-        }
-
-        $nextDate = clone $date;
-        /** @var \DateTime $nextDate */
-        $nextDate->modify('+'.$ecart.' week');
-        $nextDate->modify('+'.$day_creneau-$day_week.' day');
-
-        return $nextDate;
     }
 }

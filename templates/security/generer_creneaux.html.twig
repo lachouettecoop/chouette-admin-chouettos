@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau chouettos{% endblock %}
+
+{% block body %}
+
+    <div class="container mt-4">
+
+        <div class="col">
+
+            <h1> Génération de créneaux</h1>
+
+
+        {{ form_start(form) }}
+            {{ form_row(form.startDate) }}
+            {{ form_row(form.endDate) }}
+            {{ form_row(form.pattern) }}
+        {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
+
+
