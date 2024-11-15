@@ -23,7 +23,7 @@ final class Version20241031152127 extends AbstractMigration
         $this->addSql('ALTER TABLE poste ADD CONSTRAINT FK_7C890FAB7A650C82 FOREIGN KEY (creneau_generique_id)  REFERENCES creneau_generique(id) ON DELETE CASCADE ON UPDATE CASCADE');
         $this->addSql('ALTER TABLE creneau DROP FOREIGN KEY FK_F9668B5F7A650C82');
         $this->addSql('ALTER TABLE creneau ADD CONSTRAINT FK_F9668B5F7A650C82 FOREIGN KEY (creneau_generique_id)  REFERENCES creneau_generique(id) ON DELETE SET NULL ON UPDATE CASCADE');
-        $this->addSql('delete from creneau_generique where frequence <> 1 AND id NOT IN (272, 248, 246)');
+        $this->addSql('DELETE from creneau_generique where frequence NOT IN (1, 2) AND id NOT IN (272, 248, 246)');
         $this->addSql('UPDATE creneau_generique SET frequence = 3 WHERE id IN (272, 248, 246)');
 
     }
