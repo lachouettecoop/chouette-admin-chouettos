@@ -237,12 +237,12 @@ class PlanningController extends AbstractController
     {
         $dateDebut = (new \DateTime("now"))->modify("+3 days");
         $dateFin = (new \DateTime("now"))->modify("+4 days");
-        $crenaux = $em->getRepository('App:Creneau')->findCreneauByDate($dateDebut, $dateFin);
+        $creneaux = $em->getRepository('App:Creneau')->findCreneauByDate($dateDebut, $dateFin);
 
         $piafs = [];
-        /** @var Creneau $crenau **/
-        foreach ($crenaux as $crenau){
-            foreach ($crenau->getPiafs() as $piaf){
+        /** @var Creneau $creneau **/
+        foreach ($creneaux as $creneau){
+            foreach ($creneau->getPiafs() as $piaf){
                 if($piaf->getPiaffeur() != null and $piaf->getStatut() != "remplacement"){
                     $piafs[] = $piaf;
                 }
@@ -292,14 +292,14 @@ class PlanningController extends AbstractController
     {
         $dateDebut = (new \DateTime("now"));
         $dateFin = (new \DateTime("now"))->modify("+2 days");
-        $crenaux = $em->getRepository('App:Creneau')->findCreneauByDate($dateDebut, $dateFin);
+        $creneaux = $em->getRepository('App:Creneau')->findCreneauByDate($dateDebut, $dateFin);
 
         $users = [];
-        /** @var Creneau $crenau */
-        foreach ($crenaux as $crenau){
-            foreach ($crenau->getPiafs() as $piaf){
+        /** @var Creneau $creneau */
+        foreach ($creneaux as $creneau){
+            foreach ($creneau->getPiafs() as $piaf){
                 if($piaf->getPiaffeur() == null){
-                    foreach ($crenau->getCreneauGenerique()->getReserves() as $reserve){
+                    foreach ($creneau->getCreneauGenerique()->getReserves() as $reserve){
                         if($reserve->getUser()->getRolesChouette()->contains($piaf->getRole())){
                             $users[$reserve->getUser()->getEmail()][] = $em->getRepository('App:Piaf')->find($piaf->getId());
                         }
@@ -323,42 +323,38 @@ class PlanningController extends AbstractController
      */
     public function generateCreneaux(EntityManagerInterface $em): Response
     {
-        $numberMonths = 1;
-
         $creneauxRepository = $em->getRepository('App:Creneau');
-        $creneauxGeneriques = $em->getRepository('App:CreneauGenerique')->findBy(['actif' => true]);
-        $lastCreneau = $creneauxRepository->findOneBy([], ['fin' => 'DESC']);
 
-        if(!$lastCreneau){
-            $lastCreneau = new Creneau();
-            $lastCreneau->setDebut(new \DateTime());
-        }
+        // frequence 1 (type A) = Modele principal, doit prendre en compte le modèle vacances (fréquence 2 - type B)
+        $creneauxGeneriquesA = $em->getRepository('App:CreneauGenerique')->findBy(['actif' => true, 'frequence' => 1]);
+        $lastCreneauA = $creneauxRepository->createQueryBuilder('c')
+        ->innerJoin('c.creneauGenerique', 'cg')
+        ->where('cg.frequence = :frequence')
+        ->orWhere('cg.frequence = :frequence2')
+        ->setParameter('frequence', 1)
+        ->setParameter('frequence2', 2)
+        ->orderBy('c.fin', 'DESC')
+        ->setMaxResults(1)
+        ->getQuery()
+        ->getOneOrNullResult();
+        PlanningController::generateCreneauxAnyType($em, $creneauxRepository, $creneauxGeneriquesA, $lastCreneauA, 1);
 
-        /** @var \DateTime $startDate */
-        $startingDate = $lastCreneau->getDebut();
-        $endingDate = clone $startingDate;
-        $endingDate->modify("+". $numberMonths*4 . " week");
+        // frequence 3 (type C) = 1 semaine sur 4
+        $creneauxGeneriquesC = $em->getRepository('App:CreneauGenerique')->findBy(['actif' => true, 'frequence' => 3]);
+        $lastCreneauC = $creneauxRepository->createQueryBuilder('c')
+        ->innerJoin('c.creneauGenerique', 'cg')
+        ->where('cg.frequence = :frequence')
+        ->setParameter('frequence', 3)
+        ->orderBy('c.fin', 'DESC')
+        ->setMaxResults(1)
+        ->getQuery()
+        ->getOneOrNullResult();
+        PlanningController::generateCreneauxAnyType($em, $creneauxRepository, $creneauxGeneriquesC, $lastCreneauC, 28);
 
-        foreach ($creneauxGeneriques as $creneauGenerique){
-
-            $startingDateCreneauGenerique = clone $startingDate;
-            PlanningController::createCreneauxFromCreneauGenerique(
-                $creneauGenerique,
-                $creneauxRepository,
-                $em,
-                $startingDate,
-                $endingDate
-            );
-        }
-        $em->flush();
 
         return $this->render('main/index.html.twig', []);
     }
 
-    public function generateCreneauGenerique(EntityManagerInterface $em): Response
-    {
-    }
- 
     /**
      * Send mail to Équipe planning for a recapitulative
      *
@@ -381,40 +377,6 @@ class PlanningController extends AbstractController
         return $this->render('main/index.html.twig', []);
     }
 
-    /**
-     * Determine the next occurence of a creneau given its frequency and day of the week
-     *
-     * @param \DateTimeInterface $date
-     * @param $frequency_creneau
-     * @param $day_creneau
-     *
-     * @return \DateTime|\DateTimeInterface
-     */
-    public static function nextOccurence(\DateTimeInterface $date, $frequency_creneau, $day_creneau){
-        $week = (int)date_format($date, "W");
-        // $day_creneau commence à zéro et format N à 1
-        $day_week = (int)date_format($date, "N")-1;
-
-        $frequency_week = (int)$week % 4;
-        if ($frequency_week == 0) {
-            $frequency_week = 4;
-        }
-        $ecart = 0;
-        if ($frequency_week > $frequency_creneau) {
-            $ecart = 4 - $frequency_week + $frequency_creneau;
-        }
-        elseif ($frequency_week < $frequency_creneau) {
-            $ecart = $frequency_creneau - $frequency_week;
-        }
-
-        $nextDate = clone $date;
-        /** @var \DateTime $nextDate */
-        $nextDate->modify('+'.$ecart.' week');
-        $nextDate->modify('+'.$day_creneau-$day_week.' day');
-
-        return $nextDate;
-    }
-
     public function sendEmail($sujet, $email, $content, MailerInterface $mailer, $cc = "")
     {
         $message = (new Email())
@@ -432,11 +394,43 @@ class PlanningController extends AbstractController
         return true;
     }
 
-    public static function createCreneauxFromCreneauGenerique($creneauGenerique, $repository, $entityManager, $startingDate, $endingDate) {
-            $nextDateCreneau = PlanningController::nextOccurence($startingDate, $creneauGenerique->getFrequence(), $creneauGenerique->getJour());
-            while ($nextDateCreneau <= $endingDate) {
-                if($repository->findByCreneauGenerique($creneauGenerique->getId(), $nextDateCreneau, $creneauGenerique->getHeureDebut()) == null){
+    static function generateCreneauxAnyType(EntityManagerInterface $em, $creneauxRepository, $creneauxGeneriques, $lastCreneau, $increment)
+    {
+        $numberDays = 28;
+        $inThreeMonths = new \DateTime();
+        $inThreeMonths->modify("+". $numberDays*3 ." day");  // Get the date in 3 months
 
+        if(!$lastCreneau){
+            $lastCreneau = new Creneau();
+            $lastCreneau->setDebut(new \DateTime());
+        }
+
+        $startingDate = $lastCreneau->getDebut()->modify("+1 day");
+
+        if ($startingDate < $inThreeMonths) {
+            $endingDate = clone $startingDate;
+            $endingDate->modify("+". $numberDays. " day");
+
+            foreach ($creneauxGeneriques as $creneauGenerique){
+  
+              PlanningController::createCreneauxFromCreneauGenerique(
+                  $creneauGenerique,
+                  $creneauxRepository,
+                  $em,
+                  $startingDate,
+                  $endingDate,
+                  $increment
+              );
+          }
+          $em->flush();
+
+        }
+    }
+
+    public static function createCreneauxFromCreneauGenerique($creneauGenerique, $repository, $entityManager, $startingDate, $endingDate, $dayIncrement) {
+            $nextDateCreneau = clone $startingDate;
+            while ($nextDateCreneau <= $endingDate) {
+                if($creneauGenerique->getJour() == ($nextDateCreneau->format('N') - 1) && $repository->findByCreneauGenerique($creneauGenerique->getId(), $nextDateCreneau, $creneauGenerique->getHeureDebut()) == null){
                     $creneau = new Creneau();
                     $creneau->setCreneauGenerique($creneauGenerique);
                     $creneau->setHorsMag($creneauGenerique->getHorsMag());
@@ -460,7 +454,7 @@ class PlanningController extends AbstractController
 
                     $entityManager->persist($creneau);
                 }
-                $nextDateCreneau = PlanningController::nextOccurence($nextDateCreneau->modify("+4 week"), $creneauGenerique->getFrequence(), $creneauGenerique->getJour());
+                $nextDateCreneau = $nextDateCreneau->modify("+$dayIncrement day");
             }
     }
 }

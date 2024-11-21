@@ -25,12 +25,11 @@ final class CreneauGeneriqueAdmin extends AbstractAdmin
             ->add('frequence', ChoiceType::class,
                 ['choices' =>
                     [
-                        'A' => '1',
-                        'B' => '2',
-                        'C' => '3',
-                        'D' => '4',
+                        'Modèle principal (A)' => '1',
+                        'Modèle vacances (B)' => '2',
+                        '1 semaine sur 4 (C)' => '3',
                     ],
-                    'label' => 'Semaine / fréquence'
+                    'label' => 'Type'
                 ]
             )
             ->add('jour', ChoiceType::class,
@@ -70,14 +69,13 @@ final class CreneauGeneriqueAdmin extends AbstractAdmin
     {
         $datagridMapper
             ->add('id')
-            ->add('frequence', 'doctrine_orm_choice', array('label' => 'Semaine / fréquence',
+            ->add('frequence', 'doctrine_orm_choice', array('label' => 'Type',
                 'field_options' => array(
                     'required' => false,
                     'choices' => [
-                        'A' => '1',
-                        'B' => '2',
-                        'C' => '3',
-                        'D' => '4',
+                        'Modèle principal (A)' => '1',
+                        'Modèle vacances (B)' => '2',
+                        '1 semaine sur 4 (C)' => '3',
                     ],
                 ),
                 'field_type' => ChoiceType::class,
@@ -111,7 +109,7 @@ final class CreneauGeneriqueAdmin extends AbstractAdmin
             ->add('jour', null, ['template' => 'admin/list_jour.html.twig'])
             ->add('heureDebut')
             ->add('heureFin')
-            ->add('frequence', null, ['template' => 'admin/list_frequence.html.twig'])
+            ->add('frequence', null, ['template' => 'admin/list_frequence.html.twig', 'label' => 'Type'])
             ->add('titre')
             ->add('horsMag')
             ->add('_action', null, [
