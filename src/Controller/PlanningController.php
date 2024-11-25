@@ -324,32 +324,36 @@ class PlanningController extends AbstractController
     public function generateCreneaux(EntityManagerInterface $em): Response
     {
         $creneauxRepository = $em->getRepository('App:Creneau');
-
+        $fourMonthsLater = (new \DateTime())->modify('+4 months');
+        
         // frequence 1 (type A) = Modele principal, doit prendre en compte le modèle vacances (fréquence 2 - type B)
         $creneauxGeneriquesA = $em->getRepository('App:CreneauGenerique')->findBy(['actif' => true, 'frequence' => 1]);
         $lastCreneauA = $creneauxRepository->createQueryBuilder('c')
         ->innerJoin('c.creneauGenerique', 'cg')
         ->where('cg.frequence = :frequence')
         ->orWhere('cg.frequence = :frequence2')
+        ->andWhere('c.fin <= :fourMonthsLater')
         ->setParameter('frequence', 1)
         ->setParameter('frequence2', 2)
+        ->setParameter('fourMonthsLater', $fourMonthsLater)
         ->orderBy('c.fin', 'DESC')
         ->setMaxResults(1)
         ->getQuery()
         ->getOneOrNullResult();
         PlanningController::generateCreneauxAnyType($em, $creneauxRepository, $creneauxGeneriquesA, $lastCreneauA, 1);
-
         // frequence 3 (type C) = 1 semaine sur 4
         $creneauxGeneriquesC = $em->getRepository('App:CreneauGenerique')->findBy(['actif' => true, 'frequence' => 3]);
         $lastCreneauC = $creneauxRepository->createQueryBuilder('c')
         ->innerJoin('c.creneauGenerique', 'cg')
         ->where('cg.frequence = :frequence')
+        ->andWhere('c.fin <= :fourMonthsLater')
         ->setParameter('frequence', 3)
+        ->setParameter('fourMonthsLater', $fourMonthsLater)
         ->orderBy('c.fin', 'DESC')
         ->setMaxResults(1)
         ->getQuery()
         ->getOneOrNullResult();
-        PlanningController::generateCreneauxAnyType($em, $creneauxRepository, $creneauxGeneriquesC, $lastCreneauC, 28);
+        PlanningController::generateCreneauxAnyType($em, $creneauxRepository, $creneauxGeneriquesC, $lastCreneauC, 27);
 
 
         return $this->render('main/index.html.twig', []);
@@ -398,7 +402,7 @@ class PlanningController extends AbstractController
     {
         $numberDays = 28;
         $inThreeMonths = new \DateTime();
-        $inThreeMonths->modify("+". $numberDays*3 ." day");  // Get the date in 3 months
+        $inThreeMonths->modify("+". $numberDays*4 ." day");  // Get the date in 4 months
 
         if(!$lastCreneau){
             $lastCreneau = new Creneau();
