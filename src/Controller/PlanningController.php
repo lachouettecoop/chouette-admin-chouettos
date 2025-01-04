@@ -400,20 +400,18 @@ class PlanningController extends AbstractController
 
     static function generateCreneauxAnyType(EntityManagerInterface $em, $creneauxRepository, $creneauxGeneriques, $lastCreneau, $increment)
     {
-        $numberDays = 28;
-        $inThreeMonths = new \DateTime();
-        $inThreeMonths->modify("+". $numberDays*4 ." day");  // Get the date in 4 months
+        $inFourMonths = new \DateTime();
+        $inFourMonths->modify("+4 month")->modify('last day of this month');  // Get the date in 4 months
 
         if(!$lastCreneau){
             $lastCreneau = new Creneau();
             $lastCreneau->setDebut(new \DateTime());
+        } else {
+            $startingDate = $lastCreneau->getDebut()->modify("+1 day");
         }
 
-        $startingDate = $lastCreneau->getDebut()->modify("+1 day");
-
-        if ($startingDate < $inThreeMonths) {
-            $endingDate = clone $startingDate;
-            $endingDate->modify("+". $numberDays. " day");
+        if ($startingDate < $inFourMonths) {
+            $endingDate = clone $inFourMonths;
 
             foreach ($creneauxGeneriques as $creneauGenerique){
   
