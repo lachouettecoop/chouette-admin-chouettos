@@ -76,6 +76,12 @@ class Piaf
     private $comptabilise;
 
     /**
+     * @Groups({"read:creneauGenerique"})
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $isBeginner;
+
+    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $description;
@@ -189,6 +195,18 @@ class Piaf
     public function getComptabilise(): ?bool
     {
         return $this->comptabilise;
+    }
+
+    public function setIsBeginner(?bool $isBeginner): self
+    {
+        $this->isBeginner = $isBeginner;
+
+        return $this;
+    }
+
+    public function getIsBeginner(): ?bool
+    {
+        return $this->isBeginner;
     }
 
     public function setComptabilise(?bool $comptabilise): self
