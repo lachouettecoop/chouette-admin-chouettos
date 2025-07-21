@@ -1,21 +1,39 @@
-version: '2.1'
-
 services:
-  database:
+  db_adminchouettos:
     image: mariadb:10.3
     restart: unless-stopped
-      - MARIADB_ROOT_PASSWORD=...
-      - MARIADB_USER=adminchouettos
-      - MARIADB_PASSWORD=...
+    environment:
       - MARIADB_DATABASE=adminchouettos
+      - MARIADB_USER=adminchouettos
+      - MARIADB_ROOT_PASSWORD=...
+      - MARIADB_PASSWORD=...
     volumes:
       - ./data/:/var/lib/mysql
     networks:
-      metabase_shared:
-      default:
+      - default
 
   cron:
     build: ./cron/
+    depends_on:
+      - symfony
+
+
+  admin_nginx:
+    image: nginx:alpine
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - symfony_app:/var/www/html
+    networks:
+      - default
+      - traefik_web
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: "traefik_web"
+      traefik.http.routers.adminchouettos.entrypoints: "web,websecure"
+      traefik.http.routers.adminchouettos.rule: "Host(`adminchouettos.lachouettecoop.fr`)"
+      traefik.http.routers.adminchouettos.tls: "true"
+      traefik.http.routers.adminchouettos.tls.certresolver: "myresolver"
+      traefik.http.services.adminchouettos.loadbalancer.server.port: "80"
     depends_on:
       - symfony
 
@@ -23,22 +41,21 @@ services:
     build: .
     restart: unless-stopped
     environment:
-      - SYMFONY_DATABASE_HOST=database
+      - SYMFONY_DATABASE_HOST=db_adminchouettos
       - SYMFONY_DATABASE_PORT_NUMBER=3306
       - SYMFONY_DATABASE_NAME=adminchouettos
       - SYMFONY_DATABASE_USER=adminchouettos
       - SYMFONY_DATABASE_PASSWORD=...
     links:
-      - database:database
+      - db_adminchouettos:database
     networks:
-      default:
-      inverseproxy_shared:
-    labels:
-      traefik.docker.network: "inverseproxy_shared"
-      traefik.enable: "true"
-      traefik.frontend.passHostHeader: "true"
-      traefik.port: "8000"
-      traefik.www.frontend.rule: "Host:adminchouettos.lachouettecoop.fr"
+      - default
+    expose:
+      - "9000"
+    depends_on:
+      - db_adminchouettos
+    volumes:
+      - symfony_app:/var/www/html
 
 networks:
     default:
@@ -49,3 +66,5 @@ networks:
       external: true
     inverseproxy_shared:
       external: true
+volumes:
+  symfony_app:
