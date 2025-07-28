@@ -66,5 +66,7 @@ networks:
       external: true
     inverseproxy_shared:
       external: true
+    traefik_web:
+      external: true
 volumes:
   symfony_app:
