@@ -7,6 +7,7 @@
 40 23 * * * wget -O/dev/null http://symfony:8000/api/export/gh
 45 23 * * * wget -O/dev/null http://symfony:8000/notif/4dzq564d6/reserve
 50 23 * * * wget -O/dev/null http://symfony:8000/notif/4dzq589az6/participation
+53 23 * * * wget -O/dev/null http://symfony:8000/mouli/4dzq5848azb/premierepiaf
 55 23 * * * wget -O/dev/null http://symfony:8000/notif/4dzadui4d6/recap
 58 23 * */4 * wget -O/dev/null http://symfony:8000/notif/warningChouettos
 59 23 * */4 * wget -O/dev/null http://symfony:8000/notif/reminderAbsenceLongueDuree

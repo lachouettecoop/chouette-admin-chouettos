@@ -1,0 +1,25 @@
+{% extends "template_email.html.twig" %}
+
+{% block titre %}Information pour votre piaf du {{ piaf.creneau.debut | format_date('medium',  'dd MMM', locale='fr') }} {% endblock %}
+
+{% block introduction %}
+
+    <p style="margin: 0;font-size: 16px;line-height: 14px;">
+
+        Bonjour,<br /><br />
+
+        {{ piaffeur.prenom }} {{ piaffeur.nom }}, chouettos débutant est inscrit sur le même créneau que vous le {{ piaf.creneau.debut | format_date('medium',  'dd MMM', locale='fr') }}, de {{ piaf.creneau.debut |date('H:i') }}h à {{ piaf.creneau.fin |date('H:i') }}h. Ce sera chouette de lui  réserver le meilleur accueil : visite du magasin, présentation des fiches mission, du coin ressources, transmission de votre savoir et ainsi de contribuer à son intégration.
+        <br/>
+        
+        Merci beaucoup, chouette PIAF !
+        <br/>
+
+        L'équipe du Bureau des Membres (BdM)
+        <br/>
+
+
+    </p>
+
+
+{% endblock %}
+
