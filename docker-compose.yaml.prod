@@ -51,6 +51,7 @@ services:
       - db_adminchouettos:database
     networks:
       - default
+      - inverseproxy_shared
     expose:
       - "9000"
     depends_on:
