@@ -11,6 +11,7 @@ services:
       - ./data/:/var/lib/mysql
     networks:
       - default
+      - metabase_shared
 
   cron:
     build: ./cron/
