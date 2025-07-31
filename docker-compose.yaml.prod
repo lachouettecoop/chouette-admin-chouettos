@@ -17,6 +17,8 @@ services:
     build: ./cron/
     depends_on:
       - symfony
+    networks:
+      - default
 
 
   admin_nginx:
