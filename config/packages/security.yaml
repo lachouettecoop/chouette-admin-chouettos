@@ -49,9 +49,9 @@ security:
     - { path: ^/31enregistrement, roles: ROLE_USER }
     - { path: ^/32assoadhesion, roles: ROLE_ADMIN }
     - { path: ^/admin, roles: ROLE_ADMIN }
-    - { path: ^/notif, roles: IS_AUTHENTICATED_ANONYMOUSLY, host: admin_nginx }
+    - { path: ^/notif, roles: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/notif, roles: ROLE_NO_ACCESS }
-    - { path: ^/mouli, roles: IS_AUTHENTICATED_ANONYMOUSLY, host: admin_nginx }
+    - { path: ^/mouli, roles: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/mouli, roles: ROLE_NO_ACCESS }
     - { path: ^/docs, roles: ROLE_USER }
     - { path: ^/api, roles: IS_AUTHENTICATED_ANONYMOUSLY }
