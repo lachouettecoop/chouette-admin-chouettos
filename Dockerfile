@@ -5,12 +5,12 @@ RUN apk add --no-cache \
     git \
     bash \
     openldap-dev \
+    icu-dev \
     && docker-php-ext-configure ldap \
-    && docker-php-ext-install ldap pdo pdo_mysql
+    && docker-php-ext-configure intl \
+    && docker-php-ext-install ldap pdo pdo_mysql intl
 
 RUN curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.alpine.sh' | bash && apk add symfony-cli
-
-
 
 WORKDIR /var/www/html
 COPY . .
