@@ -50,9 +50,9 @@ security:
     - { path: ^/32assoadhesion, roles: ROLE_ADMIN }
     - { path: ^/admin, roles: ROLE_ADMIN }
     - { path: ^/notif, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-    - { path: ^/notif, roles: ROLE_NO_ACCESS }
+    # - { path: ^/notif, roles: ROLE_NO_ACCESS }
     - { path: ^/mouli, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-    - { path: ^/mouli, roles: ROLE_NO_ACCESS }
+    # - { path: ^/mouli, roles: ROLE_NO_ACCESS }
     - { path: ^/docs, roles: ROLE_USER }
     - { path: ^/api, roles: IS_AUTHENTICATED_ANONYMOUSLY }
     #- { path: ^/profile, roles: ROLE_USER }
