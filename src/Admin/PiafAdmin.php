@@ -23,7 +23,9 @@ final class PiafAdmin extends AbstractAdmin
             ->add('pourvu')
             ->add('nonPourvu')
             ->add('visible')
-            ->add('isBeginner')
+            ->add('isBeginner', null, [
+                'label' => 'Débutant',
+            ]);
             /*->add('remplacement')*/
         ;
     }

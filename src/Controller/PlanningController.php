@@ -98,7 +98,7 @@ class PlanningController extends AbstractController
     public function mailPremierePiaf(EntityManagerInterface $em): Response
     {
         $dateDebut = (new \DateTime())->modify('+2 day')->setTime(0, 0);
-        $dateFin = (clone $demain)->setTime(23, 59, 59);
+        $dateFin = (clone $dateDebut)->setTime(23, 59, 59);
 
 
         $creneaux = $em->getRepository('App:Creneau')->findCreneauByDate($dateDebut, $dateFin);;
