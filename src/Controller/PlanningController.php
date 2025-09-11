@@ -95,15 +95,13 @@ class PlanningController extends AbstractController
      * @Route("/mouli/4dzq5848azb/premierepiaf", name="app_cron_compteur_premiere_piaf")
      * @return Response
      */
-    public function mailPremierePiaf(EntityManagerInterface $em): Response
+    public function mailPremierePiaf(EntityManagerInterface $em, MailerInterface $mailer): Response
     {
         $dateDebut = (new \DateTime())->modify('+2 day')->setTime(0, 0);
         $dateFin = (clone $dateDebut)->setTime(23, 59, 59);
 
-
         $creneaux = $em->getRepository('App:Creneau')->findCreneauByDate($dateDebut, $dateFin);;
 
-        
         foreach ($creneaux as $creneau) {
             foreach ($creneau->getPiafs() as $piaf){
                 $isBeginner = $piaf->getIsBeginner();
@@ -112,7 +110,7 @@ class PlanningController extends AbstractController
                         if ($piaf->getId() !== $piaf2->getId()) {
                             $email = $piaf2->getPiaffeur()?->getEmail();
                             if ($email) {
-                                $emailContent = $this->renderView('planning/notificationPremierePiaf.html.twig', ['piaf' => $piaf, 'piaffeuf' => $piaf->getPiaffeur()]);
+                                $emailContent = $this->renderView('planning/notificationPremierePiaf.html.twig', ['piaf' => $piaf, 'piaffeur' => $piaf->getPiaffeur()]);
                                 $this->sendEmail('Votre PIAF approche - La Chouette Coop', $email, $emailContent, $mailer);
                             }
                         }
