@@ -62,7 +62,7 @@ class UserAdmin extends AbstractAdmin
 
     public function getExportFields()
     {
-        return array('id', 'civilite', 'nom', 'prenom', 'codebarre', 'email', 'exportDateNaissance', 'telephone', 'enabled', 'domaineCompetence', 'exportAdresse1', 'exportAdresse2', 'exportAdresse4', 'exportAdresse5', 'exportAdresse6', 'adhesions', 'exportdAhesionAnnee', 'exportAdhesionDate', 'exportAdhesionMontant', 'exportSouscriptionDate', 'exportNomPersonneRattachee', 'exportPrenomPersonneRattachee','exportMailPersonneRattachee');
+        return array('id', 'civilite', 'nom', 'roles', 'prenom', 'codebarre', 'email', 'exportDateNaissance', 'telephone', 'enabled', 'domaineCompetence', 'exportAdresse1', 'exportAdresse2', 'exportAdresse4', 'exportAdresse5', 'exportAdresse6', 'adhesions', 'exportdAhesionAnnee', 'exportAdhesionDate', 'exportAdhesionMontant', 'exportSouscriptionDate', 'exportNomPersonneRattachee', 'exportPrenomPersonneRattachee','exportMailPersonneRattachee');
     }
 
     public function getDataSourceIterator()
@@ -275,6 +275,14 @@ class UserAdmin extends AbstractAdmin
             ->add('actif', null, array('required' => false, 'label' => 'Actif·ve dans un groupe ?'))
             ->add('gh', null, array('required' => false, 'label' => 'Authorisation d\'ouvrir la porte du supermarché ? (Anciennement GH ?) '))
             ->add('carteImprimee', null, array('required' => false, 'label' => 'Carte imprimée ?'))
+            ->add('roles', ChoiceType::class, [
+                'label' => 'Administrateur',
+                'choices' => [
+                    'Administrateur' => 'ROLE_ADMIN',
+                ],
+                'multiple' => true,   // <--- important: roles is an array
+                'expanded' => true,   // checkboxes instead of multi-select
+            ])
             ->end()
             ->with('Photo', array(
                 'class' => 'col-md-6'
