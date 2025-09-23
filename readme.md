@@ -57,6 +57,14 @@ GRANT ALL ON adminchouettos.* TO 'adminchouettos'@'symfony';
 # Vous pouvez quitter le docker
 ```
 
+Pour déployer, voici la procédure, il faut supprimer le volume nommé (option -v) afin de mettre à jour la code base.
+
+```
+docker compose down -v
+docker compose build
+docker compose up -d
+```
+
 Pour restaurer un dump :
 
 ```shell
