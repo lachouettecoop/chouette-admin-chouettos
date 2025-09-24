@@ -14,6 +14,7 @@ use Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\DateTimeRangeFilter;
 use Sonata\Form\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 final class CreneauGeneriqueAdmin extends AbstractAdmin
 {
@@ -62,6 +63,16 @@ final class CreneauGeneriqueAdmin extends AbstractAdmin
             ->add('actif')
             ->add('horsMag')
             ->add('demiPiaf')
+            ->add('tasks', EntityType::class, [
+                'label' => "Tâches",
+                'class' => 'App\Entity\Task',
+                'choice_label' => 'title',
+                'multiple' => true,
+                'expanded' => false,
+                'required' => false,
+                'by_reference' => false, // ✅ Important pour les relations ManyToMany
+
+            ]);
         ;
     }
 
@@ -112,17 +123,16 @@ final class CreneauGeneriqueAdmin extends AbstractAdmin
             ->add('frequence', null, ['template' => 'admin/list_frequence.html.twig', 'label' => 'Type'])
             ->add('titre')
             ->add('horsMag')
+            ->add('tasks', null, [
+                'associated_property' => 'title', // affichera le titre des tâches
+            ])
             ->add('_action', null, [
                 'actions' => [
-                    'clone' => [
-                        'template' => 'admin/list__action_clone.html.twig'
-                    ],
-                    'generate' => [
-                        'template' => 'admin/form__action_generer.html.twig'
-                    ]
+                    'clone' => ['template' => 'admin/list__action_clone.html.twig'],
+                    'generate' => ['template' => 'admin/form__action_generer.html.twig']
                 ]
-            ]);
-            ;
+            ])
+        ;
     }
 
     protected function configureRoutes(RouteCollection $collection)
@@ -140,6 +150,9 @@ final class CreneauGeneriqueAdmin extends AbstractAdmin
             ->add('jour')
             ->add('heureDebut')
             ->add('heureFin')
+            ->add('tasks', null, [
+                'associated_property' => 'title',
+            ])
         ;
     }
 }

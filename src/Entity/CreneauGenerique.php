@@ -11,6 +11,8 @@ use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\NumericFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Core\Annotation\ApiSubresource;
+
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -78,6 +80,13 @@ class CreneauGenerique
 
     /**
      * @Groups({"read:creneauGenerique"})
+     * @ApiSubresource
+     * @ORM\ManyToMany(targetEntity=Task::class, mappedBy="creneauGeneriques")
+     */
+    private $tasks;
+
+    /**
+     * @Groups({"read:creneauGenerique"})
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $actif = true;
@@ -111,6 +120,7 @@ class CreneauGenerique
         $this->postes = new ArrayCollection();
         $this->creneaux = new ArrayCollection();
         $this->reserves = new ArrayCollection();
+        $this->tasks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -263,6 +273,31 @@ class CreneauGenerique
             $reserf->removeCreneauGenerique($this);
         }
 
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Task>
+     */
+    public function getTasks(): Collection
+    {
+        return $this->tasks;
+    }
+
+    public function addTask(Task $task): self
+    {
+        if (!$this->tasks->contains($task)) {
+            $this->tasks[] = $task;
+            $task->addCreneauGenerique($this);
+        }
+        return $this;
+    }
+
+    public function removeTask(Task $task): self
+    {
+        if ($this->tasks->removeElement($task)) {
+            $task->removeCreneauGenerique($this);
+        }
         return $this;
     }
 
