@@ -109,7 +109,8 @@ class PlanningController extends AbstractController
                     foreach ($creneau->getPiafs() as $piaf2){
                         if ($piaf->getId() !== $piaf2->getId()) {
                             $email = $piaf2->getPiaffeur()?->getEmail();
-                            if ($email) {
+                            $piaffeur2IsBeginner = $piaf2->getIsBeginner();
+                            if ($email && !$piaffeur2IsBeginner) {
                                 $emailContent = $this->renderView('planning/notificationPremierePiaf.html.twig', ['piaf' => $piaf, 'piaffeur' => $piaf->getPiaffeur()]);
                                 $this->sendEmail('Votre PIAF approche - La Chouette Coop', $email, $emailContent, $mailer);
                             }
