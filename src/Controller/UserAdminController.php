@@ -83,6 +83,7 @@ class UserAdminController extends CRUDController
         $user->setNom("Nom_".$uuid);
         $user->setPrenom("Prénom_".$uuid);
         $user->setTelephone("");
+        $user->setCodeBarre("");
         $user->setEnabled(false);
         $em->flush();
 
